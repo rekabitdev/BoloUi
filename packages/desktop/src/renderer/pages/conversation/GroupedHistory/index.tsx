@@ -12,14 +12,15 @@ import { restrictToVerticalAxis } from '@/renderer/utils/ui/dndModifiers';
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Button, Dropdown, Empty, Input, Menu, Modal, Tooltip } from '@arco-design/web-react';
-import { FolderClose, MoreOne, Plus, Right } from '@icon-park/react';
+import { FolderClose, MoreOne, Plus, Right, SettingTwo } from '@icon-park/react';
 import classNames from 'classnames';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import WorkspaceCollapse from '../components/WorkspaceCollapse';
 import ConversationRow from './ConversationRow';
+import ProjectProfileModal from './ProjectProfileModal';
 import SortableConversationRow from './SortableConversationRow';
 import { useBatchSelection } from './hooks/useBatchSelection';
 import { useConversationActions } from './hooks/useConversationActions';
@@ -38,6 +39,7 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
   const { id } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [profileProject, setProfileProject] = useState<{ key: string; name: string } | null>(null);
   const layout = useLayoutContext();
   const isMobile = layout?.isMobile ?? false;
   const { getJobStatus, markAsRead, setActiveConversation } = useCronJobsMap();
@@ -425,11 +427,21 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
                 const projectMenu = (
                   <Menu
                     onClickMenuItem={(key) => {
+                      if (key === 'profile') {
+                        setProfileProject({ key: group.workspace, name: group.displayName });
+                        return;
+                      }
                       if (key === 'archive') {
                         handleArchiveProject(group.displayName, group.conversations);
                       }
                     }}
                   >
+                    <Menu.Item key='profile'>
+                      <span className='flex items-center gap-8px'>
+                        <SettingTwo theme='outline' size='14' />
+                        Project profile
+                      </span>
+                    </Menu.Item>
                     <Menu.Item key='archive'>
                       <span className='flex items-center gap-8px'>
                         <FolderClose theme='outline' size='14' />
@@ -530,6 +542,14 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
           </div>
         )}
       </div>
+      {profileProject && (
+        <ProjectProfileModal
+          visible
+          projectKey={profileProject.key}
+          projectName={profileProject.name}
+          onClose={() => setProfileProject(null)}
+        />
+      )}
     </>
   );
 };

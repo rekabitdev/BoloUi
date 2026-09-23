@@ -268,20 +268,6 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
               event.stopPropagation();
             }}
           >
-            <Tooltip content={t('conversation.history.delete')} position='top'>
-              <button
-                type='button'
-                aria-label={t('conversation.history.delete')}
-                data-testid={`conversation-row-delete-${conversation.id}`}
-                className='flex-center cursor-pointer transition-colors text-t-secondary hover:text-danger size-20px rd-4px sider-action-btn border-0 bg-transparent p-0'
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onDelete(conversation);
-                }}
-              >
-                <Delete theme='outline' size='14' />
-              </button>
-            </Tooltip>
             <Dropdown
               droplist={
                 <Menu
@@ -308,6 +294,10 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
                     }
                     if (key === 'archive') {
                       onArchive(conversation);
+                      return;
+                    }
+                    if (key === 'delete') {
+                      onDelete(conversation);
                     }
                   }}
                 >
@@ -349,6 +339,12 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
                     <div className='flex items-center gap-8px'>
                       <FolderClose theme='outline' size='14' />
                       <span>{t('conversation.history.archive')}</span>
+                    </div>
+                  </Menu.Item>
+                  <Menu.Item key='delete'>
+                    <div className='flex items-center gap-8px text-danger'>
+                      <Delete theme='outline' size='14' />
+                      <span>{t('conversation.history.delete')}</span>
                     </div>
                   </Menu.Item>
                 </Menu>
