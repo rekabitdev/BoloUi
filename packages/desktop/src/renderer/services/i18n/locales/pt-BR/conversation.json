@@ -12,10 +12,10 @@
     "clearWorkspace": "Remover projeto",
     "openFolder": "Abrir Pasta",
     "none": "Nenhum",
-    "quickActionsTitle": "O que o AionUi pode fazer?",
+    "quickActionsTitle": "O que o BoloUi pode fazer?",
     "quickActionFeedback": "Reportar Problema",
     "quickActionStar": "Gostou? Nos dê uma estrela!",
-    "skillsMarket": "Mercado de Habilidades AionUi",
+    "skillsMarket": "Mercado de Habilidades BoloUi",
     "skillsMarketDesc": "Pesquise e ative as Habilidades da comunidade sob demanda. Configure uma vez, disponível para todos os agentes.",
     "skillsMarketDetails": "Ver Mais >>"
   },
@@ -143,29 +143,29 @@
       "send_feedback": "Envie feedback com logs para que a equipe possa investigar."
     },
     "ownership": {
-      "aionui": "Aplicativo",
+      "boloui": "Aplicativo",
       "user_agent": "Agente",
       "user_llm_provider": "Provedor de modelo",
       "unknown_upstream": "Upstream"
     },
     "codes": {
-      "AIONUI_STREAM_BROKEN": {
+      "BOLOUI_STREAM_BROKEN": {
         "title": "O fluxo de resposta foi interrompido",
         "body": "O aplicativo aceitou sua mensagem, mas o fluxo de resposta terminou inesperadamente. Tente novamente; se acontecer de novo, envie feedback."
       },
-      "AIONUI_STATE_INCONSISTENT": {
+      "BOLOUI_STATE_INCONSISTENT": {
         "title": "O estado da conversa está fora de sincronia",
         "body": "O estado da conversa está fora de sincronia. Reinicie este chat ou recarregue o aplicativo antes de tentar novamente."
       },
-      "AIONUI_PERMISSION_ERROR": {
+      "BOLOUI_PERMISSION_ERROR": {
         "title": "Não foi possível acessar o recurso solicitado",
         "body": "Falhou uma verificação local de permissões ou do sistema de arquivos. Verifique o caminho do projeto e as permissões do aplicativo e tente novamente."
       },
-      "AIONUI_INTERNAL_ERROR": {
+      "BOLOUI_INTERNAL_ERROR": {
         "title": "A solicitação falhou no aplicativo",
         "body": "A solicitação falhou enquanto o aplicativo a estava processando. Tente novamente uma vez; se se repetir, envie feedback."
       },
-      "AIONUI_CONVERSATION_BUSY": {
+      "BOLOUI_CONVERSATION_BUSY": {
         "title": "A conversa está ocupada",
         "body": "Ainda há outra resposta em execução. Espere ela terminar antes de enviar uma nova mensagem."
       },
@@ -316,8 +316,8 @@
       },
       "WORKSPACE_PATH_CONTAINS_WHITESPACE_RUNTIME_UNSUPPORTED": {
         "title": "Este caminho de projeto não é mais compatível com execução",
-        "body": "Esta conversa ou tarefa existente usa um caminho de projeto cujos nomes de diretório contêm espaços ou outros caracteres de espaço em branco. O AionUi não oferece mais suporte ao envio de mensagens em caminhos desse tipo. Crie uma nova conversa ou tarefa com um caminho de projeto sem espaços em branco.",
-        "bodyWithPath": "O caminho de projeto existente \"{{workspacePath}}\" contém espaços ou outros caracteres de espaço em branco. O AionUi não oferece mais suporte ao envio de mensagens em conversas ou tarefas que usam esse caminho. Crie uma nova conversa ou tarefa com um caminho de projeto sem espaços em branco."
+        "body": "Esta conversa ou tarefa existente usa um caminho de projeto cujos nomes de diretório contêm espaços ou outros caracteres de espaço em branco. O BoloUi não oferece mais suporte ao envio de mensagens em caminhos desse tipo. Crie uma nova conversa ou tarefa com um caminho de projeto sem espaços em branco.",
+        "bodyWithPath": "O caminho de projeto existente \"{{workspacePath}}\" contém espaços ou outros caracteres de espaço em branco. O BoloUi não oferece mais suporte ao envio de mensagens em conversas ou tarefas que usam esse caminho. Crie uma nova conversa ou tarefa com um caminho de projeto sem espaços em branco."
       },
       "UNKNOWN_UPSTREAM_ERROR": {
         "title": "O agente ou provedor upstream falhou",
@@ -325,7 +325,7 @@
       },
       "MCP_HTTP_RESPONSE_READ_FAILED": {
         "title": "Failed to read the team helper response",
-        "body": "AionUi could not read the local team helper response. Retry once, and if it keeps happening, restart the app."
+        "body": "BoloUi could not read the local team helper response. Retry once, and if it keeps happening, restart the app."
       },
       "MCP_TOOL_REMOTE_ERROR": {
         "title": "The local team helper rejected the request",
@@ -333,11 +333,11 @@
       },
       "MCP_TOOL_RESPONSE_UNEXPECTED": {
         "title": "The team helper returned an unexpected response",
-        "body": "AionUi received an unexpected response from the local team helper. Retry once, and report it if the problem persists."
+        "body": "BoloUi received an unexpected response from the local team helper. Retry once, and report it if the problem persists."
       },
       "MCP_TCP_READ_FAILED": {
         "title": "Failed to read from the local team helper",
-        "body": "AionUi could not read the local team helper TCP response. Retry once, and restart the app if it keeps failing."
+        "body": "BoloUi could not read the local team helper TCP response. Retry once, and restart the app if it keeps failing."
       },
       "TEAM_SERVICE_UNAVAILABLE": {
         "title": "Team service is not ready yet",
@@ -625,13 +625,13 @@
         "body": "{{count}} etapa(s) falharam e NÃO tiveram efeito. O agy encerra esses turnos como bem-sucedidos mesmo assim, então confira o resultado real em vez da resposta."
       },
       "CLI_VERSION_OLDER": {
-        "body": "O {{cli}} instalado é anterior à versão verificada pelo AionUi; alguns recursos podem estar ausentes. Considere atualizar o {{cli}}. (instalado: {{reported}} / verificado pelo AionUi: {{verified}})"
+        "body": "O {{cli}} instalado é anterior à versão verificada pelo BoloUi; alguns recursos podem estar ausentes. Considere atualizar o {{cli}}. (instalado: {{reported}} / verificado pelo BoloUi: {{verified}})"
       },
       "CLI_VERSION_NEWER": {
-        "body": "O {{cli}} instalado é posterior à versão verificada pelo AionUi. Deve continuar funcionando; relate qualquer comportamento estranho. (instalado: {{reported}} / verificado pelo AionUi: {{verified}})"
+        "body": "O {{cli}} instalado é posterior à versão verificada pelo BoloUi. Deve continuar funcionando; relate qualquer comportamento estranho. (instalado: {{reported}} / verificado pelo BoloUi: {{verified}})"
       },
       "CODEX_RETRYING": {
-        "body": "{{detail}} (tentativa {{attempts}}, {{elapsed}} decorridos — o provedor do agente derruba a conexão repetidamente; o AionUi está aguardando.)"
+        "body": "{{detail}} (tentativa {{attempts}}, {{elapsed}} decorridos — o provedor do agente derruba a conexão repetidamente; o BoloUi está aguardando.)"
       }
     }
   },
@@ -711,7 +711,7 @@
         "conflicted": "!",
         "unknown": "?"
       },
-      "conflictedHint": "Resolva este conflito fora do AionUi primeiro",
+      "conflictedHint": "Resolva este conflito fora do BoloUi primeiro",
       "opaqueHint": "Este estado vem de um backend mais novo — exibido somente leitura",
       "degraded": "A atualização está em modo mais lento porque o índice do git não pode ser gravado",
       "truncated": "Alterações demais para listar — mostrando apenas a primeira parte",
@@ -730,7 +730,7 @@
         "discard": "Descartar alterações",
         "stageAll": "Preparar tudo",
         "unstageAll": "Retirar tudo da preparação",
-        "blockedHint": "Resolva o conflito fora do AionUi antes de preparar ou descartar",
+        "blockedHint": "Resolva o conflito fora do BoloUi antes de preparar ou descartar",
         "confirmDiscardTitle": "Descartar alterações?",
         "confirmDiscardTracked": "As edições em {{count}} arquivos serão perdidas. Isso não pode ser desfeito.",
         "confirmDiscardUntracked": "{{count}} novos arquivos serão movidos para a lixeira.",

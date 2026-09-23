@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -42,7 +42,7 @@ const useFormatContent = (content: string) => {
 };
 
 const ownershipColor = {
-  aionui: 'red',
+  boloui: 'red',
   user_agent: 'orange',
   user_llm_provider: 'arcoblue',
   unknown_upstream: 'gray',

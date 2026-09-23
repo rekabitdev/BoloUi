@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -144,7 +144,7 @@ const Layout: React.FC<{
     return () => setGlobalNavigate(null);
   }, [navigate]);
   const { t } = useTranslation();
-  // The "AionUi" wordmark acts as Home / Back-to-Chat, but only from settings routes.
+  // The "BoloUi" wordmark acts as Home / Back-to-Chat, but only from settings routes.
   // In non-settings routes the user is already "home", so it is a no-op (and not actionable).
   const isSettingsRoute = location.pathname.startsWith('/settings');
   // Only wired to the wordmark in the isSettingsRoute branch below, so the
@@ -326,7 +326,7 @@ const Layout: React.FC<{
 
     // Handle check update request from tray / 托盘请求检查更新
     const handleCheckUpdate = () => {
-      window.dispatchEvent(new CustomEvent('aionui-open-update-modal', { detail: { source: 'tray' } }));
+      window.dispatchEvent(new CustomEvent('boloui-open-update-modal', { detail: { source: 'tray' } }));
     };
 
     // Listen for tray events / 监听托盘事件
@@ -442,11 +442,11 @@ const Layout: React.FC<{
                         }
                       }}
                     >
-                      AionUi
+                      BoloUi
                     </div>
                   </Tooltip>
                 ) : (
-                  <div className='text-16px text-t-primary collapsed-hidden font-semibold'>AionUi</div>
+                  <div className='text-16px text-t-primary collapsed-hidden font-semibold'>BoloUi</div>
                 )}
                 {isMobile && !collapsed && (
                   <button

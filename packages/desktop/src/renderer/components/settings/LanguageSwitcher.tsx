@@ -1,4 +1,4 @@
-import AionSelect from '@/renderer/components/base/AionSelect';
+import BoloSelect from '@/renderer/components/base/BoloSelect';
 import type { SelectHandle } from '@arco-design/web-react/es/Select/interface';
 import React, { useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -29,21 +29,21 @@ const LanguageSwitcher: React.FC = () => {
 
   return (
     <div className='flex items-center gap-8px'>
-      <AionSelect ref={selectRef} className='w-160px' value={i18n.language} onChange={handleLanguageChange}>
-        <AionSelect.Option value='zh-CN'>简体中文</AionSelect.Option>
-        <AionSelect.Option value='zh-TW'>繁體中文</AionSelect.Option>
-        <AionSelect.Option value='ja-JP'>日本語</AionSelect.Option>
-        <AionSelect.Option value='ko-KR'>한국어</AionSelect.Option>
-        <AionSelect.Option value='tr-TR'>Türkçe</AionSelect.Option>
-        <AionSelect.Option value='ru-RU'>Русский</AionSelect.Option>
-        <AionSelect.Option value='uk-UA'>Українська</AionSelect.Option>
-        <AionSelect.Option value='pt-BR'>Português (BR)</AionSelect.Option>
-        <AionSelect.Option value='de-DE'>Deutsch</AionSelect.Option>
-        <AionSelect.Option value='es-ES'>Español</AionSelect.Option>
-        <AionSelect.Option value='fr-FR'>Français</AionSelect.Option>
-        <AionSelect.Option value='fa-IR'>فارسی</AionSelect.Option>
-        <AionSelect.Option value='en-US'>English</AionSelect.Option>
-      </AionSelect>
+      <BoloSelect ref={selectRef} className='w-160px' value={i18n.language} onChange={handleLanguageChange}>
+        <BoloSelect.Option value='zh-CN'>简体中文</BoloSelect.Option>
+        <BoloSelect.Option value='zh-TW'>繁體中文</BoloSelect.Option>
+        <BoloSelect.Option value='ja-JP'>日本語</BoloSelect.Option>
+        <BoloSelect.Option value='ko-KR'>한국어</BoloSelect.Option>
+        <BoloSelect.Option value='tr-TR'>Türkçe</BoloSelect.Option>
+        <BoloSelect.Option value='ru-RU'>Русский</BoloSelect.Option>
+        <BoloSelect.Option value='uk-UA'>Українська</BoloSelect.Option>
+        <BoloSelect.Option value='pt-BR'>Português (BR)</BoloSelect.Option>
+        <BoloSelect.Option value='de-DE'>Deutsch</BoloSelect.Option>
+        <BoloSelect.Option value='es-ES'>Español</BoloSelect.Option>
+        <BoloSelect.Option value='fr-FR'>Français</BoloSelect.Option>
+        <BoloSelect.Option value='fa-IR'>فارسی</BoloSelect.Option>
+        <BoloSelect.Option value='en-US'>English</BoloSelect.Option>
+      </BoloSelect>
     </div>
   );
 };

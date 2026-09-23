@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { type FeedbackEventTags, submitFeedbackReport } from '@/renderer/services/feedback/submitFeedbackReport';
 
-const AIONUI_DOWNLOAD_URL = 'https://www.aionui.com/';
+const BOLOUI_DOWNLOAD_URL = 'https://www.boloui.com/';
 const INSTALLATION_INTEGRITY_REPORT_FLUSH_TIMEOUT_MS = 2000;
 
 type InstallationIntegrityDialogKind =
@@ -35,7 +35,7 @@ export type InstallationIntegrityDiagnostics = {
 };
 
 export function openDownloadLatest(): void {
-  window.open(AIONUI_DOWNLOAD_URL, '_blank', 'noopener,noreferrer');
+  window.open(BOLOUI_DOWNLOAD_URL, '_blank', 'noopener,noreferrer');
 }
 
 /**
@@ -113,34 +113,34 @@ export function getInstallationIntegrityDiagnosticsSentText(
 
 function buildInstallationIntegrityTags(diagnostics: InstallationIntegrityDiagnostics): FeedbackEventTags {
   const tags: FeedbackEventTags = {
-    'aionui.installation_integrity.user_report': 'true',
-    'aionui.installation_integrity.report_source': diagnostics.source,
+    'boloui.installation_integrity.user_report': 'true',
+    'boloui.installation_integrity.report_source': diagnostics.source,
   };
 
   if (diagnostics.runtime?.failureKind) {
-    tags['aionui.installation_integrity.failure_kind'] = diagnostics.runtime.failureKind;
+    tags['boloui.installation_integrity.failure_kind'] = diagnostics.runtime.failureKind;
   }
   if (diagnostics.runtime?.resource) {
-    tags['aionui.runtime_resource'] = diagnostics.runtime.resource;
+    tags['boloui.runtime_resource'] = diagnostics.runtime.resource;
   }
   if (diagnostics.runtime?.resourceId) {
-    tags['aionui.runtime_resource_id'] = diagnostics.runtime.resourceId;
+    tags['boloui.runtime_resource_id'] = diagnostics.runtime.resourceId;
   }
   if (diagnostics.runtime?.scopeKind) {
-    tags['aionui.runtime_scope'] = diagnostics.runtime.scopeKind;
+    tags['boloui.runtime_scope'] = diagnostics.runtime.scopeKind;
   }
 
   const reason = diagnostics.backendStartupFailure?.reason;
   if (typeof reason === 'string') {
-    tags['aionui.backend_startup_failure.reason'] = reason;
+    tags['boloui.backend_startup_failure.reason'] = reason;
   }
   const backendBoundaryCode = diagnostics.backendStartupFailure?.backendBoundaryCode;
   if (typeof backendBoundaryCode === 'string') {
-    tags['aionui.backend_startup_failure.backend_boundary_code'] = backendBoundaryCode;
+    tags['boloui.backend_startup_failure.backend_boundary_code'] = backendBoundaryCode;
   }
   const backendBoundaryStage = diagnostics.backendStartupFailure?.backendBoundaryStage;
   if (typeof backendBoundaryStage === 'string') {
-    tags['aionui.backend_startup_failure.backend_boundary_stage'] = backendBoundaryStage;
+    tags['boloui.backend_startup_failure.backend_boundary_stage'] = backendBoundaryStage;
   }
 
   return tags;
@@ -163,7 +163,7 @@ export async function reportInstallationIntegrityDiagnostics(
     tags: buildInstallationIntegrityTags(diagnostics),
   });
 
-  if (typeof window !== 'undefined' && window.__aionuiE2ETest) {
+  if (typeof window !== 'undefined' && window.__bolouiE2ETest) {
     window.__installationIntegrityReportCount = (window.__installationIntegrityReportCount ?? 0) + 1;
     window.__lastInstallationIntegrityReportMessage = 'installation-integrity-user-report';
   }

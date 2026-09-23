@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import AionSelect from '@/renderer/components/base/AionSelect';
+import BoloSelect from '@/renderer/components/base/BoloSelect';
 import { DROPDOWN_SEARCH_THRESHOLD } from '@/renderer/components/agent/runtimeSelectorOptions';
 import { SYSTEM_FONT_FAMILY } from '@/common/config/fontFamilies';
 import useSystemFonts from '@renderer/hooks/ui/font/useSystemFonts';
@@ -47,7 +47,7 @@ const FontFamilySelect: React.FC<FontFamilySelectProps> = ({ value, onChange }) 
         : t('settings.fontFamilyNoResults');
 
   return (
-    <AionSelect
+    <BoloSelect
       className='w-200px'
       value={value}
       onChange={(next) => onChange(typeof next === 'string' ? next : SYSTEM_FONT_FAMILY)}

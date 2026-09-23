@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import styles from './components/MessagePermission/PermissionRequestPanel.module.css';
 import own from './MessageQuestion.module.css';
 
-const OTHER_VALUE = '__aionui_other__';
+const OTHER_VALUE = '__boloui_other__';
 
 type MessageQuestionProps = {
   message: IMessageAsk;

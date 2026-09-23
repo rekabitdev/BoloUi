@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  *
  * Unit tests for process/utils/describeUncaughtError — covers the attribution fields the
  * global uncaughtException / unhandledRejection handlers log so that Node-internal stacks
- * (e.g. TCP.onStreamRead / ECONNRESET) stay triageable (AIONUI-128).
+ * (e.g. TCP.onStreamRead / ECONNRESET) stay triageable (BOLOUI-128).
  */
 
 import { describe, expect, it } from 'vitest';

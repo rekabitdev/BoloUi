@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Form, Input, Select, Message, TimePicker, Radio, Button, Switch } from '@arco-design/web-react';
-import AionModal from '@renderer/components/base/AionModal';
+import BoloModal from '@renderer/components/base/BoloModal';
 import ThemedLogo from '@/renderer/components/agent/ThemedLogo';
 import { Down, Robot } from '@icon-park/react';
 import { ipcBridge } from '@/common';
@@ -610,7 +610,7 @@ const CreateTaskDialog: React.FC<CreateTaskDialogProps> = ({
   };
 
   return (
-    <AionModal
+    <BoloModal
       variant='standard'
       header={{ title: isEditMode ? t('cron.page.editTask') : t('cron.page.createTask'), showClose: true }}
       visible={visible}
@@ -1001,7 +1001,7 @@ const CreateTaskDialog: React.FC<CreateTaskDialogProps> = ({
           )}
         </Form>
       </div>
-    </AionModal>
+    </BoloModal>
   );
 };
 

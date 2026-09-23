@@ -2,7 +2,7 @@
  * Resolve the aioncore binary path.
  *
  * Search order:
- *  1. AIONUI_BACKEND_BIN env override (path, resolved to absolute)
+ *  1. BOLOUI_BACKEND_BIN env override (path, resolved to absolute)
  *  2. Bundled with app (production)
  *  3. System PATH
  */
@@ -12,7 +12,7 @@ import { join, resolve } from 'node:path';
 import { execSync } from 'node:child_process';
 
 const BINARY_NAME = 'aioncore';
-const BIN_ENV_VAR = 'AIONUI_BACKEND_BIN';
+const BIN_ENV_VAR = 'BOLOUI_BACKEND_BIN';
 const MAX_DIR_ENTRIES = 20;
 const MAX_LOOKUP_TEXT_LENGTH = 1000;
 
@@ -83,6 +83,11 @@ export function resolveBinaryPath(): string {
   const bundled = bundledPath(runtimeKey, binaryName, diagnostics);
   if (bundled) return bundled;
 
+  // During local development Electron's resourcesPath points inside its own
+  // package, while the prepared backend lives in the repository resources dir.
+  const developmentBundled = developmentBundledPath(runtimeKey, binaryName);
+  if (developmentBundled) return developmentBundled;
+
   const fromPath = resolveFromSystemPATH(diagnostics);
   if (fromPath) return fromPath;
 
@@ -93,7 +98,7 @@ export function resolveBinaryPath(): string {
 }
 
 /**
- * Honor the AIONUI_BACKEND_BIN env override.
+ * Honor the BOLOUI_BACKEND_BIN env override.
  * The value is resolved to an absolute path (relative to process.cwd) so it
  * survives the backend launcher spawning with a different working directory.
  * Returns the path when it points at an existing file. When the variable is
@@ -140,6 +145,11 @@ function bundledPath(
 
   if (existsSync(candidate)) return candidate;
   return null;
+}
+
+function developmentBundledPath(runtimeKey: string, binaryName: string): string | null {
+  const candidate = resolve(process.cwd(), 'resources', 'bundled-aioncore', runtimeKey, binaryName);
+  return existsSync(candidate) ? candidate : null;
 }
 
 /**

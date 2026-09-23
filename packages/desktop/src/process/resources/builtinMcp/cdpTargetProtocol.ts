@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -36,9 +36,9 @@
  */
 
 /** 伪造的稳定 id：只有一个目标，不需要真的分配。/ Fixed ids — there is only ever one target. */
-export const SINGLE_TARGET_ID = 'aionui-browser-target';
-export const SINGLE_SESSION_ID = 'aionui-browser-session';
-export const SINGLE_BROWSER_CONTEXT_ID = 'aionui-browser-context';
+export const SINGLE_TARGET_ID = 'boloui-browser-target';
+export const SINGLE_SESSION_ID = 'boloui-browser-session';
+export const SINGLE_BROWSER_CONTEXT_ID = 'boloui-browser-context';
 
 export type TargetInfo = {
   targetId: string;
@@ -88,7 +88,7 @@ export const buildTargetInfo = (title: string, url: string): TargetInfo => ({
 export const buildVersionPayload = (wsUrl: string, chromeVersion: string) => ({
   Browser: `Chrome/${chromeVersion}`,
   'Protocol-Version': '1.3',
-  'User-Agent': `AionUi in-app browser (Chrome/${chromeVersion})`,
+  'User-Agent': `BoloUi in-app browser (Chrome/${chromeVersion})`,
   'V8-Version': process.versions.v8 ?? '',
   'WebKit-Version': '',
   webSocketDebuggerUrl: wsUrl,
@@ -240,19 +240,19 @@ export const decideCdpCommand = (req: CdpRequest, getTargetInfo: () => TargetInf
     case 'Target.createTarget':
       return {
         kind: 'error',
-        message: 'AionUi in-app browser exposes a single fixed tab; Target.createTarget is not supported.',
+        message: 'BoloUi in-app browser exposes a single fixed tab; Target.createTarget is not supported.',
       };
 
     case 'Target.createBrowserContext':
     case 'Target.disposeBrowserContext':
-      return { kind: 'error', message: 'AionUi in-app browser does not support multiple browser contexts.' };
+      return { kind: 'error', message: 'BoloUi in-app browser does not support multiple browser contexts.' };
 
     /**
      * Browser.close 会关掉整个应用 —— 绝不能让 Agent 触发。
      * Browser.close would terminate the whole app; never let the agent reach it.
      */
     case 'Browser.close':
-      return { kind: 'error', message: 'Browser.close is not permitted against the AionUi in-app browser.' };
+      return { kind: 'error', message: 'Browser.close is not permitted against the BoloUi in-app browser.' };
 
     default:
       return { kind: 'forward' };

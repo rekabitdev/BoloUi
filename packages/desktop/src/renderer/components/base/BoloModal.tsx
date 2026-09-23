@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -79,8 +79,8 @@ export interface ModalContentStyleConfig {
   maxHeight?: string | number;
 }
 
-/** AionModal 组件 Props */
-export interface AionModalProps extends Omit<ModalProps, 'title' | 'footer'> {
+/** BoloModal 组件 Props */
+export interface BoloModalProps extends Omit<ModalProps, 'title' | 'footer'> {
   children?: React.ReactNode;
 
   /**
@@ -121,11 +121,11 @@ const FOOTER_DIVIDER_CLASS = 'flex-shrink-0 border-t border-solid border-[var(--
 
 // ===== standard 变体：统一三段式布局 =====
 /** 标题区：上 20 / 左右 24 / 下 16，底部一条贯穿全宽的分隔线。 */
-const STD_HEADER_CLASS = 'aionui-modal-std-header flex items-start justify-between gap-16px px-24px pt-20px pb-16px';
+const STD_HEADER_CLASS = 'boloui-modal-std-header flex items-start justify-between gap-16px px-24px pt-20px pb-16px';
 const STD_TITLE_CLASS = 'text-18px font-600 leading-26px text-t-primary m-0';
 const STD_SUBTITLE_CLASS = 'text-13px leading-20px text-t-secondary m-0 mt-4px';
 /** 内容区布局：撑满剩余高度、超出滚动（不含内边距）。 */
-const STD_BODY_LAYOUT_CLASS = 'aionui-modal-std-body min-h-0 flex-1 overflow-y-auto';
+const STD_BODY_LAYOUT_CLASS = 'boloui-modal-std-body min-h-0 flex-1 overflow-y-auto';
 /** 内容区标准内边距：上下 20 / 左右 24。整栏通铺（如团队双栏）时可通过 contentStyle.padding 关闭。 */
 const STD_BODY_PADDING_CLASS = 'px-24px py-20px';
 const STD_CLOSE_BTN_CLASS =
@@ -147,17 +147,17 @@ const STD_CLOSE_BTN_CLASS =
  * @example
  * ```tsx
  * // 基本用法 / Basic usage
- * <AionModal visible={true} onCancel={handleClose} header="标题">
+ * <BoloModal visible={true} onCancel={handleClose} header="标题">
  *   内容
- * </AionModal>
+ * </BoloModal>
  *
  * // 预设尺寸 / Preset size
- * <AionModal visible={true} size="large" header="大型弹窗">
+ * <BoloModal visible={true} size="large" header="大型弹窗">
  *   内容
- * </AionModal>
+ * </BoloModal>
  *
  * // 自定义 header / Custom header
- * <AionModal
+ * <BoloModal
  *   visible={true}
  *   header={{
  *     title: "自定义标题",
@@ -166,10 +166,10 @@ const STD_CLOSE_BTN_CLASS =
  *   }}
  * >
  *   内容
- * </AionModal>
+ * </BoloModal>
  *
  * // 自定义 footer / Custom footer
- * <AionModal
+ * <BoloModal
  *   visible={true}
  *   header="标题"
  *   footer={
@@ -180,7 +180,7 @@ const STD_CLOSE_BTN_CLASS =
  *   }
  * >
  *   内容
- * </AionModal>
+ * </BoloModal>
  * ```
  */
 const dimensionKeys = ['width', 'minWidth', 'maxWidth', 'height', 'minHeight', 'maxHeight'] as const;
@@ -191,7 +191,7 @@ const formatDimensionValue = (value?: string | number) => {
   return typeof value === 'number' ? `${value}px` : value;
 };
 
-const AionModal: React.FC<AionModalProps> = ({
+const BoloModal: React.FC<BoloModalProps> = ({
   children,
   variant,
   size,
@@ -417,7 +417,7 @@ const AionModal: React.FC<AionModalProps> = ({
       const useDivider = isStandard || footerConfig.divider === true;
       const footerClassName = classNames(
         useDivider ? FOOTER_DIVIDER_CLASS : FOOTER_BASE_CLASS,
-        isStandard && 'aionui-modal-std-footer',
+        isStandard && 'boloui-modal-std-footer',
         footerConfig.className
       );
       return (
@@ -437,18 +437,18 @@ const AionModal: React.FC<AionModalProps> = ({
       closable={false}
       footer={null}
       onCancel={onCancel}
-      className={classNames('aionui-modal', isStandard && 'aionui-modal-standard', className)}
+      className={classNames('boloui-modal', isStandard && 'boloui-modal-standard', className)}
       style={finalStyle}
       getPopupContainer={() => document.body}
     >
       <div
-        className={classNames('aionui-modal-wrapper', isStandard && 'flex flex-col min-h-0')}
+        className={classNames('boloui-modal-wrapper', isStandard && 'flex flex-col min-h-0')}
         style={{ borderRadius: borderRadiusVal }}
       >
         {renderHeader()}
         <div
           className={classNames(
-            'aionui-modal-body-content',
+            'boloui-modal-body-content',
             isStandard && STD_BODY_LAYOUT_CLASS,
             // 默认套用标准内边距；调用方显式传 contentStyle.padding 时改由 inline style 生效（可为 0）
             isStandard && !stdBodyHasCustomPadding && STD_BODY_PADDING_CLASS
@@ -463,6 +463,6 @@ const AionModal: React.FC<AionModalProps> = ({
   );
 };
 
-AionModal.displayName = 'AionModal';
+BoloModal.displayName = 'BoloModal';
 
-export default AionModal;
+export default BoloModal;

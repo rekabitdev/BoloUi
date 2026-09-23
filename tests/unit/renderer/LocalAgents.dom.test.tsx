@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  *
  * Render test for the LocalAgents settings surface. Its purpose is to lock in
@@ -88,7 +88,7 @@ vi.mock('@renderer/utils/platform', async () => {
 });
 
 // Keep the test focused on LocalAgents' own logic — stub heavy children.
-vi.mock('@/renderer/components/base/AionModal', () => ({ default: () => null }));
+vi.mock('@/renderer/components/base/BoloModal', () => ({ default: () => null }));
 vi.mock('@renderer/pages/settings/AgentSettings/InlineAgentEditor', () => ({ default: () => null }));
 vi.mock('@renderer/pages/settings/AgentSettings/AgentHubModal', () => ({ AgentHubModal: () => null }));
 
@@ -290,7 +290,7 @@ describe('LocalAgents', () => {
 
     fireEvent.click(screen.getByText('settings.agentManagement.localAgentsSetupLink'));
 
-    expect(openExternalUrl).toHaveBeenCalledWith('https://github.com/iOfficeAI/AionUi/wiki/ACP-Setup');
+    expect(openExternalUrl).toHaveBeenCalledWith('https://github.com/iOfficeAI/BoloUi/wiki/ACP-Setup');
   });
 
   it('binds assistants to managed agents by agent_id instead of runtime backend', () => {

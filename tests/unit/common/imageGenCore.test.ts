@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2026 AionUi (aionui.com)
+ * Copyright 2026 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -13,7 +13,7 @@ import { processImageUri, saveGeneratedImage, executeImageGeneration } from '@/c
 let cleanupDirs: string[] = [];
 
 function createWorkspace(): string {
-  const dir = mkdtempSync(join(tmpdir(), 'aionui-image-gen-test-'));
+  const dir = mkdtempSync(join(tmpdir(), 'boloui-image-gen-test-'));
   cleanupDirs.push(dir);
   return dir;
 }

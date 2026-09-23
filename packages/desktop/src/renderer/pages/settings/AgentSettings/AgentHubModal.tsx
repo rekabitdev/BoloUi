@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Typography, Tooltip, Link } from '@arco-design/web-react';
 import { IconDownload, IconRefresh } from '@arco-design/web-react/icon';
 import { useTranslation } from 'react-i18next';
-import AionModal from '@/renderer/components/base/AionModal';
+import BoloModal from '@/renderer/components/base/BoloModal';
 import { useHubAgents } from '@/renderer/hooks/agent/useHubAgents';
 import type { IHubAgentItem } from '@/common/types/agent/hub';
 import { resolveAgentAvatar, useAgentLogos } from '@renderer/utils/model/agentLogo';
@@ -84,7 +84,7 @@ export const AgentHubModal: React.FC<AgentHubModalProps> = ({ visible, onCancel 
   };
 
   return (
-    <AionModal
+    <BoloModal
       variant='standard'
       header={{ title: t('settings.agentManagement.installFromMarket'), showClose: true }}
       visible={visible}
@@ -176,6 +176,6 @@ export const AgentHubModal: React.FC<AgentHubModalProps> = ({ visible, onCancel 
           </div>
         )}
       </div>
-    </AionModal>
+    </BoloModal>
   );
 };

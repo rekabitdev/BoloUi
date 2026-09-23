@@ -1,6 +1,6 @@
-# AionUi WebUI Mode - Startup Guide
+# BoloUi WebUI Mode - Startup Guide
 
-AionUi supports WebUI mode, allowing you to access the application through a web browser. This guide covers how to start WebUI mode on all supported platforms.
+BoloUi supports WebUI mode, allowing you to access the application through a web browser. This guide covers how to start WebUI mode on all supported platforms.
 
 ## Table of Contents
 
@@ -16,10 +16,10 @@ AionUi supports WebUI mode, allowing you to access the application through a web
 
 ## What is WebUI Mode?
 
-WebUI mode starts AionUi with an embedded web server, allowing you to:
+WebUI mode starts BoloUi with an embedded web server, allowing you to:
 
 - Access the application through any modern web browser
-- Use AionUi from remote devices on the same network (with `--remote` flag)
+- Use BoloUi from remote devices on the same network (with `--remote` flag)
 - Run the application headless on servers
 
 Default access URL: `http://localhost:3000` (port may vary, check the application output)
@@ -34,10 +34,10 @@ Open **Command Prompt** or **PowerShell** and run:
 
 ```cmd
 # Using full path
-"C:\Program Files\AionUi\AionUi.exe" --webui
+"C:\Program Files\BoloUi\BoloUi.exe" --webui
 
-# Or if AionUi is in your PATH
-AionUi.exe --webui
+# Or if BoloUi is in your PATH
+BoloUi.exe --webui
 ```
 
 ### Method 2: Create a Desktop Shortcut
@@ -45,19 +45,19 @@ AionUi.exe --webui
 1. Right-click on desktop → **New** → **Shortcut**
 2. Enter target location:
    ```
-   "C:\Program Files\AionUi\AionUi.exe" --webui
+   "C:\Program Files\BoloUi\BoloUi.exe" --webui
    ```
-3. Name it **AionUi WebUI**
+3. Name it **BoloUi WebUI**
 4. Click **Finish**
 5. Double-click the shortcut to launch
 
 ### Method 3: Create a Batch File
 
-Create `start-aionui-webui.bat`:
+Create `start-boloui-webui.bat`:
 
 ```batch
 @echo off
-"C:\Program Files\AionUi\AionUi.exe" --webui
+"C:\Program Files\BoloUi\BoloUi.exe" --webui
 pause
 ```
 
@@ -73,26 +73,26 @@ Open **Terminal** and run:
 
 ```bash
 # Using full path
-/Applications/AionUi.app/Contents/MacOS/AionUi --webui
+/Applications/BoloUi.app/Contents/MacOS/BoloUi --webui
 
 # Or using open command
-open -a AionUi --args --webui
+open -a BoloUi --args --webui
 ```
 
 ### Method 2: Create Shell Script
 
-Create `start-aionui-webui.sh`:
+Create `start-boloui-webui.sh`:
 
 ```bash
 #!/bin/bash
-/Applications/AionUi.app/Contents/MacOS/AionUi --webui
+/Applications/BoloUi.app/Contents/MacOS/BoloUi --webui
 ```
 
 Make it executable and run:
 
 ```bash
-chmod +x start-aionui-webui.sh
-./start-aionui-webui.sh
+chmod +x start-boloui-webui.sh
+./start-boloui-webui.sh
 ```
 
 ### Method 3: Create Automator Application
@@ -102,15 +102,15 @@ chmod +x start-aionui-webui.sh
 3. Add **Run Shell Script** action
 4. Enter:
    ```bash
-   /Applications/AionUi.app/Contents/MacOS/AionUi --webui
+   /Applications/BoloUi.app/Contents/MacOS/BoloUi --webui
    ```
-5. Save as **AionUi WebUI.app**
+5. Save as **BoloUi WebUI.app**
 6. Double-click to launch
 
 ### Method 4: Add to Dock
 
 1. Create an Automator app (Method 3)
-2. Drag **AionUi WebUI.app** to your Dock
+2. Drag **BoloUi WebUI.app** to your Dock
 3. Click the Dock icon to start WebUI mode anytime
 
 ---
@@ -123,32 +123,32 @@ chmod +x start-aionui-webui.sh
 
 ```bash
 # Using system path
-aionui --webui
+boloui --webui
 
 # Or using full path
-/opt/AionUi/aionui --webui
+/opt/BoloUi/boloui --webui
 ```
 
 #### For AppImage
 
 ```bash
 # Make AppImage executable (first time only)
-chmod +x AionUi-*.AppImage
+chmod +x BoloUi-*.AppImage
 
 # Run with --webui flag
-./AionUi-*.AppImage --webui
+./BoloUi-*.AppImage --webui
 ```
 
 ### Method 2: Create Desktop Entry
 
-Create `~/.local/share/applications/aionui-webui.desktop`:
+Create `~/.local/share/applications/boloui-webui.desktop`:
 
 ```ini
 [Desktop Entry]
-Name=AionUi WebUI
-Comment=Start AionUi in WebUI mode
-Exec=/opt/AionUi/aionui --webui
-Icon=aionui
+Name=BoloUi WebUI
+Comment=Start BoloUi in WebUI mode
+Exec=/opt/BoloUi/boloui --webui
+Icon=boloui
 Terminal=false
 Type=Application
 Categories=Utility;Office;
@@ -157,45 +157,45 @@ Categories=Utility;Office;
 Make it executable:
 
 ```bash
-chmod +x ~/.local/share/applications/aionui-webui.desktop
+chmod +x ~/.local/share/applications/boloui-webui.desktop
 ```
 
 The launcher will appear in your application menu.
 
 ### Method 3: Create Shell Script
 
-Create `~/bin/start-aionui-webui.sh`:
+Create `~/bin/start-boloui-webui.sh`:
 
 ```bash
 #!/bin/bash
-/opt/AionUi/aionui --webui
+/opt/BoloUi/boloui --webui
 ```
 
 Make it executable:
 
 ```bash
-chmod +x ~/bin/start-aionui-webui.sh
+chmod +x ~/bin/start-boloui-webui.sh
 ```
 
 Run it:
 
 ```bash
-start-aionui-webui.sh
+start-boloui-webui.sh
 ```
 
 ### Method 4: Systemd Service (Background)
 
-Create `/etc/systemd/system/aionui-webui.service`:
+Create `/etc/systemd/system/boloui-webui.service`:
 
 ```ini
 [Unit]
-Description=AionUi WebUI Service
+Description=BoloUi WebUI Service
 After=network.target
 
 [Service]
 Type=simple
 User=YOUR_USERNAME
-ExecStart=/opt/AionUi/aionui --webui --remote
+ExecStart=/opt/BoloUi/boloui --webui --remote
 Restart=on-failure
 RestartSec=10
 
@@ -207,24 +207,24 @@ Enable and start the service:
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable aionui-webui.service
-sudo systemctl start aionui-webui.service
+sudo systemctl enable boloui-webui.service
+sudo systemctl start boloui-webui.service
 
 # Check status
-sudo systemctl status aionui-webui.service
+sudo systemctl status boloui-webui.service
 ```
 
 ---
 
 ## Android (Termux)
 
-**Important Note**: Electron desktop mode is **not supported** on Android. However, you can run AionUi in WebUI mode using Termux with a prooted Linux environment.
+**Important Note**: Electron desktop mode is **not supported** on Android. However, you can run BoloUi in WebUI mode using Termux with a prooted Linux environment.
 
-> **Community Contribution**: This guide is contributed by [@Manamama](https://github.com/Manamama). Special thanks for making AionUi accessible on Android devices! 🙏
+> **Community Contribution**: This guide is contributed by [@Manamama](https://github.com/Manamama). Special thanks for making BoloUi accessible on Android devices! 🙏
 >
-> **Original Tutorial**: [Running AionUi WebUI on Android via Termux + Proot Ubuntu](https://gist.github.com/Manamama/b4f903c279b5e73bdad4c2c0a58d5ddd)
+> **Original Tutorial**: [Running BoloUi WebUI on Android via Termux + Proot Ubuntu](https://gist.github.com/Manamama/b4f903c279b5e73bdad4c2c0a58d5ddd)
 >
-> **Related Issues**: [#217 - Android Support Discussion](https://github.com/iOfficeAI/AionUi/issues/217)
+> **Related Issues**: [#217 - Android Support Discussion](https://github.com/iOfficeAI/BoloUi/issues/217)
 
 ### Prerequisites
 
@@ -281,28 +281,28 @@ apt install -y \
     libcups2
 ```
 
-#### 4. Download and Install AionUi
+#### 4. Download and Install BoloUi
 
 ```bash
 # Download the ARM64 .deb package (replace VERSION with the actual version)
-# Check latest version at: https://github.com/iOfficeAI/AionUi/releases
-wget https://github.com/iOfficeAI/AionUi/releases/download/vVERSION/AionUi_VERSION_arm64.deb
+# Check latest version at: https://github.com/iOfficeAI/BoloUi/releases
+wget https://github.com/iOfficeAI/BoloUi/releases/download/vVERSION/BoloUi_VERSION_arm64.deb
 
 # Example (replace VERSION with the release tag, e.g. v1.5.2):
-wget https://github.com/iOfficeAI/AionUi/releases/download/vVERSION/AionUi_VERSION_arm64.deb
+wget https://github.com/iOfficeAI/BoloUi/releases/download/vVERSION/BoloUi_VERSION_arm64.deb
 
 # Install the package
-apt install -y ./AionUi_*.deb
+apt install -y ./BoloUi_*.deb
 
 # Verify installation
-which AionUi
+which BoloUi
 ```
 
-#### 5. Launch AionUi WebUI
+#### 5. Launch BoloUi WebUI
 
 ```bash
-# Start AionUi in WebUI mode with no-sandbox flag
-AionUi --no-sandbox --webui
+# Start BoloUi in WebUI mode with no-sandbox flag
+BoloUi --no-sandbox --webui
 ```
 
 **Important**: The `--no-sandbox` flag is required in Termux/proot environments.
@@ -331,11 +331,11 @@ These errors are related to D-Bus and X server, which are not needed for WebUI m
 
 ### Remote Access on LAN
 
-To access AionUi from other devices on your local network:
+To access BoloUi from other devices on your local network:
 
 ```bash
 # Start with --remote flag
-AionUi --no-sandbox --webui --remote
+BoloUi --no-sandbox --webui --remote
 
 # Find your Android device's IP address
 # In Termux (outside proot):
@@ -352,23 +352,23 @@ If port 25808 is occupied:
 
 ```bash
 # Specify a different port
-AionUi --no-sandbox --webui --port 8080
+BoloUi --no-sandbox --webui --port 8080
 ```
 
 #### Permission Denied Errors
 
 ```bash
 # Ensure the binary has execute permissions
-chmod +x /opt/AionUi/aionui
+chmod +x /opt/BoloUi/boloui
 ```
 
 #### Out of Memory
 
-AionUi requires sufficient RAM. Close other apps if you encounter memory issues.
+BoloUi requires sufficient RAM. Close other apps if you encounter memory issues.
 
 #### Cannot Access from Browser
 
-1. Check if AionUi is running: look for "Server started" message
+1. Check if BoloUi is running: look for "Server started" message
 2. Try using Termux's built-in browser or Chrome
 3. Clear browser cache
 
@@ -377,32 +377,32 @@ AionUi requires sufficient RAM. Close other apps if you encounter memory issues.
 1. **Use a lightweight browser** - Chrome or Firefox Focus recommended
 2. **Close background apps** - Free up RAM for better performance
 3. **Use WiFi** - More stable than mobile data for remote access
-4. **Keep device charged** - Running AionUi consumes battery
+4. **Keep device charged** - Running BoloUi consumes battery
 
 ### Tested Environment
 
 - **Device**: Android 14
 - **Termux Version**: 0.118.0
-- **AionUi Version**: Latest release (e.g. 1.5.2)
+- **BoloUi Version**: Latest release (e.g. 1.5.2)
 - **Proot-distro**: Ubuntu (latest)
 
 ### Creating a Startup Script
 
-For convenience, create a script to launch AionUi quickly:
+For convenience, create a script to launch BoloUi quickly:
 
 ```bash
 # Create script in Ubuntu (proot)
-cat > ~/start-aionui.sh << 'EOF'
+cat > ~/start-boloui.sh << 'EOF'
 #!/bin/bash
-echo "Starting AionUi WebUI..."
-AionUi --no-sandbox --webui --remote
+echo "Starting BoloUi WebUI..."
+BoloUi --no-sandbox --webui --remote
 EOF
 
 # Make executable
-chmod +x ~/start-aionui.sh
+chmod +x ~/start-boloui.sh
 
 # Run anytime
-./start-aionui.sh
+./start-boloui.sh
 ```
 
 ### Quick Start Command (One-liner)
@@ -410,7 +410,7 @@ chmod +x ~/start-aionui.sh
 From Termux main shell:
 
 ```bash
-proot-distro login ubuntu -- bash -c "AionUi --no-sandbox --webui --remote"
+proot-distro login ubuntu -- bash -c "BoloUi --no-sandbox --webui --remote"
 ```
 
 ### Feedback and Improvements
@@ -418,7 +418,7 @@ proot-distro login ubuntu -- bash -c "AionUi --no-sandbox --webui --remote"
 If you encounter issues or have suggestions for improving Android support:
 
 1. Check the [original community guide](https://gist.github.com/Manamama/b4f903c279b5e73bdad4c2c0a58d5ddd)
-2. Report issues at [GitHub Issues #217](https://github.com/iOfficeAI/AionUi/issues/217)
+2. Report issues at [GitHub Issues #217](https://github.com/iOfficeAI/BoloUi/issues/217)
 3. Share your experience to help other Android users!
 
 ---
@@ -430,19 +430,19 @@ To allow access from other devices on your network, use the `--remote` flag:
 ### Windows
 
 ```cmd
-AionUi.exe --webui --remote
+BoloUi.exe --webui --remote
 ```
 
 ### macOS
 
 ```bash
-/Applications/AionUi.app/Contents/MacOS/AionUi --webui --remote
+/Applications/BoloUi.app/Contents/MacOS/BoloUi --webui --remote
 ```
 
 ### Linux
 
 ```bash
-aionui --webui --remote
+boloui --webui --remote
 ```
 
 **Security Note**: Remote mode allows network access. Use only on trusted networks. Consider setting up authentication and firewall rules for production use.
@@ -494,7 +494,7 @@ If port 3000 is already in use, the application will automatically try the next 
 
 ```cmd
 # Allow through Windows Firewall
-netsh advfirewall firewall add rule name="AionUi WebUI" dir=in action=allow protocol=TCP localport=3000
+netsh advfirewall firewall add rule name="BoloUi WebUI" dir=in action=allow protocol=TCP localport=3000
 ```
 
 **Linux (UFW):**
@@ -504,7 +504,7 @@ sudo ufw allow 3000/tcp
 ```
 
 **macOS:**
-Go to **System Preferences** → **Security & Privacy** → **Firewall** → **Firewall Options** → Add AionUi
+Go to **System Preferences** → **Security & Privacy** → **Firewall** → **Firewall Options** → Add BoloUi
 
 ### Application Not Found
 
@@ -513,21 +513,21 @@ Go to **System Preferences** → **Security & Privacy** → **Firewall** → **F
 **Windows:**
 
 ```cmd
-where AionUi.exe
+where BoloUi.exe
 ```
 
 **macOS:**
 
 ```bash
-mdfind -name "AionUi.app"
+mdfind -name "BoloUi.app"
 ```
 
 **Linux:**
 
 ```bash
-which aionui
+which boloui
 # or
-find /opt -name "aionui" 2>/dev/null
+find /opt -name "boloui" 2>/dev/null
 ```
 
 ### View Logs
@@ -535,13 +535,13 @@ find /opt -name "aionui" 2>/dev/null
 **Windows (PowerShell):**
 
 ```powershell
-& "C:\Program Files\AionUi\AionUi.exe" --webui 2>&1 | Tee-Object -FilePath aionui.log
+& "C:\Program Files\BoloUi\BoloUi.exe" --webui 2>&1 | Tee-Object -FilePath boloui.log
 ```
 
 **macOS/Linux:**
 
 ```bash
-/path/to/aionui --webui 2>&1 | tee aionui.log
+/path/to/boloui --webui 2>&1 | tee boloui.log
 ```
 
 ---
@@ -552,19 +552,19 @@ You can customize WebUI behavior with environment variables:
 
 ```bash
 # Override the listening port
-export AIONUI_PORT=8080
+export BOLOUI_PORT=8080
 
 # Allow remote access without passing --remote
-export AIONUI_ALLOW_REMOTE=true
+export BOLOUI_ALLOW_REMOTE=true
 
-# Optional host hint (0.0.0.0 behaves the same as AIONUI_ALLOW_REMOTE=true)
-export AIONUI_HOST=0.0.0.0
+# Optional host hint (0.0.0.0 behaves the same as BOLOUI_ALLOW_REMOTE=true)
+export BOLOUI_HOST=0.0.0.0
 
 # Then start the application
-aionui --webui
+boloui --webui
 
 # You can also pass the port directly via CLI
-aionui --webui --port 8080
+boloui --webui --port 8080
 ```
 
 ---
@@ -575,9 +575,9 @@ From v1.5.0+, you can store persistent WebUI preferences in `webui.config.json` 
 
 | Platform | Location                                                 |
 | -------- | -------------------------------------------------------- |
-| Windows  | `%APPDATA%/AionUi/webui.config.json`                     |
-| macOS    | `~/Library/Application Support/AionUi/webui.config.json` |
-| Linux    | `~/.config/AionUi/webui.config.json`                     |
+| Windows  | `%APPDATA%/BoloUi/webui.config.json`                     |
+| macOS    | `~/Library/Application Support/BoloUi/webui.config.json` |
+| Linux    | `~/.config/BoloUi/webui.config.json`                     |
 
 Example file:
 
@@ -614,33 +614,33 @@ If you forgot your admin password in WebUI mode, you can reset it using the `--r
 
 ```cmd
 # Using full path
-"C:\Program Files\AionUi\AionUi.exe" --resetpass
+"C:\Program Files\BoloUi\BoloUi.exe" --resetpass
 
 # Or for a specific user
-"C:\Program Files\AionUi\AionUi.exe" --resetpass username
+"C:\Program Files\BoloUi\BoloUi.exe" --resetpass username
 ```
 
 **macOS:**
 
 ```bash
 # Using full path
-/Applications/AionUi.app/Contents/MacOS/AionUi --resetpass
+/Applications/BoloUi.app/Contents/MacOS/BoloUi --resetpass
 
 # Or for a specific user
-/Applications/AionUi.app/Contents/MacOS/AionUi --resetpass username
+/Applications/BoloUi.app/Contents/MacOS/BoloUi --resetpass username
 ```
 
 **Linux:**
 
 ```bash
 # Using system path
-aionui --resetpass
+boloui --resetpass
 
 # Or for a specific user
-aionui --resetpass username
+boloui --resetpass username
 
 # Or using full path
-/opt/AionUi/aionui --resetpass
+/opt/BoloUi/boloui --resetpass
 ```
 
 ### What happens when you run --resetpass:
@@ -678,7 +678,7 @@ npm run resetpass -- username
 - [Main README](../readme.md)
 - [中文说明](./readme/readme_ch.md)
 - [日本語ドキュメント](./readme/readme_jp.md)
-- [GitHub Issues](https://github.com/iOfficeAI/AionUi/issues)
+- [GitHub Issues](https://github.com/iOfficeAI/BoloUi/issues)
 
 ---
 
@@ -687,13 +687,13 @@ npm run resetpass -- username
 If you encounter any issues:
 
 1. Check the [Troubleshooting](#troubleshooting) section
-2. Search [existing issues](https://github.com/iOfficeAI/AionUi/issues)
-3. Create a [new issue](https://github.com/iOfficeAI/AionUi/issues/new) with:
+2. Search [existing issues](https://github.com/iOfficeAI/BoloUi/issues)
+3. Create a [new issue](https://github.com/iOfficeAI/BoloUi/issues/new) with:
    - Your OS and version
-   - AionUi version
+   - BoloUi version
    - Steps to reproduce
    - Error messages or logs
 
 ---
 
-**Happy using AionUi in WebUI mode!** 🚀
+**Happy using BoloUi in WebUI mode!** 🚀

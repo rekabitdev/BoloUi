@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -53,7 +53,7 @@ export const useDesktopTurnNotification = (): void => {
         // Both turn-completed and confirmation (permission / question) kinds
         // fire a native notification. The main process still gates on the
         // setting and skips when the window is focused.
-        void ipcBridge.notification.show.invoke({ title: 'AionUi', body, conversation_id: conversationId });
+        void ipcBridge.notification.show.invoke({ title: 'BoloUi', body, conversation_id: conversationId });
       },
     });
 

@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import type { IGpuStatus } from '@/common/adapter/ipcBridge';
 
 /** localStorage key holding the `lastCrashAt` of the last acknowledged notice. */
-export const GPU_AUTO_DISABLE_ACK_KEY = 'aionui.gpuAutoDisableNoticeAckAt';
+export const GPU_AUTO_DISABLE_ACK_KEY = 'boloui.gpuAutoDisableNoticeAckAt';
 
 /**
  * Decide whether to surface the one-time "hardware acceleration auto-disabled"

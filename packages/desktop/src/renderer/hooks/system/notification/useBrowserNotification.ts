@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -63,7 +63,7 @@ export const useBrowserNotification = (): void => {
       },
       show: ({ body, conversationId }) => {
         try {
-          const notification = new Notification('AionUi', { body });
+          const notification = new Notification('BoloUi', { body });
           notification.onclick = () => {
             window.focus();
             if (conversationId) void navigate(`/conversation/${conversationId}`);

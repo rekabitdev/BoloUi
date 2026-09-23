@@ -37,7 +37,7 @@ export interface IHubExtension {
     unpackedSize: number;
   };
   engines: {
-    aionui: string; // Minimum APP version requirement
+    boloui: string; // Minimum APP version requirement
   };
   hubs: string[]; // Hub categories e.g. ["acpAdapters"]
   contributes?: HubContributes;

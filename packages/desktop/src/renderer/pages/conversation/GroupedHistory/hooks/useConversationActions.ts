@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -77,22 +77,6 @@ export const useConversationActions = ({
       }
     },
     [batchMode, toggleSelectedConversation, markAsRead, navigate, onSessionClick]
-  );
-
-  const removeConversation = useCallback(
-    async (conversation_id: string) => {
-      const success = await ipcBridge.conversation.remove.invoke({ id: conversation_id });
-      if (!success) {
-        return false;
-      }
-
-      emitter.emit('conversation.deleted', conversation_id);
-      if (id === conversation_id) {
-        void navigate('/');
-      }
-      return true;
-    },
-    [id, navigate]
   );
 
   const handleBatchArchive = useCallback(() => {
@@ -250,7 +234,7 @@ export const useConversationActions = ({
   );
 
   /**
-   * Archive-project state — rendered via AionModal in the GroupedHistory component.
+   * Archive-project state — rendered via BoloModal in the GroupedHistory component.
    * The left panel groups conversations by workspace folder (not by a bound
    * project record), so there is no project id to hand the `archiveProject`
    * endpoint. Archiving the group therefore archives each conversation in it —
@@ -316,6 +300,37 @@ export const useConversationActions = ({
     [t]
   );
 
+  const handleDelete = useCallback(
+    (conversation: TChatConversation) => {
+      setDropdownVisibleId(null);
+      Modal.confirm({
+        title: t('conversation.history.deleteConfirmTitle'),
+        content: t('conversation.history.deleteConfirmContent', { name: conversation.name }),
+        okText: t('conversation.history.delete'),
+        cancelText: t('common.cancel'),
+        okButtonProps: { status: 'danger' },
+        onOk: async () => {
+          try {
+            const success = await ipcBridge.conversation.remove.invoke({ id: conversation.id });
+            if (!success) {
+              Message.error(t('conversation.history.deleteFailed'));
+              return;
+            }
+            emitter.emit('chat.history.refresh');
+            Message.success(t('conversation.history.deleteSuccess'));
+            if (id === conversation.id) {
+              void navigate('/');
+            }
+          } catch (error) {
+            console.error('Failed to delete conversation:', error);
+            Message.error(t('conversation.history.deleteFailed'));
+          }
+        },
+      });
+    },
+    [id, navigate, t]
+  );
+
   return {
     renameModalVisible,
     renameModalName,
@@ -325,6 +340,7 @@ export const useConversationActions = ({
     handleConversationClick,
     handleBatchArchive,
     handleArchive,
+    handleDelete,
     handleEditStart,
     handleRenameConfirm,
     handleRenameCancel,

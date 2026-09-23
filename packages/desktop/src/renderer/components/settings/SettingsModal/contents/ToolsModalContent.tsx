@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -14,8 +14,8 @@ import { Help } from '@icon-park/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useConfigModelListWithImage from '@/renderer/hooks/agent/useConfigModelListWithImage';
-import AionScrollArea from '@/renderer/components/base/AionScrollArea';
-import AionSelect from '@/renderer/components/base/AionSelect';
+import BoloScrollArea from '@/renderer/components/base/BoloScrollArea';
+import BoloSelect from '@/renderer/components/base/BoloSelect';
 import TalkToButlerButton from '@/renderer/components/base/TalkToButlerButton';
 import AddMcpServerModal from '@/renderer/pages/settings/components/AddMcpServerModal';
 import McpServerItem from '@/renderer/pages/settings/ToolsSettings/McpServerItem';
@@ -199,7 +199,7 @@ const ModalMcpManagementSection: React.FC<{
             {t('settings.mcpNoServersFound')}
           </div>
         ) : (
-          <AionScrollArea
+          <BoloScrollArea
             className={classNames('max-h-360px', isPageMode && 'max-h-none')}
             disableOverflow={isPageMode}
           >
@@ -233,7 +233,7 @@ const ModalMcpManagementSection: React.FC<{
                 />
               ))}
             </div>
-          </AionScrollArea>
+          </BoloScrollArea>
         )}
       </div>
 
@@ -488,12 +488,12 @@ const ToolsModalContent: React.FC = () => {
       {mcpMessageContext}
 
       {/* Content Area */}
-      <AionScrollArea className='flex-1 min-h-0 pb-16px' disableOverflow={isPageMode}>
+      <BoloScrollArea className='flex-1 min-h-0 pb-16px' disableOverflow={isPageMode}>
         <div className='space-y-16px'>
           {/* MCP 工具配置 */}
           <div className='px-[12px] md:px-[32px] py-[24px] bg-2 rd-12px md:rd-16px flex flex-col min-h-0 border border-border-2'>
             <div className='flex-1 min-h-0'>
-              <AionScrollArea
+              <BoloScrollArea
                 className={classNames('h-full', isPageMode && 'overflow-visible')}
                 disableOverflow={isPageMode}
               >
@@ -505,7 +505,7 @@ const ToolsModalContent: React.FC = () => {
                   saveMcpServers={saveMcpServers}
                   isPageMode={isPageMode}
                 />
-              </AionScrollArea>
+              </BoloScrollArea>
             </div>
           </div>
           {/* 图像生成 */}
@@ -543,7 +543,7 @@ const ToolsModalContent: React.FC = () => {
                 }
               >
                 {imageGenerationModelList.length > 0 ? (
-                  <AionSelect
+                  <BoloSelect
                     value={
                       imageGenerationModel?.id && imageGenerationModel?.use_model
                         ? `${imageGenerationModel.id}|${imageGenerationModel.use_model}`
@@ -561,15 +561,15 @@ const ToolsModalContent: React.FC = () => {
                     }}
                   >
                     {imageGenerationModelList.map(({ models, ...platform }) => (
-                      <AionSelect.OptGroup label={platform.name} key={platform.id}>
+                      <BoloSelect.OptGroup label={platform.name} key={platform.id}>
                         {models.map((modelName) => (
-                          <AionSelect.Option key={platform.id + modelName} value={platform.id + '|' + modelName}>
+                          <BoloSelect.Option key={platform.id + modelName} value={platform.id + '|' + modelName}>
                             {modelName}
-                          </AionSelect.Option>
+                          </BoloSelect.Option>
                         ))}
-                      </AionSelect.OptGroup>
+                      </BoloSelect.OptGroup>
                     ))}
-                  </AionSelect>
+                  </BoloSelect>
                 ) : (
                   <div className='text-t-secondary flex items-center'>
                     {t('settings.noAvailable')}
@@ -588,7 +588,7 @@ const ToolsModalContent: React.FC = () => {
                         <div>
                           {t('settings.needHelpTooltip')}
                           <a
-                            href='https://github.com/iOfficeAI/AionUi/wiki/AionUi-Image-Generation-Tool-Model-Configuration-Guide'
+                            href='https://github.com/iOfficeAI/BoloUi/wiki/BoloUi-Image-Generation-Tool-Model-Configuration-Guide'
                             target='_blank'
                             rel='noopener noreferrer'
                             className='text-[rgb(var(--primary-6))] hover:text-[rgb(var(--primary-5))] underline ms-4px'
@@ -600,7 +600,7 @@ const ToolsModalContent: React.FC = () => {
                       }
                     >
                       <a
-                        href='https://github.com/iOfficeAI/AionUi/wiki/AionUi-Image-Generation-Tool-Model-Configuration-Guide'
+                        href='https://github.com/iOfficeAI/BoloUi/wiki/BoloUi-Image-Generation-Tool-Model-Configuration-Guide'
                         target='_blank'
                         rel='noopener noreferrer'
                         className='ms-8px text-[rgb(var(--primary-6))] hover:text-[rgb(var(--primary-5))] cursor-pointer'
@@ -615,7 +615,7 @@ const ToolsModalContent: React.FC = () => {
             </Form>
           </div>
         </div>
-      </AionScrollArea>
+      </BoloScrollArea>
     </div>
   );
 };

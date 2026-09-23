@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -554,7 +554,7 @@ const normalizePersistedWorkspaceRuntimeError = (
   return {
     message,
     code: 'WORKSPACE_PATH_RUNTIME_UNAVAILABLE',
-    ownership: 'aionui',
+    ownership: 'boloui',
     detail,
     workspacePath,
     retryable: false,
@@ -590,7 +590,7 @@ const classifyPersistedSendFailure = (
     return {
       message,
       code: effectiveCode,
-      ownership: 'aionui',
+      ownership: 'boloui',
       detail: message,
       retryable: true,
       feedback_recommended: true,
@@ -605,7 +605,7 @@ const classifyPersistedSendFailure = (
     return {
       message,
       code: effectiveCode,
-      ownership: 'aionui',
+      ownership: 'boloui',
       detail: message,
       retryable: false,
       feedback_recommended: false,
@@ -626,16 +626,16 @@ const classifyPersistedSendFailure = (
   if (persistedCode === 'INTERNAL_ERROR') {
     return {
       message,
-      code: 'AIONUI_INTERNAL_ERROR',
-      ownership: 'aionui',
+      code: 'BOLOUI_INTERNAL_ERROR',
+      ownership: 'boloui',
       detail: message,
       retryable: true,
       feedback_recommended: true,
     };
   }
 
-  if (persistedCode?.startsWith('AIONUI_')) {
-    return { message, code: persistedCode, ownership: 'aionui', detail: message, retryable: true };
+  if (persistedCode?.startsWith('BOLOUI_')) {
+    return { message, code: persistedCode, ownership: 'boloui', detail: message, retryable: true };
   }
   if (persistedCode?.startsWith('USER_AGENT_')) {
     return { message, code: persistedCode, ownership: 'user_agent', detail: message, retryable: true };
@@ -664,8 +664,8 @@ const classifyPersistedSendFailure = (
   if (parsed.source === 'send_failed') {
     return {
       message,
-      code: 'AIONUI_INTERNAL_ERROR',
-      ownership: 'aionui',
+      code: 'BOLOUI_INTERNAL_ERROR',
+      ownership: 'boloui',
       detail: message,
       retryable: true,
       feedback_recommended: true,

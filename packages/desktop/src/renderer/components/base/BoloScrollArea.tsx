@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -16,29 +16,29 @@ import React from 'react';
  * @example
  * ```tsx
  * // 垂直滚动（默认）/ Vertical scroll (default)
- * <AionScrollArea className="h-400px">
+ * <BoloScrollArea className="h-400px">
  *   <div>Content...</div>
- * </AionScrollArea>
+ * </BoloScrollArea>
  *
  * // 水平滚动 / Horizontal scroll
- * <AionScrollArea direction="x" className="w-400px">
+ * <BoloScrollArea direction="x" className="w-400px">
  *   <div className="whitespace-nowrap">Content...</div>
- * </AionScrollArea>
+ * </BoloScrollArea>
  *
  * // 双向滚动 / Both directions
- * <AionScrollArea direction="both" className="h-400px w-400px">
+ * <BoloScrollArea direction="both" className="h-400px w-400px">
  *   <div>Content...</div>
- * </AionScrollArea>
+ * </BoloScrollArea>
  * ```
  */
-interface AionScrollAreaProps extends React.HTMLAttributes<HTMLDivElement> {
+interface BoloScrollAreaProps extends React.HTMLAttributes<HTMLDivElement> {
   /** 滚动方向：y-垂直，x-水平，both-双向 / Scroll direction: y-vertical, x-horizontal, both-bidirectional */
   direction?: 'y' | 'x' | 'both';
   /** 是否禁用滚动（用于嵌入式页面展示） */
   disableOverflow?: boolean;
 }
 
-const AionScrollArea: React.FC<AionScrollAreaProps> = ({
+const BoloScrollArea: React.FC<BoloScrollAreaProps> = ({
   children,
   className,
   direction = 'y',
@@ -65,6 +65,6 @@ const AionScrollArea: React.FC<AionScrollAreaProps> = ({
   );
 };
 
-AionScrollArea.displayName = 'AionScrollArea';
+BoloScrollArea.displayName = 'BoloScrollArea';
 
-export default AionScrollArea;
+export default BoloScrollArea;

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -43,7 +43,7 @@ describe('buildGroupedHistory', () => {
           {
             backend: 'aioncore',
             cron_job_id: 'job-1',
-            workspace: '/repo/aionui',
+            workspace: '/repo/boloui',
             custom_workspace: true,
           },
           100
@@ -56,7 +56,7 @@ describe('buildGroupedHistory', () => {
       expect.objectContaining({
         type: 'workspace',
         workspaceGroup: expect.objectContaining({
-          workspace: '/repo/aionui',
+          workspace: '/repo/boloui',
           conversations: [expect.objectContaining({ id: 'cron-project-conversation' })],
         }),
       }),

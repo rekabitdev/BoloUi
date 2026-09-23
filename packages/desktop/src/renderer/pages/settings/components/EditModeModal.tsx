@@ -3,7 +3,7 @@ import ModalHOC from '@/renderer/utils/ui/ModalHOC';
 import { Form, Input, Message, Select, Tag } from '@arco-design/web-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import AionModal from '@/renderer/components/base/AionModal';
+import BoloModal from '@/renderer/components/base/BoloModal';
 import { ipcBridge } from '@/common';
 import useModeModeList from '@renderer/hooks/agent/useModeModeList';
 import { getProviderLogo } from '@/renderer/utils/model/modelPlatforms';
@@ -130,7 +130,7 @@ const EditModeModal = ModalHOC<{ data?: IProvider; onChange(data: IProvider): vo
     }, [data, form]);
 
     return (
-      <AionModal
+      <BoloModal
         variant='standard'
         visible={modalProps.visible}
         onCancel={modalCtrl.close}
@@ -375,7 +375,7 @@ const EditModeModal = ModalHOC<{ data?: IProvider; onChange(data: IProvider): vo
             </Form.Item>
           </Form>
         </div>
-      </AionModal>
+      </BoloModal>
     );
   }
 );

@@ -156,9 +156,9 @@ describe('buildSpawnArgs', () => {
     expect(args).not.toContain('--local');
   });
 
-  it('passes prompt dump flag in development only when AIONUI_DUMP_PROMPTS is enabled', () => {
-    const prev = process.env.AIONUI_DUMP_PROMPTS;
-    process.env.AIONUI_DUMP_PROMPTS = '1';
+  it('passes prompt dump flag in development only when BOLOUI_DUMP_PROMPTS is enabled', () => {
+    const prev = process.env.BOLOUI_DUMP_PROMPTS;
+    process.env.BOLOUI_DUMP_PROMPTS = '1';
     try {
       const args = buildSpawnArgs({
         port: 1,
@@ -170,14 +170,14 @@ describe('buildSpawnArgs', () => {
 
       expect(args).toContain('--dump-prompts');
     } finally {
-      if (prev === undefined) delete process.env.AIONUI_DUMP_PROMPTS;
-      else process.env.AIONUI_DUMP_PROMPTS = prev;
+      if (prev === undefined) delete process.env.BOLOUI_DUMP_PROMPTS;
+      else process.env.BOLOUI_DUMP_PROMPTS = prev;
     }
   });
 
   it('passes bundled managed resources mode when packaged', () => {
-    const prev = process.env.AIONUI_DUMP_PROMPTS;
-    process.env.AIONUI_DUMP_PROMPTS = '1';
+    const prev = process.env.BOLOUI_DUMP_PROMPTS;
+    process.env.BOLOUI_DUMP_PROMPTS = '1';
     try {
       const args = buildSpawnArgs({
         port: 1,
@@ -191,8 +191,8 @@ describe('buildSpawnArgs', () => {
       expect(args).toContain('bundled');
       expect(args).not.toContain('--dump-prompts');
     } finally {
-      if (prev === undefined) delete process.env.AIONUI_DUMP_PROMPTS;
-      else process.env.AIONUI_DUMP_PROMPTS = prev;
+      if (prev === undefined) delete process.env.BOLOUI_DUMP_PROMPTS;
+      else process.env.BOLOUI_DUMP_PROMPTS = prev;
     }
   });
 
@@ -209,9 +209,9 @@ describe('buildSpawnArgs', () => {
     expect(args).toContain('--recover-corrupted-database');
   });
 
-  it('respects AIONUI_LOG_LEVEL override', () => {
-    const prev = process.env.AIONUI_LOG_LEVEL;
-    process.env.AIONUI_LOG_LEVEL = 'trace';
+  it('respects BOLOUI_LOG_LEVEL override', () => {
+    const prev = process.env.BOLOUI_LOG_LEVEL;
+    process.env.BOLOUI_LOG_LEVEL = 'trace';
     try {
       const args = buildSpawnArgs({
         port: 1,
@@ -222,22 +222,22 @@ describe('buildSpawnArgs', () => {
       });
       expect(args).toContain('trace');
     } finally {
-      if (prev === undefined) delete process.env.AIONUI_LOG_LEVEL;
-      else process.env.AIONUI_LOG_LEVEL = prev;
+      if (prev === undefined) delete process.env.BOLOUI_LOG_LEVEL;
+      else process.env.BOLOUI_LOG_LEVEL = prev;
     }
   });
 });
 
 describe('buildSpawnEnv', () => {
-  it('merges process.env with AIONUI_* dir vars', () => {
+  it('merges process.env with BOLOUI_* dir vars', () => {
     const env = buildSpawnEnv({
       cacheDir: '/c',
       workDir: '/w',
       logDir: '/l',
     });
-    expect(env.AIONUI_CACHE_DIR).toBe('/c');
-    expect(env.AIONUI_WORK_DIR).toBe('/w');
-    expect(env.AIONUI_LOG_DIR).toBe('/l');
+    expect(env.BOLOUI_CACHE_DIR).toBe('/c');
+    expect(env.BOLOUI_WORK_DIR).toBe('/w');
+    expect(env.BOLOUI_LOG_DIR).toBe('/l');
     expect(env.PATH).toBe(process.env.PATH); // inherits
   });
 
@@ -258,20 +258,20 @@ describe('buildSpawnEnv', () => {
   });
 
   it('strips PREBUILDS_ONLY and injects no dir vars when no dir config is provided', () => {
-    const keys = ['PREBUILDS_ONLY', 'AIONUI_CACHE_DIR', 'AIONUI_WORK_DIR', 'AIONUI_LOG_DIR'] as const;
+    const keys = ['PREBUILDS_ONLY', 'BOLOUI_CACHE_DIR', 'BOLOUI_WORK_DIR', 'BOLOUI_LOG_DIR'] as const;
     const saved = Object.fromEntries(keys.map((k) => [k, process.env[k]]));
     process.env.PREBUILDS_ONLY = '1';
     // Dir vars may be inherited from a dev shell; clear them so the assertion
     // below observes injection behavior, not passthrough.
-    delete process.env.AIONUI_CACHE_DIR;
-    delete process.env.AIONUI_WORK_DIR;
-    delete process.env.AIONUI_LOG_DIR;
+    delete process.env.BOLOUI_CACHE_DIR;
+    delete process.env.BOLOUI_WORK_DIR;
+    delete process.env.BOLOUI_LOG_DIR;
     try {
       const env = buildSpawnEnv();
       expect(env).not.toHaveProperty('PREBUILDS_ONLY');
-      expect(env).not.toHaveProperty('AIONUI_CACHE_DIR');
-      expect(env).not.toHaveProperty('AIONUI_WORK_DIR');
-      expect(env).not.toHaveProperty('AIONUI_LOG_DIR');
+      expect(env).not.toHaveProperty('BOLOUI_CACHE_DIR');
+      expect(env).not.toHaveProperty('BOLOUI_WORK_DIR');
+      expect(env).not.toHaveProperty('BOLOUI_LOG_DIR');
       expect(env.PATH).toBe(process.env.PATH); // inherits
     } finally {
       for (const k of keys) {
@@ -451,9 +451,9 @@ describe('BackendLifecycleManager.start (success path)', () => {
       ]);
       const opts = spawnCall[2] as { cwd?: string; env: NodeJS.ProcessEnv };
       expect(opts.cwd).toBe('/w');
-      expect(opts.env.AIONUI_CACHE_DIR).toBe('/c');
-      expect(opts.env.AIONUI_WORK_DIR).toBe('/w');
-      expect(opts.env.AIONUI_LOG_DIR).toBe('/l');
+      expect(opts.env.BOLOUI_CACHE_DIR).toBe('/c');
+      expect(opts.env.BOLOUI_WORK_DIR).toBe('/w');
+      expect(opts.env.BOLOUI_LOG_DIR).toBe('/l');
       expect((spawnCall[2] as { detached?: boolean }).detached).toBe(process.platform !== 'win32');
       expect(mkdirSync).toHaveBeenCalledWith('/db/path', { recursive: true });
       expect(mkdirSync).toHaveBeenCalledWith('/log/dir', { recursive: true });
@@ -554,7 +554,7 @@ describe('BackendLifecycleManager.start (health timeout)', () => {
     child.stderr?.emit(
       'data',
       Buffer.from(
-        'BOOTSTRAP_DATA_INIT_FAILED stage=database.open databasePath=/db/path/aionui-backend.db: failed to initialize application data\n'
+        'BOOTSTRAP_DATA_INIT_FAILED stage=database.open databasePath=/db/path/boloui-backend.db: failed to initialize application data\n'
       )
     );
     child.emit('exit', 1, null);
@@ -589,7 +589,7 @@ describe('BackendLifecycleManager.start (health timeout)', () => {
     child.stderr?.emit(
       'data',
       Buffer.from(
-        'BOOTSTRAP_DATA_INIT_FAILED stage=database.migration databasePath=/db/path/aionui-backend.db: failed to initialize application data\n'
+        'BOOTSTRAP_DATA_INIT_FAILED stage=database.migration databasePath=/db/path/boloui-backend.db: failed to initialize application data\n'
       )
     );
     child.emit('close', 1, null);
@@ -1396,7 +1396,7 @@ describe('BackendLifecycleManager.start peer retry', () => {
       .mockRejectedValueOnce(makePeerAlreadyRunningError())
       .mockResolvedValueOnce(58672);
 
-    const started = mgr.start('/data/aionui-backend.db');
+    const started = mgr.start('/data/boloui-backend.db');
     await vi.runAllTimersAsync();
 
     await expect(started).resolves.toBe(58672);
@@ -1413,7 +1413,7 @@ describe('BackendLifecycleManager.start peer retry', () => {
       .spyOn(mgr as unknown as AttemptStartSpyTarget, 'attemptStart')
       .mockRejectedValue(makePeerAlreadyRunningError());
 
-    const started = mgr.start('/data/aionui-backend.db');
+    const started = mgr.start('/data/boloui-backend.db');
     const assertion = expect(started).rejects.toMatchObject({
       details: { backendBoundaryCode: 'BOOTSTRAP_PEER_ALREADY_RUNNING' },
     });
@@ -1438,7 +1438,7 @@ describe('BackendLifecycleManager.start peer retry', () => {
       .spyOn(mgr as unknown as AttemptStartSpyTarget, 'attemptStart')
       .mockRejectedValue(nonPeerError);
 
-    await expect(mgr.start('/data/aionui-backend.db')).rejects.toBe(nonPeerError);
+    await expect(mgr.start('/data/boloui-backend.db')).rejects.toBe(nonPeerError);
     expect(attemptStart).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,8 +11,8 @@ import {
   managedAgentSearchText,
   type ManagedAgent,
 } from '@/renderer/utils/model/agentTypes';
-import AionModal from '@/renderer/components/base/AionModal';
-import { AionSearchInput } from '@/renderer/components/base';
+import BoloModal from '@/renderer/components/base/BoloModal';
+import { BoloSearchInput } from '@/renderer/components/base';
 import { useLayoutContext } from '@/renderer/hooks/context/LayoutContext';
 import { useManagedAgents } from '@/renderer/hooks/agent/useManagedAgents';
 import { openExternalUrl } from '@/renderer/utils/platform';
@@ -32,7 +32,7 @@ import {
   type AgentAvailabilityFilter,
 } from './agentFilters';
 
-const LOCAL_AGENT_SETUP_GUIDE_URL = 'https://github.com/iOfficeAI/AionUi/wiki/ACP-Setup';
+const LOCAL_AGENT_SETUP_GUIDE_URL = 'https://github.com/iOfficeAI/BoloUi/wiki/ACP-Setup';
 
 const LocalAgents: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -223,7 +223,7 @@ const LocalAgents: React.FC = () => {
         actions={
           <>
             {!isMobile && (
-              <AionSearchInput
+              <BoloSearchInput
                 className='shrink-0 w-[200px] hidden md:flex'
                 data-testid='input-search-agents'
                 placeholder={t('settings.agentManagement.searchPlaceholder', { defaultValue: 'Search agents...' })}
@@ -302,7 +302,7 @@ const LocalAgents: React.FC = () => {
         </Typography.Text>
       </div>
 
-      <AionModal
+      <BoloModal
         visible={editorVisible}
         onCancel={() => {
           setEditorVisible(false);
@@ -339,7 +339,7 @@ const LocalAgents: React.FC = () => {
             }}
           />
         )}
-      </AionModal>
+      </BoloModal>
 
       <div data-testid='agent-management-custom-section'>
         <div className='flex flex-col gap-8px rounded-12px border border-border-2 bg-2 p-8px md:rounded-16px md:p-10px'>

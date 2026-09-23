@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  *
  * White-box tests for FeedbackReportModal's prefill behavior.
@@ -29,7 +29,7 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (k: string) => k, i18n: { language: 'en' } }),
 }));
 
-// FeedbackReportModal now renders through AionModal, which reads ThemeContext
+// FeedbackReportModal now renders through BoloModal, which reads ThemeContext
 // for font scaling. Provide a minimal theme so the modal mounts without a full
 // ThemeProvider (which pulls in IPC-backed theme loading).
 vi.mock('@/renderer/hooks/context/ThemeContext', () => ({

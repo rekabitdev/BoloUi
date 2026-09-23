@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -34,7 +34,7 @@ import {
 } from './cdpTargetProtocol';
 
 const HOST = '127.0.0.1';
-const WS_PATH = '/aionui-cdp';
+const WS_PATH = '/boloui-cdp';
 
 export type CdpBridgeHandle = {
   port: number;
@@ -273,7 +273,7 @@ const handleSocketMessage = async (ws: WebSocket, raw: string, announcedSessions
     sendError(
       ws,
       id,
-      'The in-app browser is not currently attached. Open the browser panel in AionUi so a page is available to control.',
+      'The in-app browser is not currently attached. Open the browser panel in BoloUi so a page is available to control.',
       sessionId
     );
     return;

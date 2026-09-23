@@ -1,14 +1,14 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import {
-  AIONUI_SESSION_MESSAGE_END_MARKER,
-  AIONUI_SESSION_MESSAGE_MARKER,
-  AIONUI_SESSIONS_END_MARKER,
-  AIONUI_SESSIONS_MARKER,
+  BOLOUI_SESSION_MESSAGE_END_MARKER,
+  BOLOUI_SESSION_MESSAGE_MARKER,
+  BOLOUI_SESSIONS_END_MARKER,
+  BOLOUI_SESSIONS_MARKER,
 } from '@/common/config/constants';
 
 export type SessionMentionChip = {
@@ -58,7 +58,7 @@ function extractBlock(
  * user's own message so the bubble shows chips instead of raw markers.
  */
 export function parseSessionsBlock(content: string): { text: string; sessions: SessionMentionChip[] } {
-  const block = extractBlock(content, AIONUI_SESSIONS_MARKER, AIONUI_SESSIONS_END_MARKER);
+  const block = extractBlock(content, BOLOUI_SESSIONS_MARKER, BOLOUI_SESSIONS_END_MARKER);
   if (!block) return { text: content, sessions: [] };
 
   const sessions: SessionMentionChip[] = [];
@@ -83,7 +83,7 @@ export function parseSessionsBlock(content: string): { text: string; sessions: S
  * of truth, no artifact (spec §5.6).
  */
 export function parseSessionMessageBlock(content: string): { text: string; source: SessionDeliverySource | null } {
-  const block = extractBlock(content, AIONUI_SESSION_MESSAGE_MARKER, AIONUI_SESSION_MESSAGE_END_MARKER);
+  const block = extractBlock(content, BOLOUI_SESSION_MESSAGE_MARKER, BOLOUI_SESSION_MESSAGE_END_MARKER);
   if (!block) return { text: content, source: null };
 
   let fromName = '';

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -18,6 +18,7 @@ import {
   EditOne,
   Export,
   FolderClose,
+  Delete,
   Inbox,
   MessageOne,
   MoreOne,
@@ -59,6 +60,7 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
     onEditStart,
     onCreateCronTask,
     onArchive,
+    onDelete,
     onExport,
     onTogglePin,
     onToggleManualUnread,
@@ -266,6 +268,20 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
               event.stopPropagation();
             }}
           >
+            <Tooltip content={t('conversation.history.delete')} position='top'>
+              <button
+                type='button'
+                aria-label={t('conversation.history.delete')}
+                data-testid={`conversation-row-delete-${conversation.id}`}
+                className='flex-center cursor-pointer transition-colors text-t-secondary hover:text-danger size-20px rd-4px sider-action-btn border-0 bg-transparent p-0'
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onDelete(conversation);
+                }}
+              >
+                <Delete theme='outline' size='14' />
+              </button>
+            </Tooltip>
             <Dropdown
               droplist={
                 <Menu

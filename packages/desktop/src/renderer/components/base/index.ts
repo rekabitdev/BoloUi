@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
- * AionUi 基础组件库统一导出 / AionUi base components unified exports
+ * BoloUi 基础组件库统一导出 / BoloUi base components unified exports
  *
  * 提供所有基础组件和类型的统一导出入口
  * Provides unified export entry for all base components and types
@@ -13,37 +13,37 @@
 
 // ==================== 组件导出 / Component Exports ====================
 
-export { default as AionModal } from './AionModal';
-export { default as AionCollapse } from './AionCollapse';
-export { default as AionSelect } from './AionSelect';
-export { default as AionScrollArea } from './AionScrollArea';
-export { default as AionSteps } from './AionSteps';
-export { default as AionSearchInput } from './AionSearchInput';
-export { default as AionInlineSearchInput } from './AionInlineSearchInput';
+export { default as BoloModal } from './BoloModal';
+export { default as BoloCollapse } from './BoloCollapse';
+export { default as BoloSelect } from './BoloSelect';
+export { default as BoloScrollArea } from './BoloScrollArea';
+export { default as BoloSteps } from './BoloSteps';
+export { default as BoloSearchInput } from './BoloSearchInput';
+export { default as BoloInlineSearchInput } from './BoloInlineSearchInput';
 
 // ==================== 类型导出 / Type Exports ====================
 
-// AionModal 类型 / AionModal types
+// BoloModal 类型 / BoloModal types
 export type {
   ModalSize,
   ModalHeaderConfig,
   ModalFooterConfig,
   ModalContentStyleConfig,
-  AionModalProps,
-} from './AionModal';
-export { MODAL_SIZES } from './AionModal';
+  BoloModalProps,
+} from './BoloModal';
+export { MODAL_SIZES } from './BoloModal';
 
-// AionCollapse 类型 / AionCollapse types
-export type { AionCollapseProps, AionCollapseItemProps } from './AionCollapse';
+// BoloCollapse 类型 / BoloCollapse types
+export type { BoloCollapseProps, BoloCollapseItemProps } from './BoloCollapse';
 
-// AionSelect 类型 / AionSelect types
-export type { AionSelectProps } from './AionSelect';
+// BoloSelect 类型 / BoloSelect types
+export type { BoloSelectProps } from './BoloSelect';
 
-// AionSteps 类型 / AionSteps types
-export type { AionStepsProps } from './AionSteps';
+// BoloSteps 类型 / BoloSteps types
+export type { BoloStepsProps } from './BoloSteps';
 
-// AionSearchInput 类型 / AionSearchInput types
-export type { AionSearchInputProps } from './AionSearchInput';
+// BoloSearchInput 类型 / BoloSearchInput types
+export type { BoloSearchInputProps } from './BoloSearchInput';
 
-// AionInlineSearchInput 类型 / AionInlineSearchInput types
-export type { AionInlineSearchInputProps } from './AionInlineSearchInput';
+// BoloInlineSearchInput 类型 / BoloInlineSearchInput types
+export type { BoloInlineSearchInputProps } from './BoloInlineSearchInput';

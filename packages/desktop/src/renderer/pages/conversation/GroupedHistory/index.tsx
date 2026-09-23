@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import type { TChatConversation } from '@/common/config/storage';
-import AionModal from '@/renderer/components/base/AionModal';
+import BoloModal from '@/renderer/components/base/BoloModal';
 import { useLayoutContext } from '@/renderer/hooks/context/LayoutContext';
 import { useCronJobsMap } from '@/renderer/pages/cron';
 import { restrictToVerticalAxis } from '@/renderer/utils/ui/dndModifiers';
@@ -112,6 +112,7 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
     dropdownVisibleId,
     handleConversationClick,
     handleArchive,
+    handleDelete,
     handleBatchArchive,
     handleEditStart,
     handleRenameConfirm,
@@ -180,6 +181,7 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
       onEditStart: handleEditStart,
       onCreateCronTask: handleCreateCronTask,
       onArchive: handleArchive,
+      onDelete: handleDelete,
       onTogglePin: handleTogglePin,
       onToggleManualUnread: handleToggleManualUnread,
       getJobStatus,
@@ -203,6 +205,7 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
       handleEditStart,
       handleCreateCronTask,
       handleArchive,
+      handleDelete,
       handleTogglePin,
       handleToggleManualUnread,
       getJobStatus,
@@ -314,8 +317,8 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
         </div>
       )}
 
-      {/* 归档项目确认弹窗 — 使用项目自家 AionModal + 圆角线框按钮（归档为非危险态，用主色） */}
-      <AionModal
+      {/* 归档项目确认弹窗 — 使用项目自家 BoloModal + 圆角线框按钮（归档为非危险态，用主色） */}
+      <BoloModal
         visible={archiveProjectTarget !== null}
         style={{ width: '400px' }}
         header={{
@@ -379,7 +382,7 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
             count: archiveProjectTarget?.conversations.length ?? 0,
           })}
         </div>
-      </AionModal>
+      </BoloModal>
 
       <div>
         {/* L1: Pinned section */}

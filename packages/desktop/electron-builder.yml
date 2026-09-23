@@ -1,12 +1,12 @@
-appId: com.aionui.app
-productName: AionUi
-executableName: AionUi
-copyright: Copyright © 2024 AionUi
+appId: com.boloui.app
+productName: BoloUi
+executableName: BoloUi
+copyright: Copyright © 2024 BoloUi
 
 protocols:
-  - name: AionUi Protocol
+  - name: BoloUi Protocol
     schemes:
-      - aionui
+      - boloui
 
 asar:
   smartUnpack: true
@@ -169,17 +169,17 @@ linux:
   icon: resources/app.png
   artifactName: ${productName}-${version}-${os}-${arch}.${ext}
   category: Utility
-  maintainer: aionui
-  vendor: aionui
+  maintainer: boloui
+  vendor: boloui
   synopsis: ${description}
   description: ${description}
   desktop:
     entry:
-      Name: AionUi
+      Name: BoloUi
       Comment: ${description}
-      Icon: AionUi
+      Icon: BoloUi
       Categories: Office;Utility;
-      MimeType: x-scheme-handler/aionui;
+      MimeType: x-scheme-handler/boloui;
 
 npmRebuild: false
 buildDependenciesFromSource: false
@@ -219,6 +219,6 @@ electronDownload:
 publish:
   provider: github
   owner: iOfficeAI
-  repo: AionUi
+  repo: BoloUi
   publishAutoUpdate: true
   releaseType: release

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  *
  * Verifies MessageTips only renders the FeedbackButton on error tips and
@@ -69,7 +69,7 @@ import MessageTips from '@/renderer/pages/conversation/Messages/components/Messa
 import type { AgentStreamErrorInfo, IMessageTips } from '@/common/chat/chatLib';
 
 const requiredAgentErrorCodes = [
-  'AIONUI_CONVERSATION_BUSY',
+  'BOLOUI_CONVERSATION_BUSY',
   'USER_AGENT_HANDSHAKE_FAILED',
   'USER_AGENT_HANDSHAKE_TIMEOUT',
   'USER_AGENT_ACP_INIT_FAILED',
@@ -238,8 +238,8 @@ describe('MessageTips — FeedbackButton wiring', () => {
       <MessageTips
         message={buildTips('error', 'Something went wrong, please try again.', {
           message: 'Something went wrong, please try again.',
-          code: 'AIONUI_INTERNAL_ERROR',
-          ownership: 'aionui',
+          code: 'BOLOUI_INTERNAL_ERROR',
+          ownership: 'boloui',
           detail: 'Something went wrong, please try again.',
           retryable: true,
           feedback_recommended: true,
@@ -547,20 +547,20 @@ describe('agent error locale copy', () => {
     }
   });
 
-  it('does not label app-side errors as direct AionUi ownership', () => {
+  it('does not label app-side errors as direct BoloUi ownership', () => {
     const localeDir = path.join(process.cwd(), 'packages/desktop/src/renderer/services/i18n/locales');
 
     for (const localeName of supportedLocaleNames) {
       const locale = JSON.parse(readFileSync(path.join(localeDir, localeName, 'conversation.json'), 'utf8'));
       const agentError = locale.agentError;
 
-      expect(agentError.ownership.aionui, localeName).not.toMatch(/AionUi/);
+      expect(agentError.ownership.boloui, localeName).not.toMatch(/BoloUi/);
 
       for (const [code, copy] of Object.entries<Record<string, string>>(agentError.codes)) {
-        if (!code.startsWith('AIONUI_')) continue;
+        if (!code.startsWith('BOLOUI_')) continue;
 
-        expect(copy.title, `${localeName} ${code} title`).not.toMatch(/AionUi/);
-        expect(copy.body, `${localeName} ${code} body`).not.toMatch(/AionUi/);
+        expect(copy.title, `${localeName} ${code} title`).not.toMatch(/BoloUi/);
+        expect(copy.body, `${localeName} ${code} body`).not.toMatch(/BoloUi/);
       }
     }
   });

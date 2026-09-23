@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.2.2](https://github.com/iOfficeAI/AionUi/compare/v2.2.1...v2.2.2) (2026-09-09)
+## [2.2.2](https://github.com/iOfficeAI/BoloUi/compare/v2.2.1...v2.2.2) (2026-09-09)
 
 ### Desktop
 
@@ -16,7 +16,7 @@
 
 ---
 
-## [2.2.1](https://github.com/iOfficeAI/AionUi/compare/v2.1.61...v2.2.1) (2026-09-01)
+## [2.2.1](https://github.com/iOfficeAI/BoloUi/compare/v2.1.61...v2.2.1) (2026-09-01)
 
 ### Desktop
 
@@ -34,12 +34,12 @@
 
 #### ⚠ BREAKING CHANGES
 
-- **skills:** deliver skills through an AionUi-owned view instead of the workspace (#938)
+- **skills:** deliver skills through an BoloUi-owned view instead of the workspace (#938)
 
 #### Features
 
 - **auth:** dual-token refresh with singleflight (#926)
-- **skills:** deliver skills through an AionUi-owned view instead of the workspace (#938)
+- **skills:** deliver skills through an BoloUi-owned view instead of the workspace (#938)
 - **conversation:** route @@ mentions to the session-message skill (#949)
 - **scm:** enumerate a repository's linked worktrees during discovery (#959)
 - **session-message:** add session capabilities fallback to @@ blocks (#952)
@@ -50,7 +50,7 @@
 
 ---
 
-## [2.1.61](https://github.com/iOfficeAI/AionUi/compare/v2.1.60...v2.1.61) (2026-08-25)
+## [2.1.61](https://github.com/iOfficeAI/BoloUi/compare/v2.1.60...v2.1.61) (2026-08-25)
 
 ### Desktop
 
@@ -91,7 +91,7 @@
 
 ---
 
-## [2.1.60](https://github.com/iOfficeAI/AionUi/compare/v2.1.59...v2.1.60) (2026-08-21)
+## [2.1.60](https://github.com/iOfficeAI/BoloUi/compare/v2.1.59...v2.1.60) (2026-08-21)
 
 ### Desktop
 
@@ -122,17 +122,17 @@
 
 #### Bug Fixes
 
-- **app:** fall back to default log dir when custom log dir is unusable (AIONUI-231) (#898)
+- **app:** fall back to default log dir when custom log dir is unusable (BOLOUI-231) (#898)
 - **claude:** append the assistant preset instead of replacing the system prompt (#900)
 - **codex:** send the assistant preset as developerInstructions, not baseInstructions (#897)
 - **conversation:** apply agent session titles at the relay level (#896)
-- **extension:** bound the builtin-skills materialize lock acquisition (AIONUI-168) (#903)
-- **project:** keep mounted targets when one fs/subscribe target fails (AIONUI-236) (#902)
-- **runtime:** log npm/npx probe stderr and missing-executable snapshot (AIONUI-62) (#904)
+- **extension:** bound the builtin-skills materialize lock acquisition (BOLOUI-168) (#903)
+- **project:** keep mounted targets when one fs/subscribe target fails (BOLOUI-236) (#902)
+- **runtime:** log npm/npx probe stderr and missing-executable snapshot (BOLOUI-62) (#904)
 
 ---
 
-## [2.1.59](https://github.com/iOfficeAI/AionUi/compare/v2.1.58...v2.1.59) (2026-08-19)
+## [2.1.59](https://github.com/iOfficeAI/BoloUi/compare/v2.1.58...v2.1.59) (2026-08-19)
 
 ### Desktop
 
@@ -176,7 +176,7 @@
 
 ---
 
-## [2.1.58](https://github.com/iOfficeAI/AionUi/compare/v2.1.57...v2.1.58) (2026-08-18)
+## [2.1.58](https://github.com/iOfficeAI/BoloUi/compare/v2.1.57...v2.1.58) (2026-08-18)
 
 ### Desktop
 
@@ -212,7 +212,7 @@
 
 ---
 
-## [2.1.57](https://github.com/iOfficeAI/AionUi/compare/v2.1.56...v2.1.57) (2026-08-17)
+## [2.1.57](https://github.com/iOfficeAI/BoloUi/compare/v2.1.56...v2.1.57) (2026-08-17)
 
 ### Desktop
 
@@ -245,7 +245,7 @@
 
 ---
 
-## [2.1.56](https://github.com/iOfficeAI/AionUi/compare/v2.1.55...v2.1.56) (2026-08-14)
+## [2.1.56](https://github.com/iOfficeAI/BoloUi/compare/v2.1.55...v2.1.56) (2026-08-14)
 
 ### Desktop
 
@@ -270,7 +270,7 @@
 
 ---
 
-## [2.1.55](https://github.com/iOfficeAI/AionUi/compare/v2.1.54...v2.1.55) (2026-08-13)
+## [2.1.55](https://github.com/iOfficeAI/BoloUi/compare/v2.1.54...v2.1.55) (2026-08-13)
 
 ### Desktop
 
@@ -294,18 +294,18 @@
 
 ---
 
-## [2.1.54](https://github.com/iOfficeAI/AionUi/compare/v2.1.53...v2.1.54) (2026-08-12)
+## [2.1.54](https://github.com/iOfficeAI/BoloUi/compare/v2.1.53...v2.1.54) (2026-08-12)
 
 ### Desktop
 
 #### Features
 
-- **backend:** honor AIONUI_BACKEND_BIN override in desktop resolver (#3988)
+- **backend:** honor BOLOUI_BACKEND_BIN override in desktop resolver (#3988)
 - **channel:** add Discord channel configuration UI (#3956)
 - **conversation:** open selected links in built-in or system browser (#3959)
 - **preview:** add save button to editable file toolbar (#3964)
 - **preview:** enable mermaid pan/zoom controls in markdown viewer (#3958)
-- **startup:** dedicated dialog for database created by newer AionUi (downgrade) (#3998)
+- **startup:** dedicated dialog for database created by newer BoloUi (downgrade) (#3998)
 
 #### Bug Fixes
 
@@ -325,7 +325,7 @@
 
 ---
 
-## [2.1.53](https://github.com/iOfficeAI/AionUi/compare/v2.1.52...v2.1.53) (2026-08-10)
+## [2.1.53](https://github.com/iOfficeAI/BoloUi/compare/v2.1.52...v2.1.53) (2026-08-10)
 
 ### Desktop
 
@@ -370,7 +370,7 @@
 
 ---
 
-## [2.1.52](https://github.com/iOfficeAI/AionUi/compare/v2.1.50...v2.1.52) (2026-08-07)
+## [2.1.52](https://github.com/iOfficeAI/BoloUi/compare/v2.1.50...v2.1.52) (2026-08-07)
 
 ### Desktop
 
@@ -394,7 +394,7 @@
 
 ---
 
-## [2.1.50](https://github.com/iOfficeAI/AionUi/compare/v2.1.49...v2.1.50) (2026-08-06)
+## [2.1.50](https://github.com/iOfficeAI/BoloUi/compare/v2.1.49...v2.1.50) (2026-08-06)
 
 ### Desktop
 
@@ -428,7 +428,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.47](https://github.com/iOfficeAI/AionUi/compare/v2.1.46...v2.1.47-final) (2026-08-04)
+## [2.1.47](https://github.com/iOfficeAI/BoloUi/compare/v2.1.46...v2.1.47-final) (2026-08-04)
 
 ### Desktop
 
@@ -439,7 +439,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 - **preview:** add agent-controllable in-app browser over a single-target CDP bridge (#3826)
 - **preview:** pdf via stream URL + office ChatFileRef + drop fs/resolve (#3837)
 - **preview:** migrate content I/O to ChatFileRef /content endpoints (#3825)
-- **update:** discontinue AionUi in-app updates and guide migration to the official website (#3730)
+- **update:** discontinue BoloUi in-app updates and guide migration to the official website (#3730)
 
 #### Bug Fixes
 
@@ -467,7 +467,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.46](https://github.com/iOfficeAI/AionUi/compare/v2.1.45...v2.1.46) (2026-08-03)
+## [2.1.46](https://github.com/iOfficeAI/BoloUi/compare/v2.1.45...v2.1.46) (2026-08-03)
 
 ### Desktop
 
@@ -506,7 +506,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.45](https://github.com/iOfficeAI/AionUi/compare/v2.1.44...v2.1.45) (2026-07-31)
+## [2.1.45](https://github.com/iOfficeAI/BoloUi/compare/v2.1.44...v2.1.45) (2026-07-31)
 
 ### Desktop
 
@@ -535,7 +535,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.44](https://github.com/iOfficeAI/AionUi/compare/v2.1.43...v2.1.44) (2026-07-30)
+## [2.1.44](https://github.com/iOfficeAI/BoloUi/compare/v2.1.43...v2.1.44) (2026-07-30)
 
 ### Desktop
 
@@ -558,7 +558,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 #### Bug Fixes
 
-- **auth:** make AionUi->AionPro data adoption a one-shot event (#716)
+- **auth:** make BoloUi->AionPro data adoption a one-shot event (#716)
 - **db:** pre-migration repair for migration-030 startup-blocking CHECK failures (#724)
 - prevent silent encryption-key rotation on migration upgrade (ELECTRON-3T0) (#722)
 - **project:** add temporary fs/resolve command for preview file paths (#723)
@@ -566,7 +566,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.43](https://github.com/iOfficeAI/AionUi/compare/v2.1.42...v2.1.43) (2026-07-29)
+## [2.1.43](https://github.com/iOfficeAI/BoloUi/compare/v2.1.42...v2.1.43) (2026-07-29)
 
 ### Desktop
 
@@ -607,7 +607,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.42](https://github.com/iOfficeAI/AionUi/compare/v2.1.41...v2.1.42) (2026-07-28)
+## [2.1.42](https://github.com/iOfficeAI/BoloUi/compare/v2.1.41...v2.1.42) (2026-07-28)
 
 ### Desktop
 
@@ -641,7 +641,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.41](https://github.com/iOfficeAI/AionUi/compare/v2.1.40...v2.1.41) (2026-07-24)
+## [2.1.41](https://github.com/iOfficeAI/BoloUi/compare/v2.1.40...v2.1.41) (2026-07-24)
 
 ### Desktop
 
@@ -670,13 +670,13 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.40](https://github.com/iOfficeAI/AionUi/compare/v2.1.39...v2.1.40) (2026-07-23)
+## [2.1.40](https://github.com/iOfficeAI/BoloUi/compare/v2.1.39...v2.1.40) (2026-07-23)
 
 ### Desktop
 
 #### Features
 
-- **session-port:** AionUi frontend support for the direct-CLI claude/codex session path (#3572)
+- **session-port:** BoloUi frontend support for the direct-CLI claude/codex session path (#3572)
 - **assistants:** support reordering enabled assistants (#3696)
 - **permissions:** redesign request panel (#3676)
 - **team:** dormant teammate UI with lazy warmup and per-member retry-start (#3712)
@@ -695,7 +695,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 #### Features
 
-- **project:** add project-bind foundation (db + aionui-project) (#672)
+- **project:** add project-bind foundation (db + boloui-project) (#672)
 - **session-port:** route claude/codex through the direct-CLI SessionAgentTask (#609)
 - **team:** leader-only warmup with lazy teammate wakeup and per-member attach (#670)
 
@@ -708,7 +708,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.39](https://github.com/iOfficeAI/AionUi/compare/v2.1.38...v2.1.39) (2026-07-21)
+## [2.1.39](https://github.com/iOfficeAI/BoloUi/compare/v2.1.38...v2.1.39) (2026-07-21)
 
 ### Desktop
 
@@ -754,7 +754,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.38](https://github.com/iOfficeAI/AionUi/compare/v2.1.37...v2.1.38) (2026-07-20)
+## [2.1.38](https://github.com/iOfficeAI/BoloUi/compare/v2.1.37...v2.1.38) (2026-07-20)
 
 ### Desktop
 
@@ -782,13 +782,13 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 #### Bug Fixes
 
-- **ai-agent:** ignore max token limits for aionui requests
+- **ai-agent:** ignore max token limits for boloui requests
 - **system:** apply keep-awake client preference (#642)
 - **team:** broadcast Stopped status on idle-cleanup team reclaim (#640)
 
 ---
 
-## [2.1.37](https://github.com/iOfficeAI/AionUi/compare/v2.1.36...v2.1.37) (2026-07-18)
+## [2.1.37](https://github.com/iOfficeAI/BoloUi/compare/v2.1.36...v2.1.37) (2026-07-18)
 
 ### Desktop
 
@@ -799,7 +799,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.36](https://github.com/iOfficeAI/AionUi/compare/v2.1.35...v2.1.36) (2026-07-17)
+## [2.1.36](https://github.com/iOfficeAI/BoloUi/compare/v2.1.35...v2.1.36) (2026-07-17)
 
 ### Desktop
 
@@ -838,7 +838,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.35](https://github.com/iOfficeAI/AionUi/compare/v2.1.34...v2.1.35) (2026-07-14)
+## [2.1.35](https://github.com/iOfficeAI/BoloUi/compare/v2.1.34...v2.1.35) (2026-07-14)
 
 ### Desktop
 
@@ -864,7 +864,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.34](https://github.com/iOfficeAI/AionUi/compare/v2.1.33...v2.1.34) (2026-07-13)
+## [2.1.34](https://github.com/iOfficeAI/BoloUi/compare/v2.1.33...v2.1.34) (2026-07-13)
 
 ### Desktop
 
@@ -882,7 +882,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.33](https://github.com/iOfficeAI/AionUi/compare/v2.1.32...v2.1.33) (2026-07-11)
+## [2.1.33](https://github.com/iOfficeAI/BoloUi/compare/v2.1.32...v2.1.33) (2026-07-11)
 
 ### Desktop
 
@@ -892,7 +892,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.32](https://github.com/iOfficeAI/AionUi/compare/v2.1.31...v2.1.32) (2026-07-10)
+## [2.1.32](https://github.com/iOfficeAI/BoloUi/compare/v2.1.31...v2.1.32) (2026-07-10)
 
 ### Desktop
 
@@ -930,7 +930,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.31](https://github.com/iOfficeAI/AionUi/compare/v2.1.30...v2.1.31) (2026-07-08)
+## [2.1.31](https://github.com/iOfficeAI/BoloUi/compare/v2.1.30...v2.1.31) (2026-07-08)
 
 ### Desktop
 
@@ -956,12 +956,12 @@ _Includes AionCore v0.1.59 – v0.1.61._
 #### Bug Fixes
 
 - **agent:** preserve ACP error cause detail (#581)
-- **skills:** correct aionui-config butler skill drift (2026-07) (#584)
+- **skills:** correct boloui-config butler skill drift (2026-07) (#584)
 - use provider and model protocol to determine llm request
 
 ---
 
-## [2.1.30](https://github.com/iOfficeAI/AionUi/compare/v2.1.29...v2.1.30) (2026-07-06)
+## [2.1.30](https://github.com/iOfficeAI/BoloUi/compare/v2.1.29...v2.1.30) (2026-07-06)
 
 ### Desktop
 
@@ -1000,7 +1000,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.29](https://github.com/iOfficeAI/AionUi/compare/v2.1.28...v2.1.29) (2026-07-03)
+## [2.1.29](https://github.com/iOfficeAI/BoloUi/compare/v2.1.28...v2.1.29) (2026-07-03)
 
 ### Desktop
 
@@ -1044,7 +1044,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.28](https://github.com/iOfficeAI/AionUi/compare/v2.1.27...v2.1.28) (2026-07-02)
+## [2.1.28](https://github.com/iOfficeAI/BoloUi/compare/v2.1.27...v2.1.28) (2026-07-02)
 
 ### Desktop
 
@@ -1087,11 +1087,11 @@ _Includes AionCore v0.1.59 – v0.1.61._
 - **runtime:** harden managed Node command resolution (#565)
 - **runtime:** protect active ACP tasks from idle cleanup (#561)
 - **skill:** raise import size limits (#564)
-- **skills:** correct AionUi Butler skill drift against current backend (#557)
+- **skills:** correct BoloUi Butler skill drift against current backend (#557)
 
 ---
 
-## [2.1.27](https://github.com/iOfficeAI/AionUi/compare/v2.1.26...v2.1.27) (2026-06-30)
+## [2.1.27](https://github.com/iOfficeAI/BoloUi/compare/v2.1.26...v2.1.27) (2026-06-30)
 
 ### Desktop
 
@@ -1119,7 +1119,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.26](https://github.com/iOfficeAI/AionUi/compare/v2.1.25...v2.1.26) (2026-06-29)
+## [2.1.26](https://github.com/iOfficeAI/BoloUi/compare/v2.1.25...v2.1.26) (2026-06-29)
 
 ### Desktop
 
@@ -1147,7 +1147,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.25](https://github.com/iOfficeAI/AionUi/compare/v2.1.24...v2.1.25) (2026-06-26)
+## [2.1.25](https://github.com/iOfficeAI/BoloUi/compare/v2.1.24...v2.1.25) (2026-06-26)
 
 ### Desktop
 
@@ -1190,11 +1190,11 @@ _Includes AionCore v0.1.59 – v0.1.61._
 - **agent:** expose runtime catalogs from metadata (#523)
 - **assistant:** expose auto-inject skills and preserve assistant rules (#525)
 - repair invalid UTF-8 agent metadata cache fields (#526)
-- **skills:** sync AionUi Butler skills + rule with current backend (#520)
+- **skills:** sync BoloUi Butler skills + rule with current backend (#520)
 
 ---
 
-## [2.1.24](https://github.com/iOfficeAI/AionUi/compare/v2.1.23...v2.1.24) (2026-06-25)
+## [2.1.24](https://github.com/iOfficeAI/BoloUi/compare/v2.1.23...v2.1.24) (2026-06-25)
 
 ### Desktop
 
@@ -1227,7 +1227,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.23](https://github.com/iOfficeAI/AionUi/compare/v2.1.22...v2.1.23) (2026-06-23)
+## [2.1.23](https://github.com/iOfficeAI/BoloUi/compare/v2.1.22...v2.1.23) (2026-06-23)
 
 ### Desktop
 
@@ -1249,13 +1249,13 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.22](https://github.com/iOfficeAI/AionUi/compare/v2.1.21...v2.1.22) (2026-06-22)
+## [2.1.22](https://github.com/iOfficeAI/BoloUi/compare/v2.1.21...v2.1.22) (2026-06-22)
 
 ### Desktop
 
 #### Features
 
-- **acp:** preserve redacted raw error in AIONUI_INTERNAL_ERROR fallback (#3393)
+- **acp:** preserve redacted raw error in BOLOUI_INTERNAL_ERROR fallback (#3393)
 
 #### Bug Fixes
 
@@ -1277,7 +1277,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.21](https://github.com/iOfficeAI/AionUi/compare/v2.1.20...v2.1.21) (2026-06-18)
+## [2.1.21](https://github.com/iOfficeAI/BoloUi/compare/v2.1.20...v2.1.21) (2026-06-18)
 
 ### Desktop
 
@@ -1308,7 +1308,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.20](https://github.com/iOfficeAI/AionUi/compare/v2.1.19...v2.1.20) (2026-06-17)
+## [2.1.20](https://github.com/iOfficeAI/BoloUi/compare/v2.1.19...v2.1.20) (2026-06-17)
 
 ### Desktop
 
@@ -1327,8 +1327,8 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 #### Features
 
-- **assistant:** add built-in AionUi self-management assistant ([#474](https://github.com/iOfficeAI/AionCore/issues/474))
-- **assistant:** expand AionUi assistant into a butler with remote-access ([#481](https://github.com/iOfficeAI/AionCore/issues/481))
+- **assistant:** add built-in BoloUi self-management assistant ([#474](https://github.com/iOfficeAI/AionCore/issues/474))
+- **assistant:** expand BoloUi assistant into a butler with remote-access ([#481](https://github.com/iOfficeAI/AionCore/issues/481))
 - enforce TeamRun ownership for agent turns ([#483](https://github.com/iOfficeAI/AionCore/issues/483))
 - **team:** support queued team_send_message semantics ([#479](https://github.com/iOfficeAI/AionCore/issues/479))
 
@@ -1340,7 +1340,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.19](https://github.com/iOfficeAI/AionUi/compare/v2.1.18...v2.1.19) (2026-06-15)
+## [2.1.19](https://github.com/iOfficeAI/BoloUi/compare/v2.1.18...v2.1.19) (2026-06-15)
 
 ### Desktop
 
@@ -1383,7 +1383,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.18](https://github.com/iOfficeAI/AionUi/compare/v2.1.17...v2.1.18) (2026-06-12)
+## [2.1.18](https://github.com/iOfficeAI/BoloUi/compare/v2.1.17...v2.1.18) (2026-06-12)
 
 ### Desktop
 
@@ -1430,7 +1430,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.17](https://github.com/iOfficeAI/AionUi/compare/v2.1.16...v2.1.17) (2026-06-11)
+## [2.1.17](https://github.com/iOfficeAI/BoloUi/compare/v2.1.16...v2.1.17) (2026-06-11)
 
 ### Desktop
 
@@ -1458,12 +1458,12 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 - **auth:** allow same-origin framing on office preview proxy routes ([#454](https://github.com/iOfficeAI/AionCore/issues/454))
 - **file:** strip Windows verbatim prefix from /api/fs/browse paths ([#453](https://github.com/iOfficeAI/AionCore/issues/453))
-- **stt:** STT compatibility fixes for Groq Whisper and AionUI web frontend ([#400](https://github.com/iOfficeAI/AionCore/issues/400))
+- **stt:** STT compatibility fixes for Groq Whisper and BoloUi web frontend ([#400](https://github.com/iOfficeAI/AionCore/issues/400))
 - **stt:** treat blank base_url as unset and log malformed config ([#448](https://github.com/iOfficeAI/AionCore/issues/448))
 
 ---
 
-## [2.1.16](https://github.com/iOfficeAI/AionUi/compare/v2.1.15...v2.1.16) (2026-06-10)
+## [2.1.16](https://github.com/iOfficeAI/BoloUi/compare/v2.1.15...v2.1.16) (2026-06-10)
 
 ### Desktop
 
@@ -1484,7 +1484,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.15](https://github.com/iOfficeAI/AionUi/compare/v2.1.14...v2.1.15) (2026-06-09)
+## [2.1.15](https://github.com/iOfficeAI/BoloUi/compare/v2.1.14...v2.1.15) (2026-06-09)
 
 ### Desktop
 
@@ -1516,7 +1516,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.14](https://github.com/iOfficeAI/AionUi/compare/v2.1.13...v2.1.14) (2026-06-08)
+## [2.1.14](https://github.com/iOfficeAI/BoloUi/compare/v2.1.13...v2.1.14) (2026-06-08)
 
 ### Desktop
 
@@ -1542,7 +1542,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.13](https://github.com/iOfficeAI/AionUi/compare/v2.1.12...v2.1.13) (2026-06-07)
+## [2.1.13](https://github.com/iOfficeAI/BoloUi/compare/v2.1.12...v2.1.13) (2026-06-07)
 
 ### Desktop
 
@@ -1583,7 +1583,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.12](https://github.com/iOfficeAI/AionUi/compare/v2.1.11...v2.1.12) (2026-06-05)
+## [2.1.12](https://github.com/iOfficeAI/BoloUi/compare/v2.1.11...v2.1.12) (2026-06-05)
 
 ### Desktop
 
@@ -1612,7 +1612,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.11](https://github.com/iOfficeAI/AionUi/compare/v2.1.10...v2.1.11) (2026-06-04)
+## [2.1.11](https://github.com/iOfficeAI/BoloUi/compare/v2.1.10...v2.1.11) (2026-06-04)
 
 ### Desktop
 
@@ -1642,7 +1642,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.10](https://github.com/iOfficeAI/AionUi/compare/v2.1.9...v2.1.10) (2026-06-02)
+## [2.1.10](https://github.com/iOfficeAI/BoloUi/compare/v2.1.9...v2.1.10) (2026-06-02)
 
 ### Desktop
 
@@ -1662,14 +1662,14 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 #### Bug Fixes
 
-- **aionui-ai-agent:** classify aionrs API connection errors ([#389](https://github.com/iOfficeAI/AionCore/issues/389))
+- **boloui-ai-agent:** classify aionrs API connection errors ([#389](https://github.com/iOfficeAI/AionCore/issues/389))
 - classify missing MCP launcher runtimes ([#387](https://github.com/iOfficeAI/AionCore/issues/387))
 - enforce workspace path whitespace errors across create and runtime ([#381](https://github.com/iOfficeAI/AionCore/issues/381))
 - **startup:** add startup phase diagnostics ([#388](https://github.com/iOfficeAI/AionCore/issues/388))
 
 ---
 
-## [2.1.9](https://github.com/iOfficeAI/AionUi/compare/v2.1.8...v2.1.9) (2026-06-01)
+## [2.1.9](https://github.com/iOfficeAI/BoloUi/compare/v2.1.8...v2.1.9) (2026-06-01)
 
 ### Desktop
 
@@ -1691,12 +1691,12 @@ _Includes AionCore v0.1.59 – v0.1.61._
 - **agent:** classify Bedrock 'model identifier is invalid' as model-not-found (AIO-12) ([#377](https://github.com/iOfficeAI/AionCore/issues/377))
 - **agent:** preserve process-group cleanup after leader exit ([#369](https://github.com/iOfficeAI/AionCore/issues/369))
 - **agent:** tighten send_error classifier (AIO-87, AIO-89, AIO-90) ([#375](https://github.com/iOfficeAI/AionCore/issues/375))
-- **aionui-ai-agent:** strip HTML body from sanitized error detail (AIO-13) ([#380](https://github.com/iOfficeAI/AionCore/issues/380))
+- **boloui-ai-agent:** strip HTML body from sanitized error detail (AIO-13) ([#380](https://github.com/iOfficeAI/AionCore/issues/380))
 - recover deleted conversation workspaces ([#379](https://github.com/iOfficeAI/AionCore/issues/379))
 
 ---
 
-## [2.1.8](https://github.com/iOfficeAI/AionUi/compare/v2.1.7...v2.1.8) (2026-05-30)
+## [2.1.8](https://github.com/iOfficeAI/BoloUi/compare/v2.1.7...v2.1.8) (2026-05-30)
 
 ### Desktop
 
@@ -1714,7 +1714,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.7](https://github.com/iOfficeAI/AionUi/compare/v2.1.6...v2.1.7) (2026-05-29)
+## [2.1.7](https://github.com/iOfficeAI/BoloUi/compare/v2.1.6...v2.1.7) (2026-05-29)
 
 ### Desktop
 
@@ -1748,7 +1748,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.6](https://github.com/iOfficeAI/AionUi/compare/v2.1.5...v2.1.6) (2026-05-28)
+## [2.1.6](https://github.com/iOfficeAI/BoloUi/compare/v2.1.5...v2.1.6) (2026-05-28)
 
 ### Desktop
 
@@ -1773,7 +1773,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.5](https://github.com/iOfficeAI/AionUi/compare/v2.1.4...v2.1.5) (2026-05-27)
+## [2.1.5](https://github.com/iOfficeAI/BoloUi/compare/v2.1.4...v2.1.5) (2026-05-27)
 
 ### Desktop
 
@@ -1817,7 +1817,7 @@ _Includes AionCore v0.1.59 – v0.1.61._
 
 ---
 
-## [2.1.4](https://github.com/iOfficeAI/AionUi/compare/v2.1.3...v2.1.4) (2026-05-27)
+## [2.1.4](https://github.com/iOfficeAI/BoloUi/compare/v2.1.3...v2.1.4) (2026-05-27)
 
 ### Desktop
 

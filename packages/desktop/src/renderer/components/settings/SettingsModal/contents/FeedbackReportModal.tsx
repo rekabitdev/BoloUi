@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import AionModal from '@renderer/components/base/AionModal';
+import BoloModal from '@renderer/components/base/BoloModal';
 import { FEEDBACK_MODULES } from './feedbackModules';
 import { useTalkToButler } from '@/renderer/hooks/assistant/useTalkToButler';
 import { useAuth } from '@/renderer/hooks/context/AuthContext';
@@ -33,7 +33,7 @@ const DESCRIPTION_MAX_LENGTH = 2000;
 const MAX_SCREENSHOTS = 3;
 const ACCEPTED_IMAGE_TYPES = '.png,.jpg,.jpeg,.gif';
 
-// aionui's AuthUser is { id, username } and carries no email; aionpro's AuthUser
+// boloui's AuthUser is { id, username } and carries no email; aionpro's AuthUser
 // does. Read it structurally (no AuthUser type import, no `any`) so this file
 // stays byte-identical across both repos and simply yields undefined whenever
 // the signed-in user has no email (the open-source desktop build is usually
@@ -220,7 +220,7 @@ const FeedbackReportModal: React.FC<FeedbackReportModalProps> = ({
     feedbackDiagnosticsContext,
   ]);
 
-  // "Solve via chat": hand the report to the AionUi Butler for on-the-spot
+  // "Solve via chat": hand the report to the BoloUi Butler for on-the-spot
   // diagnosis instead of submitting to the team. The typed description + module
   // become a structured prompt; screenshots are uploaded to disk so they ride
   // along in the chat input (reusing the same upload path as pasted images).
@@ -246,7 +246,7 @@ const FeedbackReportModal: React.FC<FeedbackReportModalProps> = ({
       const moduleLabel = t(selectedModule?.i18nKey ?? 'settings.bugReportModuleOther');
       const prompt = t('settings.talkToButler.prompt.diagnose', {
         defaultValue:
-          'I ran into a problem with AionUi, please help me diagnose it.\n\n[Module] {{module}}\n[Description] {{description}}\n[Attachments] see the screenshots in the input.\n\nPlease diagnose the cause and tell me how to fix it.',
+          'I ran into a problem with BoloUi, please help me diagnose it.\n\n[Module] {{module}}\n[Description] {{description}}\n[Attachments] see the screenshots in the input.\n\nPlease diagnose the cause and tell me how to fix it.',
         module: moduleLabel,
         description: description.trim(),
       });
@@ -339,7 +339,7 @@ const FeedbackReportModal: React.FC<FeedbackReportModalProps> = ({
   }, [handlePaste, visible]);
 
   return (
-    <AionModal
+    <BoloModal
       variant='standard'
       header={{ title: t('settings.bugReportTitle'), showClose: true }}
       visible={visible}
@@ -387,7 +387,7 @@ const FeedbackReportModal: React.FC<FeedbackReportModalProps> = ({
       className='w-[min(600px,calc(100vw-32px))] max-w-600px'
       autoFocus={false}
       // The feedback modal is global and may be opened from inside another
-      // AionModal (e.g. the Agent editor). Arco's default z-index stacks
+      // BoloModal (e.g. the Agent editor). Arco's default z-index stacks
       // modals in mount order, which leaves the feedback modal under the
       // pre-existing modal when both are open. Bump wrap+mask above the
       // standard 1001 so feedback always appears on top.
@@ -479,7 +479,7 @@ const FeedbackReportModal: React.FC<FeedbackReportModalProps> = ({
           ) : null}
         </div>
       </div>
-    </AionModal>
+    </BoloModal>
   );
 };
 

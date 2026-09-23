@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import type { IMessageAvailableCommands } from '@/common/chat/chatLib';
-import AionCollapse from '@/renderer/components/base/AionCollapse';
+import BoloCollapse from '@/renderer/components/base/BoloCollapse';
 import CollapsibleContent from '@/renderer/components/chat/CollapsibleContent';
 import { iconColors } from '@/renderer/styles/colors';
 import { HammerAndAnvil } from '@icon-park/react';
@@ -33,9 +33,9 @@ const MessageAvailableCommands: React.FC<MessageAvailableCommandsProps> = ({ mes
         </span>
       </div>
       <CollapsibleContent maxHeight={150} defaultCollapsed={true}>
-        <AionCollapse accordion bordered={false} expandIconPosition='right'>
+        <BoloCollapse accordion bordered={false} expandIconPosition='right'>
           {commands.map((command) => (
-            <AionCollapse.Item
+            <BoloCollapse.Item
               key={command.name}
               name={command.name}
               header={<span className='text-t-primary font-medium'>{command.name}</span>}
@@ -44,9 +44,9 @@ const MessageAvailableCommands: React.FC<MessageAvailableCommandsProps> = ({ mes
                 {command.description}
                 {command.hint && <span className='text-t-tertiary ms-4px'>({command.hint})</span>}
               </div>
-            </AionCollapse.Item>
+            </BoloCollapse.Item>
           ))}
-        </AionCollapse>
+        </BoloCollapse>
       </CollapsibleContent>
     </div>
   );

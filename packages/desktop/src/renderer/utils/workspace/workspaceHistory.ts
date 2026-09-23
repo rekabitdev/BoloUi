@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const WORKSPACE_UPDATE_TIME_KEY = 'aionui_workspace_update_time';
+const WORKSPACE_UPDATE_TIME_KEY = 'boloui_workspace_update_time';
 
 /**
  * 获取 workspace 的最后更新时间

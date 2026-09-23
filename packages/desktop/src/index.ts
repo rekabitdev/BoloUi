@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -31,14 +31,14 @@ import { shouldRegisterBackendStartup } from './process/startup/singleInstanceGa
 import { ProcessConfig } from './process/utils/initStorage';
 import type { BackendStartupFailureInfo } from './common/types/platform/electron';
 import { registerWindowMaximizeListeners } from '@process/bridge';
-import { BackendLifecycleManager } from '@aionui/web-host';
+import { BackendLifecycleManager } from '@boloui/web-host';
 import { resolveBinaryPath } from '@process/backend';
 import './process/bridge/feedbackBridge';
 import { wasLaunchedAtLogin } from '@process/bridge/applicationBridge';
 import { onLanguageChanged } from './process/bridge/systemSettingsBridge';
 import { setInitialLanguage } from '@process/services/i18n';
 import { setupApplicationMenu } from './process/utils/appMenu';
-import { startWebHost } from '@aionui/web-host';
+import { startWebHost } from '@boloui/web-host';
 import { initializeZoomFactor, setupZoomForWindow } from './process/utils/zoom';
 import { hydrateWindowsProcessPath } from './process/startup/windowsPath';
 import { registerWindowsAppUserModelId } from './process/startup/windowsAppUserModelId';
@@ -83,12 +83,12 @@ import electronSquirrelStartup from 'electron-squirrel-startup';
 // Acquire lock early so the second instance quits before doing unnecessary work.
 // When a second instance starts (e.g. from protocol URL), it sends its data
 // to the first instance via second-instance event, then quits.
-const isE2ETestMode = process.env.AIONUI_E2E_TEST === '1';
-const skipSingleInstanceLock = isE2ETestMode || process.env.AIONUI_MULTI_INSTANCE === '1';
+const isE2ETestMode = process.env.BOLOUI_E2E_TEST === '1';
+const skipSingleInstanceLock = isE2ETestMode || process.env.BOLOUI_MULTI_INSTANCE === '1';
 const deepLinkFromArgv = process.argv.find((arg) => arg.startsWith(`${PROTOCOL_SCHEME}://`));
 const gotTheLock = skipSingleInstanceLock ? true : app.requestSingleInstanceLock({ deepLinkUrl: deepLinkFromArgv });
 if (!gotTheLock) {
-  console.warn('[AionUi] Another instance is already running; current process will exit.');
+  console.warn('[BoloUi] Another instance is already running; current process will exit.');
   app.quit();
 } else {
   app.on('second-instance', (_event, argv, _workingDirectory, additionalData) => {
@@ -111,7 +111,7 @@ if (!gotTheLock) {
       showOrCreateMainWindow({
         mainWindow,
         createWindow: () => {
-          console.log('[AionUi] second-instance received with no active main window, recreating main window');
+          console.log('[BoloUi] second-instance received with no active main window, recreating main window');
           createWindow();
         },
       });
@@ -155,7 +155,7 @@ if (electronSquirrelStartup) {
 // Sentry automatically captures these, but we keep the handlers to prevent Electron's default error dialog.
 // Control flow is unchanged — both handlers still swallow the failure and keep the process alive; they only
 // log allow-listed attribution first, because a Sentry event for e.g. `read ECONNRESET` otherwise carries
-// nothing but Node-internal frames (TCP.onStreamRead) and cannot be traced back to a subsystem (AIONUI-128).
+// nothing but Node-internal frames (TCP.onStreamRead) and cannot be traced back to a subsystem (BOLOUI-128).
 process.on('uncaughtException', (error, origin) => {
   logUncaught(describeUncaughtError(error, origin));
 });
@@ -166,7 +166,7 @@ process.on('unhandledRejection', (reason, _promise) => {
 
 function logUncaught(diagnostics: UncaughtErrorDiagnostics): void {
   try {
-    console.error(`[AionUi] ${diagnostics.origin}:`, diagnostics);
+    console.error(`[BoloUi] ${diagnostics.origin}:`, diagnostics);
   } catch {
     // Logging must never escalate a swallowed error into a fatal one: a throw inside an
     // uncaughtException listener terminates the process, and the log transport itself can
@@ -312,7 +312,7 @@ function broadcastBackendStartupState(state: BackendStartupFailureInfo | null): 
 function markBackendStartupFailed(error: unknown): void {
   backendStartupFailed = true;
   // Stamp the currently installed app version so failure dialogs (notably the
-  // downgrade "update AionUi" dialog) can tell the user which version they are
+  // downgrade "update BoloUi" dialog) can tell the user which version they are
   // on now — i.e. that they need something newer than this.
   backendStartupFailureInfo = { ...classifyBackendStartupFailure(error), appVersion: app.getVersion() };
   (globalThis as typeof globalThis & { __backendStartupFailed?: boolean }).__backendStartupFailed = true;
@@ -326,10 +326,10 @@ function registerCronResumeBridge(backendPort: number): void {
     void fetch(`http://127.0.0.1:${backendPort}/api/cron/internal/system-resume`, {
       method: 'POST',
       headers: {
-        'x-aionui-internal': '1',
+        'x-boloui-internal': '1',
       },
     }).catch((error) => {
-      console.error('[AionUi] Failed to notify backend about system resume:', error);
+      console.error('[BoloUi] Failed to notify backend about system resume:', error);
     });
   };
 
@@ -352,9 +352,9 @@ const scheduleBackendMigrations = (): void => {
     try {
       const { runBackendMigrations } = await import('./process/utils/runBackendMigrations');
       await runBackendMigrations(ProcessConfig);
-      console.info('[AionUi] runBackendMigrations completed');
+      console.info('[BoloUi] runBackendMigrations completed');
     } catch (error) {
-      console.error('[AionUi] Backend migration hook threw:', error);
+      console.error('[BoloUi] Backend migration hook threw:', error);
     }
   })();
 };
@@ -383,7 +383,7 @@ function ensureAdminUserOnce(backendPort: number): Promise<void> {
 
 function markBackendReady(backendPort: number, source: string): void {
   if (backendStartedOk) return;
-  console.log(`[AionUi] ${source} ready (port=${backendPort})`);
+  console.log(`[BoloUi] ${source} ready (port=${backendPort})`);
   exposeBackendPort(backendPort);
   registerCronResumeBridge(backendPort);
   backendStartedOk = true;
@@ -397,12 +397,12 @@ function markBackendReady(backendPort: number, source: string): void {
 }
 
 function resolveDebugBackendStartupFailure(): BackendStartupFailureInfo | null {
-  const reason = process.env.AIONUI_DEBUG_BACKEND_STARTUP_FAILURE as BackendStartupFailureInfo['reason'] | undefined;
+  const reason = process.env.BOLOUI_DEBUG_BACKEND_STARTUP_FAILURE as BackendStartupFailureInfo['reason'] | undefined;
   if (!reason) {
     return null;
   }
   if ((app.isPackaged && !isE2ETestMode) || isWebUIMode || isResetPasswordMode) {
-    console.warn('[AionUi] Ignoring AIONUI_DEBUG_BACKEND_STARTUP_FAILURE outside desktop dev/e2e mode.');
+    console.warn('[BoloUi] Ignoring BOLOUI_DEBUG_BACKEND_STARTUP_FAILURE outside desktop dev/e2e mode.');
     return null;
   }
 
@@ -442,7 +442,7 @@ function resolveDebugBackendStartupFailure(): BackendStartupFailureInfo | null {
     return { reason };
   }
 
-  console.warn(`[AionUi] Ignoring unknown AIONUI_DEBUG_BACKEND_STARTUP_FAILURE value: ${reason}`);
+  console.warn(`[BoloUi] Ignoring unknown BOLOUI_DEBUG_BACKEND_STARTUP_FAILURE value: ${reason}`);
   return null;
 }
 
@@ -453,7 +453,7 @@ function applyDebugBackendStartupFailure(failure: BackendStartupFailureInfo): vo
 }
 
 const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): void => {
-  console.log('[AionUi] Creating main window...');
+  console.log('[BoloUi] Creating main window...');
   const { x: windowX, y: windowY, width: windowWidth, height: windowHeight } = resolveInitialBounds();
 
   // Get app icon for development mode (Windows/Linux need icon in BrowserWindow)
@@ -502,7 +502,7 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
       webviewTag: true, // 启用 webview 标签用于 HTML 预览 / Enable webview tag for HTML preview
     },
   });
-  console.log(`[AionUi] Main window created (id=${mainWindow.id})`);
+  console.log(`[BoloUi] Main window created (id=${mainWindow.id})`);
 
   scheduleStartupLogReport(mainWindow);
 
@@ -512,18 +512,18 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
   if (showOnReady) {
     const showWindow = () => {
       if (!mainWindow.isDestroyed() && !mainWindow.isVisible()) {
-        console.log('[AionUi] Showing main window');
+        console.log('[BoloUi] Showing main window');
         mainWindow.show();
         mainWindow.focus();
       }
     };
     mainWindow.once('ready-to-show', () => {
-      console.log('[AionUi] Window ready-to-show');
+      console.log('[BoloUi] Window ready-to-show');
       showWindow();
     });
     // Belt-and-suspenders: also show on did-finish-load in case ready-to-show already fired
     mainWindow.webContents.once('did-finish-load', () => {
-      console.log('[AionUi] Renderer did-finish-load');
+      console.log('[BoloUi] Renderer did-finish-load');
       showWindow();
       scheduleBackendMigrations();
     });
@@ -546,7 +546,7 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
   // 初始化自动更新服务（通过环境变量禁用时跳过，例如 E2E / CI 场景）
   const isCiRuntime = process.env.CI === 'true' || process.env.CI === '1' || process.env.GITHUB_ACTIONS === 'true';
   const disableAutoUpdater =
-    process.env.AIONUI_DISABLE_AUTO_UPDATE === '1' || process.env.AIONUI_E2E_TEST === '1' || isCiRuntime;
+    process.env.BOLOUI_DISABLE_AUTO_UPDATE === '1' || process.env.BOLOUI_E2E_TEST === '1' || isCiRuntime;
   if (!disableAutoUpdater) {
     Promise.all([import('./process/services/autoUpdaterService'), import('./process/bridge/updateBridge')])
       .then(([{ autoUpdaterService }, { createAutoUpdateStatusBroadcast }]) => {
@@ -557,7 +557,7 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
           await backendManager.stop();
         });
         // Check for updates after 3 seconds delay. Skipped in the discontinued
-        // build: AionUi's final version guides users to the website instead of
+        // build: BoloUi's final version guides users to the website instead of
         // auto-checking, so startup stays silent. The flag is a compile-time
         // literal, so this branch is tree-shaken out of non-discontinued builds.
         // 3秒后检查更新。停更版启动静默，不做应用内检测。
@@ -571,7 +571,7 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
         console.error('[App] Failed to initialize autoUpdaterService:', error);
       });
   } else {
-    console.log('[AionUi] Auto-updater disabled via env/CI guard');
+    console.log('[BoloUi] Auto-updater disabled via env/CI guard');
   }
 
   // Load the renderer: dev server URL in development, built HTML file in production
@@ -579,46 +579,46 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
   const fallbackFile = path.join(__dirname, '../renderer/index.html');
 
   if (!app.isPackaged && rendererUrl) {
-    console.log(`[AionUi] Loading renderer URL: ${rendererUrl}`);
+    console.log(`[BoloUi] Loading renderer URL: ${rendererUrl}`);
     mainWindow.loadURL(rendererUrl).catch((error) => {
-      console.error('[AionUi] loadURL failed, falling back to file:', error.message || error);
+      console.error('[BoloUi] loadURL failed, falling back to file:', error.message || error);
       mainWindow.loadFile(fallbackFile).catch((e2) => {
-        console.error('[AionUi] loadFile fallback also failed:', e2.message || e2);
+        console.error('[BoloUi] loadFile fallback also failed:', e2.message || e2);
       });
     });
   } else {
-    console.log(`[AionUi] Loading renderer file: ${fallbackFile}`);
+    console.log(`[BoloUi] Loading renderer file: ${fallbackFile}`);
     mainWindow.loadFile(fallbackFile).catch((error) => {
-      console.error('[AionUi] loadFile failed:', error.message || error);
+      console.error('[BoloUi] loadFile failed:', error.message || error);
     });
   }
 
   mainWindow.webContents.on('did-fail-load', (_event, errorCode, errorDescription, validatedURL, isMainFrame) => {
-    console.error('[AionUi] did-fail-load:', { errorCode, errorDescription, validatedURL, isMainFrame });
+    console.error('[BoloUi] did-fail-load:', { errorCode, errorDescription, validatedURL, isMainFrame });
   });
 
   // Recovery policy for renderer crashes: reload with backoff for ordinary
   // crashes, escalate to a throttled app relaunch when the renderer cannot
   // launch at all (e.g. app files replaced by an update while running).
   // An unconditional immediate reload here caused a ~50/s crash storm on
-  // `launch-failed` (Sentry AIONUI-DESKTOP-A).
+  // `launch-failed` (Sentry BOLOUI-DESKTOP-A).
   const rendererRecovery = createRendererRecoveryPolicy();
 
   mainWindow.webContents.on('render-process-gone', (_event, details) => {
-    console.error('[AionUi] render-process-gone:', details);
+    console.error('[BoloUi] render-process-gone:', details);
     if (mainWindow.isDestroyed()) return;
 
     const action = rendererRecovery.onCrash(details.reason);
 
     if (action.kind === 'relaunch') {
-      console.warn(`[AionUi] renderer cannot be recovered in-place (reason=${details.reason}); relaunching app`);
+      console.warn(`[BoloUi] renderer cannot be recovered in-place (reason=${details.reason}); relaunching app`);
       app.relaunch();
       app.exit(0);
       return;
     }
 
     if (action.kind === 'give-up') {
-      console.error(`[AionUi] renderer recovery exhausted (reason=${details.reason}); not retrying`);
+      console.error(`[BoloUi] renderer recovery exhausted (reason=${details.reason}); not retrying`);
       return;
     }
 
@@ -626,15 +626,15 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
     // to the dead webContents while the reload is in progress.
     const reload = () => {
       if (mainWindow.isDestroyed()) return;
-      console.log('[AionUi] Attempting to recover from renderer crash by reloading...');
+      console.log('[BoloUi] Attempting to recover from renderer crash by reloading...');
 
       if (!app.isPackaged && rendererUrl) {
         mainWindow.loadURL(rendererUrl).catch((error) => {
-          console.error('[AionUi] Recovery loadURL failed:', error.message || error);
+          console.error('[BoloUi] Recovery loadURL failed:', error.message || error);
         });
       } else {
         mainWindow.loadFile(fallbackFile).catch((error) => {
-          console.error('[AionUi] Recovery loadFile failed:', error.message || error);
+          console.error('[BoloUi] Recovery loadFile failed:', error.message || error);
         });
       }
     };
@@ -647,11 +647,11 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
   });
 
   mainWindow.webContents.on('unresponsive', () => {
-    console.warn('[AionUi] Renderer became unresponsive');
+    console.warn('[BoloUi] Renderer became unresponsive');
   });
 
   mainWindow.on('closed', () => {
-    console.log('[AionUi] Main window closed');
+    console.log('[BoloUi] Main window closed');
   });
 
   // DevTools is no longer auto-opened at startup.
@@ -679,7 +679,7 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
 
 const handleAppReady = async (): Promise<void> => {
   const t0 = performance.now();
-  const mark = (label: string) => console.log(`[AionUi:ready] ${label} +${Math.round(performance.now() - t0)}ms`);
+  const mark = (label: string) => console.log(`[BoloUi:ready] ${label} +${Math.round(performance.now() - t0)}ms`);
   mark('start');
 
   if (!app.isPackaged) {
@@ -785,8 +785,8 @@ const handleAppReady = async (): Promise<void> => {
        * any MCP config the user copied from there could never connect.
        */
       setActiveCdpPort(bridge.port);
-      process.env.AIONUI_CDP_ACTIVE_PORT = String(bridge.port);
-      process.env.AIONUI_CDP_BRIDGE_TOKEN = bridge.token;
+      process.env.BOLOUI_CDP_ACTIVE_PORT = String(bridge.port);
+      process.env.BOLOUI_CDP_BRIDGE_TOKEN = bridge.token;
       console.log(`[CDP] Single-target bridge listening on 127.0.0.1:${bridge.port} (token required)`);
       app.once('will-quit', () => {
         void bridge.close();
@@ -896,7 +896,7 @@ const handleAppReady = async (): Promise<void> => {
     initializeZoomFactor(await ProcessConfig.get('ui.zoomFactor'));
     mark('initializeZoomFactor');
   } catch (error) {
-    console.error('[AionUi] Failed to restore zoom factor:', error);
+    console.error('[BoloUi] Failed to restore zoom factor:', error);
     initializeZoomFactor(undefined);
   }
 
@@ -904,7 +904,7 @@ const handleAppReady = async (): Promise<void> => {
     loadSavedWindowBounds(await ProcessConfig.get('window.bounds'));
     mark('restoreWindowBounds');
   } catch (error) {
-    console.error('[AionUi] Failed to restore window bounds:', error);
+    console.error('[BoloUi] Failed to restore window bounds:', error);
     loadSavedWindowBounds(undefined);
   }
 
@@ -928,14 +928,14 @@ const handleAppReady = async (): Promise<void> => {
     const resolvedPort = resolveWebUIPort(userConfigInfo.config, getSwitchValue);
     const allowRemote = resolveRemoteAccess(userConfigInfo.config, isRemoteMode);
     try {
-      // Inside Electron (`AionUi --webui` or packaged `aionui-web` mode that
+      // Inside Electron (`BoloUi --webui` or packaged `boloui-web` mode that
       // launches via the Electron shell), reuse the desktop app's data-dir so
       // that conversations / cron jobs created in any path show up everywhere.
       // Matches the desktop IPC path at line 493 above.
       const { getDataPath } = await import('./process/utils/utils');
       const { getSystemDir } = await import('./process/utils/initStorage');
       const sysDirWebUI = getSystemDir();
-      // M6: Switch to @aionui/web-host
+      // M6: Switch to @boloui/web-host
       const handle = await startWebHost({
         app: {
           version: app.getVersion(),
@@ -952,7 +952,7 @@ const handleAppReady = async (): Promise<void> => {
         allowRemote,
         dataDir: getDataPath(),
         logDir: sysDirWebUI.logDir,
-        // Expose the same AIONUI_{CACHE,WORK,LOG}_DIR env the desktop IPC path
+        // Expose the same BOLOUI_{CACHE,WORK,LOG}_DIR env the desktop IPC path
         // passes at line 493, so /api/system/info reports the symlink workDir
         // instead of the path-with-spaces userData root.
         dirs: {
@@ -1067,7 +1067,7 @@ const handleAppReady = async (): Promise<void> => {
 };
 
 // ============ Protocol Registration ============
-// Register aionui:// as the default protocol client
+// Register boloui:// as the default protocol client
 if (process.defaultApp) {
   // Dev mode: need to pass execPath explicitly
   app.setAsDefaultProtocolClient(PROTOCOL_SCHEME, process.execPath, [path.resolve(process.argv[1])]);
@@ -1075,7 +1075,7 @@ if (process.defaultApp) {
   app.setAsDefaultProtocolClient(PROTOCOL_SCHEME);
 }
 
-// macOS: handle aionui:// URLs via the open-url event
+// macOS: handle boloui:// URLs via the open-url event
 app.on('open-url', (event, url) => {
   event.preventDefault();
   handleDeepLinkUrl(url);
@@ -1101,7 +1101,7 @@ if (shouldRegisterBackendStartup(gotTheLock)) {
     .then(handleAppReady)
     .catch((error) => {
       // App initialization failed
-      console.error('[AionUi] App initialization failed:', error);
+      console.error('[BoloUi] App initialization failed:', error);
       app.quit();
     });
 }
@@ -1163,11 +1163,11 @@ installQuitCleanup({
 });
 
 app.on('will-quit', () => {
-  console.log('[AionUi] will-quit — all cleanup should be complete');
+  console.log('[BoloUi] will-quit — all cleanup should be complete');
 });
 
 app.on('quit', (_event, exitCode) => {
-  console.log(`[AionUi] quit (exitCode=${exitCode})`);
+  console.log(`[BoloUi] quit (exitCode=${exitCode})`);
 });
 
 // In this file you can include the rest of your app's specific main process

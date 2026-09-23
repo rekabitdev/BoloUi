@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright 2025 AionUi (aionui.com)
+ * Copyright 2025 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  *
  * Unit tests for process/utils/rendererRecovery — covers the backoff/relaunch
- * policy that stops the renderer 'launch-failed' reload storm (AIONUI-DESKTOP-A).
+ * policy that stops the renderer 'launch-failed' reload storm (BOLOUI-DESKTOP-A).
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
