@@ -245,12 +245,12 @@ const FETCH_FORBIDDEN_PORTS = new Set([
 ]);
 
 const FETCH_COMPATIBLE_PORT_MAX_ATTEMPTS = 50;
-const AIONCORE_LISTENING_PREFIX = 'AIONCORE_LISTENING ';
+const BACKEND_LISTENING_PREFIXES = ['BOLOUICORE_LISTENING ', 'AIONCORE_LISTENING '] as const;
 // Bare, payload-less readiness marker emitted by aioncore once `axum::serve`
 // actually begins serving (see AionCore cmd_server.rs). Authoritative "ready"
 // signal — matched by exact whole-line equality. The port is already known from
 // the earlier AIONCORE_LISTENING line, so this marker carries no payload.
-const AIONCORE_READY_MARKER = 'AIONCORE_READY';
+const BACKEND_READY_MARKERS = new Set(['BOLOUICORE_READY', 'AIONCORE_READY']);
 const BACKEND_PORT_REPORT_TIMEOUT_MS = 60_000;
 
 // Benign boundary code emitted by an aioncore instance that yielded the
@@ -381,13 +381,14 @@ function clearHealthCheckErrorDiagnostics(diagnostics: HealthCheckDiagnostics): 
 }
 
 function isAioncoreReadyLine(line: string): boolean {
-  return line === AIONCORE_READY_MARKER;
+  return BACKEND_READY_MARKERS.has(line);
 }
 
 function parseAioncoreListeningPort(line: string): number | undefined {
-  if (!line.startsWith(AIONCORE_LISTENING_PREFIX)) return undefined;
+  const prefix = BACKEND_LISTENING_PREFIXES.find((candidate) => line.startsWith(candidate));
+  if (!prefix) return undefined;
   try {
-    const parsed = JSON.parse(line.slice(AIONCORE_LISTENING_PREFIX.length)) as { port?: unknown };
+    const parsed = JSON.parse(line.slice(prefix.length)) as { port?: unknown };
     if (typeof parsed.port !== 'number' || !Number.isInteger(parsed.port)) return undefined;
     if (parsed.port <= 0 || parsed.port > 65535) return undefined;
     return parsed.port;

@@ -39,6 +39,8 @@ jspm_packages/
 
 # Lock files for other package managers (project uses bun.lock)
 package-lock.json
+packages/bolouicore/bin/
+packages/bolouicore/obj/
 yarn.lock
 
 # TypeScript v1 declaration files

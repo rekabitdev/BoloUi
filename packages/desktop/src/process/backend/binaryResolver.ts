@@ -11,7 +11,7 @@ import { existsSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { execSync } from 'node:child_process';
 
-const BINARY_NAME = 'aioncore';
+const BINARY_NAME = 'bolouicore';
 const BIN_ENV_VAR = 'BOLOUI_BACKEND_BIN';
 const MAX_DIR_ENTRIES = 20;
 const MAX_LOOKUP_TEXT_LENGTH = 1000;
