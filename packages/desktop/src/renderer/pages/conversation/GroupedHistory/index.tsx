@@ -437,6 +437,12 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
                                 : group.workspace,
                             projectWorkspace: group.workspace,
                             projectModel: profile.model,
+                            projectProfile: {
+                              instructions: profile.instructions,
+                              skills: profile.skills,
+                              context: profile.context,
+                              documents: profile.documents,
+                            },
                           },
                         });
                         return;

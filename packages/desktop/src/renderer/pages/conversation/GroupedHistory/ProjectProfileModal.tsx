@@ -75,23 +75,48 @@ const normalizeMarkdownName = (name: string): string => {
 const ProjectProfileModal: React.FC<Props> = ({ visible, projectKey, projectName, onClose }) => {
   const [profile, setProfile] = useState<ProjectProfile>(EMPTY_PROFILE);
   const { data: providers = [] } = useProvidersQuery();
+  const [availableSkills, setAvailableSkills] = useState<Array<{ name: string; description: string }>>([]);
+  const [profileHydrated, setProfileHydrated] = useState(false);
   const [skillInput, setSkillInput] = useState('');
   const [documentName, setDocumentName] = useState('');
 
   useEffect(() => {
-    if (visible) setProfile(loadProjectProfile(projectKey));
+    if (!visible) return;
+    setProfileHydrated(false);
+    setProfile(loadProjectProfile(projectKey));
+    setProfileHydrated(true);
+    void ipcBridge.fs.listAvailableSkills
+      .invoke()
+      .then((skills) => setAvailableSkills(skills.map(({ name, description }) => ({ name, description }))))
+      .catch((error: unknown) => {
+        console.error('Failed to load project skills:', error);
+        setAvailableSkills([]);
+      });
   }, [projectKey, visible]);
+
+  useEffect(() => {
+    if (!visible || !profileHydrated) return;
+    localStorage.setItem(projectProfileStorageKey(projectKey), JSON.stringify(profile));
+  }, [profile, profileHydrated, projectKey, visible]);
 
   const duplicateDocumentNames = useMemo(() => {
     const names = profile.documents.map((document) => document.name.toLowerCase());
     return names.some((name, index) => names.indexOf(name) !== index);
   }, [profile.documents]);
 
-  const addSkill = () => {
-    const skill = skillInput.trim();
-    if (!skill || profile.skills.includes(skill)) return;
+  const addSkill = (selectedSkill?: string) => {
+    const skill = (selectedSkill ?? skillInput).trim();
+    if (!skill) {
+      Message.warning('Choose or enter a skill first.');
+      return;
+    }
+    if (profile.skills.includes(skill)) {
+      Message.info(`${skill} is already attached to this project.`);
+      return;
+    }
     setProfile((current) => ({ ...current, skills: [...current.skills, skill] }));
     setSkillInput('');
+    Message.success(`Added skill: ${skill}`);
   };
 
   const addDocument = () => {
@@ -103,6 +128,7 @@ const ProjectProfileModal: React.FC<Props> = ({ visible, projectKey, projectName
     }
     setProfile((current) => ({ ...current, documents: [...current.documents, { name, content: '' }] }));
     setDocumentName('');
+    Message.success(`Added Markdown file: ${name}`);
   };
 
   const connectCowork = async () => {
@@ -136,6 +162,7 @@ const ProjectProfileModal: React.FC<Props> = ({ visible, projectKey, projectName
       style={{ width: 720 }}
       unmountOnExit
     >
+      <div className='max-h-[68vh] overflow-y-auto pe-8px'>
       <Space direction='vertical' size='large' className='w-full'>
         <div>
           <Typography.Title heading={6}>Project model</Typography.Title>
@@ -184,13 +211,22 @@ const ProjectProfileModal: React.FC<Props> = ({ visible, projectKey, projectName
         <div>
           <Typography.Title heading={6}>Skills</Typography.Title>
           <Space className='w-full'>
-            <Input
-              value={skillInput}
-              onChange={setSkillInput}
-              onPressEnter={addSkill}
-              placeholder='Skill name or identifier'
-            />
-            <Button icon={<Plus />} onClick={addSkill}>Add</Button>
+            <Select
+              allowCreate
+              showSearch
+              value={skillInput || undefined}
+              onChange={(value) => setSkillInput(value ?? '')}
+              onSearch={setSkillInput}
+              placeholder='Choose an installed skill or enter its name'
+              className='flex-1 min-w-360px'
+            >
+              {availableSkills.map((skill) => (
+                <Select.Option key={skill.name} value={skill.name}>
+                  {skill.name}{skill.description ? ` — ${skill.description}` : ''}
+                </Select.Option>
+              ))}
+            </Select>
+            <Button icon={<Plus />} onClick={() => addSkill()}>Add</Button>
           </Space>
           <div className='mt-8px flex flex-wrap gap-6px'>
             {profile.skills.map((skill) => (
@@ -275,6 +311,7 @@ const ProjectProfileModal: React.FC<Props> = ({ visible, projectKey, projectName
           </Space>
         </div>
       </Space>
+      </div>
     </Modal>
   );
 };

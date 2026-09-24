@@ -1849,6 +1849,11 @@ export interface ICreateConversationParams {
     exclude_auto_inject_skills?: string[];
     selected_mcp_server_ids?: string[];
     selected_session_mcp_servers?: ISessionMcpServer[];
+    project_workspace?: string;
+    project_instructions?: string;
+    project_context?: string;
+    project_documents?: Array<{ name: string; content: string }>;
+    cowork_workspace?: string;
     codex_model?: string;
     thought_level?: string;
     cached_config_options?: import('../types/platform/acpTypes').AcpSessionConfigOption[];

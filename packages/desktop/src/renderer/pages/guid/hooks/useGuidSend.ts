@@ -44,6 +44,13 @@ export type GuidSendDeps = {
   selectedMcpServerIds: string[] | undefined;
   assistantDefaultMcpIds?: string[];
   isGoogleAuth: boolean;
+  projectWorkspace?: string;
+  projectProfile?: {
+    instructions: string;
+    skills: string[];
+    context: string;
+    documents: Array<{ name: string; content: string }>;
+  };
 
   // Mention state reset
   setMentionOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -89,6 +96,8 @@ export const useGuidSend = (deps: GuidSendDeps): GuidSendResult => {
     availableMcpServers,
     selectedMcpServerIds,
     assistantDefaultMcpIds,
+    projectWorkspace,
+    projectProfile,
     setMentionOpen,
     setMentionQuery,
     setMentionSelectorOpen,
@@ -176,20 +185,41 @@ export const useGuidSend = (deps: GuidSendDeps): GuidSendResult => {
         return;
       }
       try {
+        const projectDocuments = projectProfile?.documents.filter(
+          (document) => document.name.trim() && document.content.trim()
+        );
+        const projectContext = [
+          projectProfile?.instructions,
+          projectProfile?.context,
+          ...(projectDocuments?.map((document) => `# ${document.name}\n\n${document.content}`) ?? []),
+        ]
+          .filter(Boolean)
+          .join('\n\n');
         const conversation = await ipcBridge.conversation.create.invoke({
           name: input,
           model: current_model,
           assistant: {
             id: assistantConversationId,
             locale: localeKey,
-            conversation_overrides: assistantOverrides,
+            conversation_overrides: {
+              ...assistantOverrides,
+              skill_ids: [...new Set([...(assistantOverrides.skill_ids ?? []), ...(projectProfile?.skills ?? [])])],
+            },
           },
           extra: {
             default_files: files.map(chatFileRefPath),
-            workspace: finalWorkspace,
+            workspace: projectWorkspace || finalWorkspace,
             custom_workspace: isCustomWorkspace,
             selected_mcp_server_ids: selectedUserMcpServerIdsToSend,
             selected_session_mcp_servers: selectedSessionMcpServersToSend,
+            project_workspace: projectWorkspace,
+            project_instructions: projectProfile?.instructions,
+            project_context: projectProfile?.context,
+            project_documents: projectDocuments,
+            cowork_workspace: projectWorkspace ? finalWorkspace : undefined,
+            context: projectContext || undefined,
+            context_file_name: projectContext ? 'PROJECT_CONTEXT.md' : undefined,
+            preset_enabled_skills: projectProfile?.skills,
           },
         });
 
@@ -231,6 +261,16 @@ export const useGuidSend = (deps: GuidSendDeps): GuidSendResult => {
     }
 
     try {
+      const projectDocuments = projectProfile?.documents.filter(
+        (document) => document.name.trim() && document.content.trim()
+      );
+      const projectContext = [
+        projectProfile?.instructions,
+        projectProfile?.context,
+        ...(projectDocuments?.map((document) => `# ${document.name}\n\n${document.content}`) ?? []),
+      ]
+        .filter(Boolean)
+        .join('\n\n');
       const conversation = await ipcBridge.conversation.create.invoke({
         name: input,
         assistant: {
@@ -239,9 +279,17 @@ export const useGuidSend = (deps: GuidSendDeps): GuidSendResult => {
           conversation_overrides: assistantOverrides,
         },
         extra: {
-          workspace: finalWorkspace,
+          workspace: projectWorkspace || finalWorkspace,
           custom_workspace: isCustomWorkspace,
           default_files: files.map(chatFileRefPath),
+          project_workspace: projectWorkspace,
+          project_instructions: projectProfile?.instructions,
+          project_context: projectProfile?.context,
+          project_documents: projectDocuments,
+          cowork_workspace: projectWorkspace ? finalWorkspace : undefined,
+          context: projectContext || undefined,
+          context_file_name: projectContext ? 'PROJECT_CONTEXT.md' : undefined,
+          preset_enabled_skills: projectProfile?.skills,
           selected_mcp_server_ids: selectedUserMcpServerIdsToSend,
           selected_session_mcp_servers:
             selectedMcpServerIds !== undefined ? selectedSessionMcpServers : selectedSessionMcpServersToSend,

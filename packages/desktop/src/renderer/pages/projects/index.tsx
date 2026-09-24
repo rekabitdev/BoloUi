@@ -74,6 +74,12 @@ const ProjectsPage: React.FC = () => {
         workspace: cowork && profile.coworkWorkspace ? profile.coworkWorkspace : workspace,
         projectWorkspace: workspace,
         projectModel: profile.model,
+        projectProfile: {
+          instructions: profile.instructions,
+          skills: profile.skills,
+          context: profile.context,
+          documents: profile.documents,
+        },
       },
     });
   };

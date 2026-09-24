@@ -52,6 +52,12 @@ type GuidNavigationState = {
   workspace?: string;
   projectWorkspace?: string;
   projectModel?: { providerId: string; modelId: string };
+  projectProfile?: {
+    instructions: string;
+    skills: string[];
+    context: string;
+    documents: Array<{ name: string; content: string }>;
+  };
   [key: string]: unknown;
 };
 
@@ -288,6 +294,8 @@ const GuidPage: React.FC = () => {
     selectedMcpServerIds: guidSelectedMcpServerIds,
     assistantDefaultMcpIds: resolvedAssistantDefaults.mcpIds,
     isGoogleAuth: modelSelection.isGoogleAuth,
+    projectWorkspace: navState?.projectWorkspace,
+    projectProfile: navState?.projectProfile,
 
     // Mention state reset
     setMentionOpen: resetMentionOpen,
