@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/common/platform/bridge', () => ({
   bridge: {
@@ -19,10 +19,7 @@ vi.mock('@/common/platform/bridge', () => ({
         _getHandler: () => handlerMap.get('handler'),
       };
     }),
-    buildEmitter: vi.fn(() => ({
-      emit: vi.fn(),
-      on: vi.fn(),
-    })),
+    buildEmitter: vi.fn(() => ({ emit: vi.fn(), on: vi.fn() })),
   },
 }));
 
@@ -33,10 +30,7 @@ vi.mock('electron', () => ({
     exit: vi.fn(),
     isPackaged: true,
   },
-  autoUpdater: {
-    on: vi.fn(),
-    removeListener: vi.fn(),
-  },
+  autoUpdater: { on: vi.fn(), removeListener: vi.fn() },
 }));
 
 vi.mock('electron-updater', () => ({
@@ -66,48 +60,39 @@ vi.mock('electron-log', () => ({
   },
 }));
 
-vi.mock('@process/services/i18n', () => ({
-  default: { t: (key: string) => key },
-}));
-
-// The fixtures below are mac-arm64 assets and both resolveCdnChannelFile and
-// pickRecommendedAsset read the host platform/arch, so pin the runtime to keep
-// results identical on every CI runner (linux/windows x64 would otherwise
-// filter the assets out and pick no recommended asset).
-import { afterAll, beforeAll } from 'vitest';
+vi.mock('@process/services/i18n', () => ({ default: { t: (key: string) => key } }));
 
 const realPlatform = process.platform;
 const realArch = process.arch;
+
 beforeAll(() => {
   Object.defineProperty(process, 'platform', { value: 'darwin', configurable: true });
   Object.defineProperty(process, 'arch', { value: 'arm64', configurable: true });
 });
+
 afterAll(() => {
   Object.defineProperty(process, 'platform', { value: realPlatform, configurable: true });
   Object.defineProperty(process, 'arch', { value: realArch, configurable: true });
 });
 
-const CDN_YML = `version: 2.1.45
-files:
-  - url: BoloUi-2.1.45-mac-arm64.zip
-    size: 100
-  - url: BoloUi-2.1.45-mac-arm64.dmg
-    size: 200
-path: BoloUi-2.1.45-mac-arm64.zip
-releaseDate: '2026-07-31T14:45:19.381Z'
-`;
-
-const GITHUB_RELEASES = [
-  {
-    tag_name: 'v2.1.45',
-    name: 'v2.1.45',
-    body: 'changelog body',
-    html_url: 'https://github.com/iOfficeAI/BoloUi/releases/tag/v2.1.45',
-    prerelease: false,
-    draft: false,
-    assets: [],
-  },
-];
+const githubRelease = {
+  tag_name: 'v2.1.45',
+  name: 'v2.1.45',
+  body: 'changelog body',
+  html_url: 'https://github.com/rekabitdev/BoloUi/releases/tag/v2.1.45',
+  published_at: '2026-07-31T14:45:19.381Z',
+  prerelease: false,
+  draft: false,
+  assets: [
+    {
+      name: 'BoloUi-2.1.45-mac-arm64.dmg',
+      browser_download_url:
+        'https://github.com/rekabitdev/BoloUi/releases/download/v2.1.45/BoloUi-2.1.45-mac-arm64.dmg',
+      size: 200,
+      content_type: 'application/x-apple-diskimage',
+    },
+  ],
+};
 
 const getCheckHandler = async () => {
   vi.resetModules();
@@ -120,98 +105,65 @@ const getCheckHandler = async () => {
   return lastCall[0];
 };
 
-type FetchScenario = {
-  cdn?: () => Promise<Response> | Response;
-  github?: () => Promise<Response> | Response;
-};
-
-const stubFetch = (scenario: FetchScenario) => {
+const stubFetch = (response: Response | Error) => {
   const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
-    const url = String(input);
-    if (url.startsWith('https://static.boloui.com/releases/latest')) {
-      if (!scenario.cdn) throw new Error('unexpected CDN request');
-      return scenario.cdn();
-    }
-    if (url.startsWith('https://api.github.com/')) {
-      if (!scenario.github) throw new Error('github unreachable');
-      return scenario.github();
-    }
-    throw new Error(`unexpected fetch: ${url}`);
+    expect(String(input)).toContain('https://api.github.com/repos/rekabitdev/BoloUi/releases');
+    if (response instanceof Error) throw response;
+    return response;
   });
   vi.stubGlobal('fetch', fetchMock);
   return fetchMock;
 };
 
-const ymlResponse = (body: string) => new Response(body, { status: 200 });
-const jsonResponse = (body: unknown) => new Response(JSON.stringify(body), { status: 200 });
+const jsonResponse = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status });
 
-describe('update.check CDN-first', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+describe('update.check GitHub Releases', () => {
+  beforeEach(() => vi.clearAllMocks());
+  afterEach(() => vi.unstubAllGlobals());
 
-  afterEach(() => {
-    vi.unstubAllGlobals();
-  });
-
-  it('reports an update from the CDN manifest and attaches GitHub notes', async () => {
-    stubFetch({ cdn: () => ymlResponse(CDN_YML), github: () => jsonResponse(GITHUB_RELEASES) });
+  it('reports an update and recommends the matching GitHub asset', async () => {
+    stubFetch(jsonResponse([githubRelease]));
     const handler = await getCheckHandler();
     const res = await handler({});
+
     expect(res.success).toBe(true);
     expect(res.data?.updateAvailable).toBe(true);
     expect(res.data?.latest?.version).toBe('2.1.45');
     expect(res.data?.latest?.body).toBe('changelog body');
-    expect(res.data?.latest?.htmlUrl).toBe('https://github.com/iOfficeAI/BoloUi/releases/tag/v2.1.45');
-    expect(res.data?.latest?.recommendedAsset?.url).toBe(
-      'https://static.boloui.com/releases/2.1.45/BoloUi-2.1.45-mac-arm64.dmg'
-    );
+    expect(res.data?.latest?.recommendedAsset?.url).toContain('/rekabitdev/BoloUi/releases/download/');
   });
 
-  it('succeeds without notes when GitHub is unreachable', async () => {
-    stubFetch({ cdn: () => ymlResponse(CDN_YML) });
+  it('reports up-to-date when the newest release equals the current version', async () => {
+    stubFetch(jsonResponse([{ ...githubRelease, tag_name: 'v2.1.40' }]));
     const handler = await getCheckHandler();
     const res = await handler({});
-    expect(res.success).toBe(true);
-    expect(res.data?.updateAvailable).toBe(true);
-    expect(res.data?.latest?.body).toBeUndefined();
-    expect(res.data?.latest?.htmlUrl).toBe('');
-    expect(res.data?.latest?.assets.length).toBeGreaterThan(0);
-  });
 
-  it('ignores GitHub releases that do not match the CDN version', async () => {
-    stubFetch({
-      cdn: () => ymlResponse(CDN_YML),
-      github: () => jsonResponse([{ ...GITHUB_RELEASES[0], tag_name: 'v9.9.9' }]),
-    });
-    const handler = await getCheckHandler();
-    const res = await handler({});
-    expect(res.success).toBe(true);
-    expect(res.data?.latest?.body).toBeUndefined();
-  });
-
-  it('reports up-to-date when CDN version equals current version', async () => {
-    stubFetch({
-      cdn: () => ymlResponse(CDN_YML.replace(/2\.1\.45/g, '2.1.40')),
-      github: () => jsonResponse([]),
-    });
-    const handler = await getCheckHandler();
-    const res = await handler({});
     expect(res.success).toBe(true);
     expect(res.data?.updateAvailable).toBe(false);
   });
 
-  it('fails the check when the CDN manifest request fails', async () => {
-    stubFetch({ cdn: () => new Response('nope', { status: 502 }), github: () => jsonResponse(GITHUB_RELEASES) });
+  it('ignores prereleases unless they are requested', async () => {
+    stubFetch(jsonResponse([{ ...githubRelease, tag_name: 'v2.2.0-beta.1', prerelease: true }]));
+    const handler = await getCheckHandler();
+    const res = await handler({ includePrerelease: false });
+
+    expect(res.success).toBe(true);
+    expect(res.data?.updateAvailable).toBe(false);
+  });
+
+  it('returns a failed check when GitHub is unavailable', async () => {
+    stubFetch(new Error('github unreachable'));
     const handler = await getCheckHandler();
     const res = await handler({});
+
     expect(res.success).toBe(false);
   });
 
-  it('fails the check when the CDN manifest is malformed', async () => {
-    stubFetch({ cdn: () => ymlResponse('not: [valid'), github: () => jsonResponse(GITHUB_RELEASES) });
+  it('returns a failed check for an unsuccessful GitHub response', async () => {
+    stubFetch(jsonResponse({ message: 'rate limited' }, 403));
     const handler = await getCheckHandler();
     const res = await handler({});
+
     expect(res.success).toBe(false);
   });
 });

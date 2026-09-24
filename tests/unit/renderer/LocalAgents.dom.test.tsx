@@ -200,7 +200,7 @@ describe('LocalAgents', () => {
     // Proves L30 (useManagedAgents) ran and fed the derived lists.
     expect(useManagedAgents).toHaveBeenCalled();
     expect(screen.getByText('Aion CLI')).toBeTruthy();
-    expect(screen.getByText('Claude Code')).toBeTruthy();
+    expect(screen.queryByText('Claude Code')).toBeNull();
     expect(screen.getByText('My Agent')).toBeTruthy();
   });
 
@@ -225,8 +225,8 @@ describe('LocalAgents', () => {
 
     expect(screen.getByText('settings.agents')).toBeTruthy();
     expect(screen.getByText('settings.agentManagement.customAgents')).toBeTruthy();
-    // Only Claude Code shows 'missing' now; openclaw-gateway is filtered out as deprecated
-    expect(screen.getByText('settings.agentManagement.statusMissing')).toBeTruthy();
+    // The default available filter hides missing official agents while custom diagnostics remain visible.
+    expect(screen.queryByText('settings.agentManagement.statusMissing')).toBeNull();
     expect(screen.getByText('settings.agentManagement.statusOffline')).toBeTruthy();
     expect(screen.queryByText('settings.agentManagement.goToChat')).toBeNull();
     // Verify deprecated agent is filtered out
@@ -247,7 +247,7 @@ describe('LocalAgents', () => {
     expect(screen.getByText('Aion CLI')).toBeInTheDocument();
   });
 
-  it('renders official agents as diagnostics cards and filters out deprecated types', () => {
+  it('renders available official agents as diagnostics cards and filters out deprecated types', () => {
     useManagedAgents.mockReturnValue({
       agents: makeAgents(),
       revalidate: vi.fn(),
@@ -258,12 +258,12 @@ describe('LocalAgents', () => {
 
     // Agent names render
     expect(screen.getByText('Aion CLI')).toBeInTheDocument();
-    expect(screen.getByText('Claude Code')).toBeInTheDocument();
+    expect(screen.queryByText('Claude Code')).toBeNull();
     // Deprecated openclaw-gateway agent is filtered out
     expect(screen.queryByText('OpenClaw Gateway')).toBeNull();
-    // Status tags render
+    // The default available filter renders only online agents.
     expect(screen.getByText('settings.agentManagement.statusOnline')).toBeInTheDocument();
-    expect(screen.getByText('settings.agentManagement.statusMissing')).toBeInTheDocument();
+    expect(screen.queryByText('settings.agentManagement.statusMissing')).toBeNull();
   });
 
   it('does not render the market-install CTA in the diagnostics-only agent page', () => {
@@ -367,6 +367,7 @@ describe('LocalAgents', () => {
     });
 
     render(<LocalAgents />);
+    fireEvent.click(screen.getByTestId('settings-tab-all'));
 
     // Alphabetically Claude Code < Kimi, so this order proves the pin rule:
     // aionrs stays first, Kimi jumps ahead of the localeCompare ordering.
@@ -436,11 +437,15 @@ describe('LocalAgents', () => {
     const unavailableTab = screen.getByTestId('settings-tab-unavailable');
     expect(allTab.tagName).toBe('BUTTON');
 
-    // Default "all": both official agents visible (Aion CLI online, Claude Code missing).
+    // Default "available" keeps only the online agent.
+    expect(screen.getByText('Aion CLI')).toBeInTheDocument();
+    expect(screen.queryByText('Claude Code')).toBeNull();
+
+    // "all" reveals both official agents.
+    fireEvent.click(allTab);
     expect(screen.getByText('Aion CLI')).toBeInTheDocument();
     expect(screen.getByText('Claude Code')).toBeInTheDocument();
 
-    // "available" keeps only the online agent.
     fireEvent.click(availableTab);
     expect(screen.getByText('Aion CLI')).toBeInTheDocument();
     expect(screen.queryByText('Claude Code')).toBeNull();

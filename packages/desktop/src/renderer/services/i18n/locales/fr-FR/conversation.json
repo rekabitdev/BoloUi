@@ -25,6 +25,9 @@
     "skillsMarketDetails": "Voir plus >>"
   },
   "history": {
+    "delete": "Supprimer",
+    "deleteConfirmTitle": "Supprimer définitivement la conversation ?",
+    "deleteConfirmContent": "« {{name}} » sera définitivement supprimée. Cette action est irréversible.",
     "recents": "Récents",
     "noHistory": "Aucun historique de chat",
     "deleteTitle": "Supprimer",
@@ -787,5 +790,12 @@
     "progress": "{{completed}}/{{total}}",
     "expand": "Développer le plan",
     "collapse": "Réduire le plan"
+  },
+  "projects": {
+    "developBoloUi": "Développer BoloUi",
+    "developBoloUiDescription": "Ouvrez et améliorez BoloUi avec son flux de travail existant de Projets, Cowork, Skills et mémoire.",
+    "developBoloUiLocateFailed": "Impossible de localiser le code source de BoloUi sur cet ordinateur.",
+    "developBoloUi": "Develop BoloUi",
+    "sourceNotFound": "BoloUi source repository was not found. Set BOLOUI_SOURCE_PATH and try again."
   }
 }

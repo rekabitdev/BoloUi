@@ -248,6 +248,7 @@ const AionrsConversationPanel: React.FC<{ conversation: AionrsConversation; slid
       <AionrsChat
         conversation_id={conversation.id}
         workspace={conversation.extra.workspace}
+        projectWorkspace={(conversation.extra as { project_workspace?: string }).project_workspace}
         emptySlot={emptySlot}
         modelSelection={modelSelection}
         session_mode={conversation.extra?.session_mode}
@@ -324,6 +325,7 @@ const ChatConversation: React.FC<{
             key={conversation.id}
             conversation_id={conversation.id}
             workspace={conversation.extra?.workspace}
+            projectWorkspace={conversation.extra?.project_workspace}
             backend={resolvedConversationBackend || 'claude'}
             session_mode={conversation.extra?.session_mode}
             agent_name={assistantDisplayName}

@@ -168,7 +168,7 @@ describe('updateBridge CDN URL rewriting', () => {
     vi.clearAllMocks();
   });
 
-  it('rewrites asset.url to the CDN path and keeps GitHub URL in fallbackUrl', async () => {
+  it('keeps GitHub release asset URLs unchanged', async () => {
     const fetchMock = stubCdnAndGitHubFetch();
 
     try {
@@ -182,28 +182,29 @@ describe('updateBridge CDN URL rewriting', () => {
 
       const macAsset = assets.find((a: { name: string }) => a.name === 'BoloUi-1.9.22-mac-arm64.dmg');
       expect(macAsset).toBeDefined();
-      expect(macAsset?.url).toBe('https://static.boloui.com/releases/1.9.22/BoloUi-1.9.22-mac-arm64.dmg');
-      expect(macAsset?.fallbackUrl).toBe(
+      expect(macAsset?.url).toBe(
         'https://github.com/iOfficeAI/BoloUi/releases/download/v1.9.22/BoloUi-1.9.22-mac-arm64.dmg'
       );
+      expect(macAsset?.fallbackUrl).toBeUndefined();
 
       const linuxAsset = assets.find((a: { name: string }) => a.name === 'BoloUi-1.9.22-linux-amd64.deb');
-      expect(linuxAsset?.url).toBe('https://static.boloui.com/releases/1.9.22/BoloUi-1.9.22-linux-amd64.deb');
+      expect(linuxAsset?.url).toBe(
+        'https://github.com/iOfficeAI/BoloUi/releases/download/v1.9.22/BoloUi-1.9.22-linux-amd64.deb'
+      );
       expect(fetchMock).toHaveBeenCalled();
     } finally {
       vi.unstubAllGlobals();
     }
   });
 
-  it('uses the normalized version (no v prefix) in the CDN path', async () => {
+  it('preserves the release tag in the GitHub download path', async () => {
     stubCdnAndGitHubFetch();
 
     try {
       const handler = await getCheckHandler();
       const result = await handler({ repo: 'iOfficeAI/BoloUi' });
       const asset = result.data?.latest?.assets?.[0];
-      expect(asset?.url).toMatch(/^https:\/\/static\.boloui\.com\/releases\/1\.9\.22\//);
-      expect(asset?.url).not.toMatch(/\/v1\.9\.22\//);
+      expect(asset?.url).toMatch(/^https:\/\/github\.com\/iOfficeAI\/BoloUi\/releases\/download\/v1\.9\.22\//);
     } finally {
       vi.unstubAllGlobals();
     }

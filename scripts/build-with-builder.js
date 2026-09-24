@@ -66,7 +66,10 @@ function patchElectronBuilderNsisInstaller() {
   }
 
   const original = fs.readFileSync(installUtilPath, 'utf8');
-  let patched = original;
+  let patched = original.replaceAll(
+    ' --installer-log="$BoloUiSessionLogPath" --installer-session="$BoloUiSessionId"',
+    ''
+  );
 
   const retryPrompt = [
     '    ${if} $R5 > 5',
@@ -95,7 +98,7 @@ function patchElectronBuilderNsisInstaller() {
   }
 
   const copiedUninstallerExec = `ExecWait '"$uninstallerFileNameTemp" /S /KEEP_APP_DATA $0 _?=$installationDir' $R0`;
-  const copiedUninstallerExecWithLog = `ExecWait '"$uninstallerFileNameTemp" /S /KEEP_APP_DATA $0 --installer-log="$BoloUiSessionLogPath" --installer-session="$BoloUiSessionId" _?=$installationDir' $R0`;
+  const copiedUninstallerExecWithLog = copiedUninstallerExec;
   if (patched.includes(copiedUninstallerExec)) {
     patched = patched.replace(copiedUninstallerExec, copiedUninstallerExecWithLog);
   } else if (
@@ -148,7 +151,7 @@ function patchElectronBuilderNsisInstaller() {
   }
 
   const inPlaceUninstallerExec = `ExecWait '"$uninstallerFileName" /S /KEEP_APP_DATA $0 _?=$installationDir' $R0`;
-  const inPlaceUninstallerExecWithLog = `ExecWait '"$uninstallerFileName" /S /KEEP_APP_DATA $0 --installer-log="$BoloUiSessionLogPath" --installer-session="$BoloUiSessionId" _?=$installationDir' $R0`;
+  const inPlaceUninstallerExecWithLog = inPlaceUninstallerExec;
   if (patched.includes(inPlaceUninstallerExec)) {
     patched = patched.replace(inPlaceUninstallerExec, inPlaceUninstallerExecWithLog);
   } else if (
@@ -779,10 +782,10 @@ try {
   // compatibility engine is prepared so both executables are packaged together.
   if (process.platform === 'win32') {
     const runtime = targetArch === 'arm64' ? 'win-arm64' : 'win-x64';
-    execSync(
-      `powershell -ExecutionPolicy Bypass -File scripts/build-bolouicore.ps1 -Runtime ${runtime}`,
-      { stdio: 'inherit', shell: true }
-    );
+    execSync(`powershell -ExecutionPolicy Bypass -File scripts/build-bolouicore.ps1 -Runtime ${runtime}`, {
+      stdio: 'inherit',
+      shell: true,
+    });
   }
 
   // 6. Prepare hub resources (index.json + extension zips for offline fallback)
@@ -826,7 +829,11 @@ try {
   // 使用 .onVerifyInstDir 避免与 electron-builder 冲突
   // Use .onVerifyInstDir to avoid conflicts with electron-builder
   let nsisInclude = '';
-  if (builderArgs.includes('--win') || builderArgs.includes('--all')) {
+  if (
+    builderArgs.includes('--win') ||
+    builderArgs.includes('--all') ||
+    (process.platform === 'win32' && !builderArgs.includes('--mac') && !builderArgs.includes('--linux'))
+  ) {
     if (!multiArch) {
       // 单架构构建：添加对应架构的检测脚本
       // Single-arch build: Add architecture-specific detection script
@@ -850,7 +857,10 @@ try {
     // Multi-arch builds: Architecture detection not supported yet
   }
 
-  if (process.platform === 'win32' && builderArgs.includes('--win')) {
+  if (
+    process.platform === 'win32' &&
+    (builderArgs.includes('--win') || (!builderArgs.includes('--mac') && !builderArgs.includes('--linux')))
+  ) {
     const winUnpackedDir = path.join(outDir, 'win-unpacked');
     let cleaned = tryRemoveDir(winUnpackedDir);
     if (!cleaned) {
@@ -867,7 +877,10 @@ try {
     }
   }
 
-  const isWindowsBuild = builderArgs.includes('--win') || builderArgs.includes('--all');
+  const isWindowsBuild =
+    builderArgs.includes('--win') ||
+    builderArgs.includes('--all') ||
+    (process.platform === 'win32' && !builderArgs.includes('--mac') && !builderArgs.includes('--linux'));
   if (isWindowsBuild) {
     patchElectronBuilderNsisInstaller();
     cleanupWindowsPackOutput();

@@ -82,3 +82,16 @@ export type DesktopProjectEntry = {
 
 /** Complete desktop Project data stored in SQLite. */
 export type DesktopProject = DesktopProjectEntry & DesktopProjectProfile;
+
+export type ProjectMemoryChunk = {
+  id: string;
+  projectId: string;
+  conversationId?: string;
+  source: 'turn' | 'handoff' | 'manual';
+  content: string;
+  createdAt: string;
+};
+
+export type ProjectMemorySearchResult = ProjectMemoryChunk & {
+  rank: number;
+};

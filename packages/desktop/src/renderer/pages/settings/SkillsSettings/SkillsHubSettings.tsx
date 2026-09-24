@@ -377,6 +377,37 @@ const SkillsHubSettings: React.FC<SkillsHubSettingsProps> = ({ withWrapper = tru
     }
   };
 
+  const handlePluginInstall = async () => {
+    try {
+      const result = await ipcBridge.dialog.showOpen.invoke({
+        properties: ['openFile'],
+        filters: [{ name: 'BoloUi plugin package', extensions: ['zip'] }],
+      });
+      if (!result?.[0]) return;
+      const installResult = await ipcBridge.plugins.installArchive.invoke({ zipPath: result[0] });
+      const installed = installResult.installed.map((plugin) => `${plugin.name} v${plugin.version}`).join(', ');
+      if (installResult.rejected.length > 0) {
+        Message.warning(
+          t('settings.skillsHub.pluginInstallPartial', {
+            installed,
+            rejected: installResult.rejected.length,
+            defaultValue: `Installed ${installed}; rejected ${installResult.rejected.length} invalid plugin(s).`,
+          })
+        );
+      } else {
+        Message.success(
+          t('settings.skillsHub.pluginInstallSuccess', {
+            installed,
+            defaultValue: `Installed ${installed}`,
+          })
+        );
+      }
+      void fetchData();
+    } catch (error) {
+      Message.error(error instanceof Error ? error.message : String(error));
+    }
+  };
+
   const getImportHistoryStatusLabel = (group: SkillImportHistoryGroup) => {
     if (group.failedCount > 0 && hasImportedRecords(group)) {
       return t('settings.skillsHub.importHistoryStatusPartial', { defaultValue: 'Partial' });
@@ -987,7 +1018,7 @@ const SkillsHubSettings: React.FC<SkillsHubSettingsProps> = ({ withWrapper = tru
         data-testid='skills-header'
         title={t('settings.skills', { defaultValue: 'Skills' })}
         description={t('settings.skillsHub.description', {
-          defaultValue: 'Centrally manage AI skill packs — install once, use across all assistants.',
+          defaultValue: 'Centrally manage AI skill packs. Install once, use across all assistants.',
         })}
         actions={
           <>
@@ -1001,6 +1032,9 @@ const SkillsHubSettings: React.FC<SkillsHubSettingsProps> = ({ withWrapper = tru
               onClick={showImportHistory}
             >
               {t('settings.skillsHub.importHistoryTitle', { defaultValue: 'Import history' })}
+            </Button>
+            <Button size='small' onClick={handlePluginInstall}>
+              {t('settings.skillsHub.installPlugin')}
             </Button>
             <TalkToButlerButton
               label={t('settings.skillsHub.addSkill', { defaultValue: 'Add Skill' })}

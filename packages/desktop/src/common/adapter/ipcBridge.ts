@@ -101,6 +101,7 @@ import type {
   DesktopProject,
   DesktopProjectEntry,
   DesktopProjectProfile,
+  ProjectMemorySearchResult,
   ProjectDetailDto,
   ProjectEntryDto,
 } from '@/common/types/project';
@@ -737,6 +738,15 @@ export const application = {
   devToolsStateChanged: bridge.buildEmitter<{ isOpen: boolean }>('app.devtools-state-changed'),
 };
 
+export type PluginInstallResult = {
+  installed: Array<{ name: string; version: string; hooks: string[] }>;
+  rejected: Array<{ plugin: string; reason: string }>;
+};
+
+export const plugins = {
+  installArchive: bridge.buildProvider<PluginInstallResult, { zipPath: string }>('plugins.installArchive'),
+};
+
 export const desktopProjects = {
   list: bridge.buildProvider<DesktopProjectEntry[], void>('desktop-projects.list'),
   get: bridge.buildProvider<DesktopProject | null, { workspace: string }>('desktop-projects.get'),
@@ -744,6 +754,14 @@ export const desktopProjects = {
     'desktop-projects.upsert'
   ),
   delete: bridge.buildProvider<boolean, { workspace: string }>('desktop-projects.delete'),
+  remember: bridge.buildProvider<
+    void,
+    { workspace: string; conversationId?: string; source: 'turn' | 'handoff' | 'manual'; content: string }
+  >('desktop-projects.remember'),
+  recall: bridge.buildProvider<ProjectMemorySearchResult[], { workspace: string; query: string; limit?: number }>(
+    'desktop-projects.recall'
+  ),
+  locateBoloUiSource: bridge.buildProvider<string | null, void>('desktop-projects.locate-boloui-source'),
 };
 
 // ---------------------------------------------------------------------------
@@ -1533,6 +1551,8 @@ export const systemSettings = {
   })),
   getKeepAwake: httpGetClientSetting<boolean>('keepAwake'),
   setKeepAwake: httpPut<void, { enabled: boolean }>('/api/settings/client', (p) => ({ keepAwake: p.enabled })),
+  getAllowEmoji: httpGetClientSetting<boolean>('allowEmoji'),
+  setAllowEmoji: httpPut<void, { enabled: boolean }>('/api/settings/client', (p) => ({ allowEmoji: p.enabled })),
   changeLanguage: httpPatch<void, { language: string }>('/api/settings', (p) => ({ language: p.language })),
   // Cross-session messaging master switch. NOTE the channel differs from the
   // sibling switches above: this one is a TYPED COLUMN on `system_settings`

@@ -25,6 +25,9 @@
     "skillsMarketDetails": "Ayrıntılar >>"
   },
   "history": {
+    "delete": "Sil",
+    "deleteConfirmTitle": "Konuşma kalıcı olarak silinsin mi?",
+    "deleteConfirmContent": "\"{{name}}\" kalıcı olarak silinecek. Bu işlem geri alınamaz.",
     "recents": "Son",
     "today": "Bugün",
     "yesterday": "Dün",
@@ -789,5 +792,12 @@
     "progress": "{{completed}}/{{total}}",
     "expand": "Planı genişlet",
     "collapse": "Planı daralt"
+  },
+  "projects": {
+    "developBoloUi": "BoloUi'yi Geliştir",
+    "developBoloUiDescription": "Mevcut Projeler, Cowork, Yetenekler ve bellek iş akışıyla BoloUi'yi açın ve geliştirin.",
+    "developBoloUiLocateFailed": "Bu bilgisayarda BoloUi kaynak kodu bulunamadı.",
+    "developBoloUi": "Develop BoloUi",
+    "sourceNotFound": "BoloUi source repository was not found. Set BOLOUI_SOURCE_PATH and try again."
   }
 }

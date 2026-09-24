@@ -26,6 +26,7 @@ import { useConversationContextSafe } from '@/renderer/hooks/context/Conversatio
 import { useLayoutContext } from '@/renderer/hooks/context/LayoutContext';
 import { useOpenFileSelector } from '@/renderer/hooks/file/useOpenFileSelector';
 import { useLatestRef } from '@/renderer/hooks/ui/useLatestRef';
+import { appendGlobalResponsePreferences } from '@/renderer/utils/emojiPreference';
 import { useAddOrUpdateMessage } from '@/renderer/pages/conversation/Messages/hooks';
 import {
   useConversationCommandQueue,
@@ -303,6 +304,7 @@ const AcpSendBox: React.FC<{
           input,
           conversation_id,
           files,
+          inject_skills: await appendGlobalResponsePreferences([]),
           // `@@` references. Dropping this here is a silent failure: the agent
           // simply never receives the session block.
           sessions,

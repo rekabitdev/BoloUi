@@ -50,7 +50,9 @@ function parseLegacyProjectProfile(projectKey: string): ProjectProfile | null {
     const parsed = JSON.parse(value) as Partial<ProjectProfile>;
     return {
       instructions: typeof parsed.instructions === 'string' ? parsed.instructions : '',
-      skills: Array.isArray(parsed.skills) ? parsed.skills.filter((skill): skill is string => typeof skill === 'string') : [],
+      skills: Array.isArray(parsed.skills)
+        ? parsed.skills.filter((skill): skill is string => typeof skill === 'string')
+        : [],
       context: typeof parsed.context === 'string' ? parsed.context : '',
       memory: typeof parsed.memory === 'string' ? parsed.memory : '',
       model:
@@ -211,167 +213,181 @@ const ProjectProfileModal: React.FC<Props> = ({ visible, projectKey, projectName
       unmountOnExit
     >
       <div className='max-h-[68vh] overflow-y-auto pe-8px'>
-      <Space direction='vertical' size='large' className='w-full'>
-        <div>
-          <Typography.Title heading={6}>Project model</Typography.Title>
-          <Select
-            allowClear
-            value={profile.model ? `${profile.model.providerId}::${profile.model.modelId}` : undefined}
-            placeholder='Use the global default model'
-            className='w-full'
-            onChange={(value?: string) => {
-              if (!value) {
-                setProfile((current) => ({ ...current, model: undefined }));
-                return;
-              }
-              const [providerId, ...modelParts] = value.split('::');
-              setProfile((current) => ({ ...current, model: { providerId, modelId: modelParts.join('::') } }));
-            }}
-          >
-            {providers.flatMap((provider) =>
-              (provider.models ?? []).map((modelId) => (
-                <Select.Option key={`${provider.id}::${modelId}`} value={`${provider.id}::${modelId}`}>
-                  {provider.name || provider.id} — {modelId}
-                </Select.Option>
-              ))
-            )}
-          </Select>
-        </div>
-
-        <div>
-          <Typography.Title heading={6}>Cowork Desktop</Typography.Title>
-          <Space className='w-full'>
-            <Input value={profile.coworkWorkspace ?? ''} readOnly placeholder='No Cowork folder connected' />
-            <Button icon={<FolderOpen />} onClick={() => void connectCowork()}>Connect folder</Button>
-          </Space>
-        </div>
-
-        <div>
-          <Typography.Title heading={6}>Custom instructions</Typography.Title>
-          <Input.TextArea
-            value={profile.instructions}
-            onChange={(instructions) => setProfile((current) => ({ ...current, instructions }))}
-            placeholder='Rules and behavior that apply to conversations in this project'
-            autoSize={{ minRows: 3, maxRows: 8 }}
-          />
-        </div>
-
-        <div>
-          <Typography.Title heading={6}>Skills</Typography.Title>
-          <Space className='w-full'>
+        <Space direction='vertical' size='large' className='w-full'>
+          <div>
+            <Typography.Title heading={6}>Project model</Typography.Title>
             <Select
-              allowCreate
-              showSearch
-              value={skillInput || undefined}
-              onChange={(value) => setSkillInput(value ?? '')}
-              onSearch={setSkillInput}
-              placeholder='Choose an installed skill or enter its name'
-              className='flex-1 min-w-360px'
+              allowClear
+              value={profile.model ? `${profile.model.providerId}::${profile.model.modelId}` : undefined}
+              placeholder='Use the global default model'
+              className='w-full'
+              onChange={(value?: string) => {
+                if (!value) {
+                  setProfile((current) => ({ ...current, model: undefined }));
+                  return;
+                }
+                const [providerId, ...modelParts] = value.split('::');
+                setProfile((current) => ({ ...current, model: { providerId, modelId: modelParts.join('::') } }));
+              }}
             >
-              {availableSkills.map((skill) => (
-                <Select.Option key={skill.name} value={skill.name}>
-                  {skill.name}{skill.description ? ` — ${skill.description}` : ''}
-                </Select.Option>
-              ))}
+              {providers.flatMap((provider) =>
+                (provider.models ?? []).map((modelId) => (
+                  <Select.Option key={`${provider.id}::${modelId}`} value={`${provider.id}::${modelId}`}>
+                    {provider.name || provider.id} — {modelId}
+                  </Select.Option>
+                ))
+              )}
             </Select>
-            <Button icon={<Plus />} onClick={() => addSkill()}>Add</Button>
-          </Space>
-          <div className='mt-8px flex flex-wrap gap-6px'>
-            {profile.skills.map((skill) => (
-              <Tag
-                key={skill}
-                closable
-                onClose={() => setProfile((current) => ({ ...current, skills: current.skills.filter((item) => item !== skill) }))}
-              >
-                {skill}
-              </Tag>
-            ))}
           </div>
-        </div>
 
-        <div>
-          <Typography.Title heading={6}>Project context</Typography.Title>
-          <Input.TextArea
-            value={profile.context}
-            onChange={(context) => setProfile((current) => ({ ...current, context }))}
-            placeholder='Background, goals, constraints, conventions, and other shared context'
-            autoSize={{ minRows: 3, maxRows: 8 }}
-          />
-        </div>
+          <div>
+            <Typography.Title heading={6}>Cowork Desktop</Typography.Title>
+            <Space className='w-full'>
+              <Input value={profile.coworkWorkspace ?? ''} readOnly placeholder='No Cowork folder connected' />
+              <Button icon={<FolderOpen />} onClick={() => void connectCowork()}>
+                Connect folder
+              </Button>
+            </Space>
+          </div>
 
-        <div>
-          <Typography.Title heading={6}>{t('conversation.projectMemory.title')}</Typography.Title>
-          <Typography.Paragraph type='secondary'>{t('conversation.projectMemory.description')}</Typography.Paragraph>
-          <Input.TextArea
-            value={profile.memory}
-            onChange={(memory) => setProfile((current) => ({ ...current, memory }))}
-            placeholder={t('conversation.projectMemory.placeholder')}
-            autoSize={{ minRows: 4, maxRows: 10 }}
-            maxLength={12000}
-            showWordLimit
-          />
-        </div>
-
-        <div>
-          <Typography.Title heading={6}>Markdown context files</Typography.Title>
-          <Typography.Paragraph type='secondary'>Maintain SOUL.md and any additional .md project documents.</Typography.Paragraph>
-          <Space className='w-full mb-12px'>
-            <Input
-              value={documentName}
-              onChange={setDocumentName}
-              onPressEnter={addDocument}
-              placeholder='Example: RULES.md'
+          <div>
+            <Typography.Title heading={6}>Custom instructions</Typography.Title>
+            <Input.TextArea
+              value={profile.instructions}
+              onChange={(instructions) => setProfile((current) => ({ ...current, instructions }))}
+              placeholder='Rules and behavior that apply to conversations in this project'
+              autoSize={{ minRows: 3, maxRows: 8 }}
             />
-            <Button icon={<Plus />} onClick={addDocument}>Add file</Button>
-          </Space>
-          <Space direction='vertical' className='w-full'>
-            {profile.documents.map((document, index) => (
-              <div key={`${document.name}-${index}`} className='border border-solid border-[var(--color-border-2)] rd-8px p-12px'>
-                <div className='flex items-center gap-8px mb-8px'>
-                  <Input
-                    value={document.name}
-                    onChange={(name) =>
+          </div>
+
+          <div>
+            <Typography.Title heading={6}>Skills</Typography.Title>
+            <Space className='w-full'>
+              <Select
+                allowCreate
+                showSearch
+                value={skillInput || undefined}
+                onChange={(value) => setSkillInput(value ?? '')}
+                onSearch={setSkillInput}
+                placeholder='Choose an installed skill or enter its name'
+                className='flex-1 min-w-360px'
+              >
+                {availableSkills.map((skill) => (
+                  <Select.Option key={skill.name} value={skill.name}>
+                    {skill.name}
+                    {skill.description ? ` — ${skill.description}` : ''}
+                  </Select.Option>
+                ))}
+              </Select>
+              <Button icon={<Plus />} onClick={() => addSkill()}>
+                Add
+              </Button>
+            </Space>
+            <div className='mt-8px flex flex-wrap gap-6px'>
+              {profile.skills.map((skill) => (
+                <Tag
+                  key={skill}
+                  closable
+                  onClose={() =>
+                    setProfile((current) => ({ ...current, skills: current.skills.filter((item) => item !== skill) }))
+                  }
+                >
+                  {skill}
+                </Tag>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <Typography.Title heading={6}>Project context</Typography.Title>
+            <Input.TextArea
+              value={profile.context}
+              onChange={(context) => setProfile((current) => ({ ...current, context }))}
+              placeholder='Background, goals, constraints, conventions, and other shared context'
+              autoSize={{ minRows: 3, maxRows: 8 }}
+            />
+          </div>
+
+          <div>
+            <Typography.Title heading={6}>{t('conversation.projectMemory.title')}</Typography.Title>
+            <Typography.Paragraph type='secondary'>{t('conversation.projectMemory.description')}</Typography.Paragraph>
+            <Input.TextArea
+              value={profile.memory}
+              onChange={(memory) => setProfile((current) => ({ ...current, memory }))}
+              placeholder={t('conversation.projectMemory.placeholder')}
+              autoSize={{ minRows: 4, maxRows: 10 }}
+              maxLength={12000}
+              showWordLimit
+            />
+          </div>
+
+          <div>
+            <Typography.Title heading={6}>Markdown context files</Typography.Title>
+            <Typography.Paragraph type='secondary'>
+              Maintain SOUL.md and any additional .md project documents.
+            </Typography.Paragraph>
+            <Space className='w-full mb-12px'>
+              <Input
+                value={documentName}
+                onChange={setDocumentName}
+                onPressEnter={addDocument}
+                placeholder='Example: RULES.md'
+              />
+              <Button icon={<Plus />} onClick={addDocument}>
+                Add file
+              </Button>
+            </Space>
+            <Space direction='vertical' className='w-full'>
+              {profile.documents.map((document, index) => (
+                <div
+                  key={`${document.name}-${index}`}
+                  className='border border-solid border-[var(--color-border-2)] rd-8px p-12px'
+                >
+                  <div className='flex items-center gap-8px mb-8px'>
+                    <Input
+                      value={document.name}
+                      onChange={(name) =>
+                        setProfile((current) => ({
+                          ...current,
+                          documents: current.documents.map((item, itemIndex) =>
+                            itemIndex === index ? { ...item, name: normalizeMarkdownName(name) } : item
+                          ),
+                        }))
+                      }
+                      disabled={document.name.toLowerCase() === 'soul.md'}
+                    />
+                    {document.name.toLowerCase() !== 'soul.md' && (
+                      <Button
+                        status='danger'
+                        type='text'
+                        icon={<Delete />}
+                        onClick={() =>
+                          setProfile((current) => ({
+                            ...current,
+                            documents: current.documents.filter((_, itemIndex) => itemIndex !== index),
+                          }))
+                        }
+                      />
+                    )}
+                  </div>
+                  <Input.TextArea
+                    value={document.content}
+                    onChange={(content) =>
                       setProfile((current) => ({
                         ...current,
                         documents: current.documents.map((item, itemIndex) =>
-                          itemIndex === index ? { ...item, name: normalizeMarkdownName(name) } : item
+                          itemIndex === index ? { ...item, content } : item
                         ),
                       }))
                     }
-                    disabled={document.name.toLowerCase() === 'soul.md'}
+                    placeholder={`Content for ${document.name}`}
+                    autoSize={{ minRows: 4, maxRows: 12 }}
                   />
-                  {document.name.toLowerCase() !== 'soul.md' && (
-                    <Button
-                      status='danger'
-                      type='text'
-                      icon={<Delete />}
-                      onClick={() =>
-                        setProfile((current) => ({
-                          ...current,
-                          documents: current.documents.filter((_, itemIndex) => itemIndex !== index),
-                        }))
-                      }
-                    />
-                  )}
                 </div>
-                <Input.TextArea
-                  value={document.content}
-                  onChange={(content) =>
-                    setProfile((current) => ({
-                      ...current,
-                      documents: current.documents.map((item, itemIndex) =>
-                        itemIndex === index ? { ...item, content } : item
-                      ),
-                    }))
-                  }
-                  placeholder={`Content for ${document.name}`}
-                  autoSize={{ minRows: 4, maxRows: 12 }}
-                />
-              </div>
-            ))}
-          </Space>
-        </div>
-      </Space>
+              ))}
+            </Space>
+          </div>
+        </Space>
       </div>
     </Modal>
   );

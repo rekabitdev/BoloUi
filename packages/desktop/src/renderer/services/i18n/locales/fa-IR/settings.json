@@ -1,6 +1,9 @@
 {
   "title": "تنظیمات",
   "skillsHub": {
+    "installPlugin": "نصب افزونه",
+    "pluginInstallSuccess": "{{installed}} نصب شد",
+    "pluginInstallPartial": "{{installed}} نصب شد؛ {{rejected}} افزونه نامعتبر رد شد.",
     "title": "مرکز مهارت‌ها",
     "description": "بسته‌های مهارت هوش مصنوعی را متمرکز مدیریت کنید — یک‌بار نصب، استفاده در همه دستیارها.",
     "mySkillsTitle": "مهارت‌های من",
@@ -1414,5 +1417,8 @@
   "crossSessionMessageDesc": "به عامل‌ها اجازه می‌دهد به گفتگوهای دیگر شما پیام بفرستند. با خاموش کردن، منشن @@ در کادر ورودی نیز غیرفعال می‌شود.",
   "crossSessionMessageDisabledBanner": "پیام‌های بین گفتگوها خاموش است، منشن @@ در دسترس نیست.",
   "crossSessionMessageResume": "روشن کردن دوباره",
-  "crossSessionMessageUpdateFailed": "به‌روزرسانی تنظیم پیام‌های بین گفتگوها ناموفق بود"
+  "crossSessionMessageUpdateFailed": "به‌روزرسانی تنظیم پیام‌های بین گفتگوها ناموفق بود",
+  "allowEmoji": "Allow emoji in responses",
+  "allowEmojiDesc": "Allow assistants to use emoji and decorative symbols in their responses.",
+  "allowEmojiUpdateFailed": "Could not update the emoji preference."
 }

@@ -5,7 +5,7 @@
  */
 
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 
 const renderMock = vi.hoisted(() => vi.fn());
@@ -105,10 +105,10 @@ describe('MermaidBlock pan/zoom', () => {
     expect(inner.style.transform).toContain('scale(1)');
 
     fireEvent.click(screen.getByTestId('mermaid-zoom-in'));
-    expect(inner.style.transform).toContain('scale(1.25)');
+    await waitFor(() => expect(inner.style.transform).toContain('scale(1.25)'));
 
     fireEvent.click(screen.getByTestId('mermaid-zoom-out'));
-    expect(inner.style.transform).toContain('scale(1)');
+    await waitFor(() => expect(inner.style.transform).toContain('scale(1)'));
 
     fireEvent.click(screen.getByTestId('mermaid-zoom-in'));
     fireEvent.click(screen.getByTestId('mermaid-zoom-reset'));

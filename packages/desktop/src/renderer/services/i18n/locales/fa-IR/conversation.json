@@ -25,6 +25,9 @@
     "skillsMarketDetails": "مشاهده بیشتر >>"
   },
   "history": {
+    "delete": "حذف",
+    "deleteConfirmTitle": "گفتگو برای همیشه حذف شود؟",
+    "deleteConfirmContent": "«{{name}}» برای همیشه حذف می‌شود. این عمل قابل بازگشت نیست.",
     "recents": "اخیر",
     "noHistory": "تاریخچه چتی وجود ندارد",
     "deleteTitle": "حذف",
@@ -787,5 +790,12 @@
     "progress": "{{completed}}/{{total}}",
     "expand": "گسترش برنامه",
     "collapse": "جمع کردن برنامه"
+  },
+  "projects": {
+    "developBoloUi": "توسعه BoloUi",
+    "developBoloUiDescription": "BoloUi را با گردش‌کار موجود پروژه‌ها، Cowork، مهارت‌ها و حافظه باز کنید و بهبود دهید.",
+    "developBoloUiLocateFailed": "کد منبع BoloUi در این رایانه پیدا نشد.",
+    "developBoloUi": "Develop BoloUi",
+    "sourceNotFound": "BoloUi source repository was not found. Set BOLOUI_SOURCE_PATH and try again."
   }
 }

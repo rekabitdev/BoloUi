@@ -112,6 +112,8 @@ extraResources:
     to: bundled-aioncore
   - from: resources/hub
     to: hub
+  - from: resources/builtin-skills
+    to: builtin-skills
 win:
   target:
     - nsis
@@ -218,7 +220,7 @@ electronDownload:
 
 publish:
   provider: github
-  owner: iOfficeAI
+  owner: rekabitdev
   repo: BoloUi
   publishAutoUpdate: true
   releaseType: release

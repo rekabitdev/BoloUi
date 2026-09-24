@@ -45,6 +45,7 @@ const STORAGE_PATH = {
   cronSkills: 'cron-skills',
 };
 
+const BUNDLED_SKILLS_DIR = 'builtin-skills';
 /** Legacy builtin-skills cache directory, cleaned up at startup after the
  * backend took ownership of the corpus. */
 const LEGACY_BUILTIN_SKILLS_DIR = 'builtin-skills';
@@ -294,6 +295,24 @@ const getAssistantsDir = () => {
  * 获取技能脚本目录路径
  * Get skills scripts directory path
  */
+const getBundledSkillsDir = (): string => {
+  if (hasElectronAppPath() && getPlatformServices().paths.isPackaged()) {
+    return path.join(process.resourcesPath, BUNDLED_SKILLS_DIR);
+  }
+  const candidates = [
+    path.resolve(process.cwd(), 'resources', BUNDLED_SKILLS_DIR),
+    path.resolve(process.cwd(), '..', '..', 'resources', BUNDLED_SKILLS_DIR),
+    path.resolve(__dirname, `../../../../../resources/${BUNDLED_SKILLS_DIR}`),
+  ];
+  return candidates.find((candidate) => existsSync(candidate)) ?? candidates[0];
+};
+
+const installBundledSkills = async () => {
+  const sourceDir = getBundledSkillsDir();
+  if (!existsSync(sourceDir)) return;
+  await copyDirectoryRecursively(sourceDir, path.join(cacheDir, STORAGE_PATH.skills), { overwrite: true });
+};
+
 const getSkillsDir = () => {
   return path.join(cacheDir, STORAGE_PATH.skills);
 };
@@ -333,6 +352,7 @@ const ensureAssistantDirs = async (): Promise<void> => {
   const userSkillsDir = getSkillsDir();
 
   if (!existsSync(userSkillsDir)) mkdirSync(userSkillsDir);
+  await installBundledSkills();
 
   const cronSkillsDir = getCronSkillsDir();
   if (!existsSync(cronSkillsDir)) mkdirSync(cronSkillsDir);

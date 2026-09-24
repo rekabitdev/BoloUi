@@ -432,9 +432,7 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
                           navigate('/', {
                             state: {
                               workspace:
-                                key === 'cowork' && profile.coworkWorkspace
-                                  ? profile.coworkWorkspace
-                                  : group.workspace,
+                                key === 'cowork' && profile.coworkWorkspace ? profile.coworkWorkspace : group.workspace,
                               projectWorkspace: group.workspace,
                               projectModel: profile.model,
                               projectProfile: {
@@ -445,7 +443,7 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
                                 documents: profile.documents,
                               },
                             },
-                          }),
+                          })
                         );
                         return;
                       }

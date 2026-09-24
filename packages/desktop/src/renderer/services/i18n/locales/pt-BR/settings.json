@@ -1,6 +1,9 @@
 {
   "title": "Configurações",
   "skillsHub": {
+    "installPlugin": "Instalar plugin",
+    "pluginInstallSuccess": "{{installed}} instalado",
+    "pluginInstallPartial": "{{installed}} instalado; {{rejected}} plugin(s) inválido(s) rejeitado(s).",
     "title": "Central de Habilidades",
     "description": "Gerencie centralmente os pacotes de habilidades de IA — instale uma vez e use em todos os assistentes.",
     "mySkillsTitle": "Minhas Habilidades",
@@ -1417,5 +1420,8 @@
   "crossSessionMessageDesc": "Permite que agentes enviem mensagens para suas outras conversas. Desativar também desliga a menção @@ na caixa de entrada.",
   "crossSessionMessageDisabledBanner": "As mensagens entre conversas estão desativadas, a menção @@ não está disponível.",
   "crossSessionMessageResume": "Ativar novamente",
-  "crossSessionMessageUpdateFailed": "Falha ao atualizar a configuração de mensagens entre conversas"
+  "crossSessionMessageUpdateFailed": "Falha ao atualizar a configuração de mensagens entre conversas",
+  "allowEmoji": "Allow emoji in responses",
+  "allowEmojiDesc": "Allow assistants to use emoji and decorative symbols in their responses.",
+  "allowEmojiUpdateFailed": "Could not update the emoji preference."
 }

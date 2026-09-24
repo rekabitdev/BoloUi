@@ -5,6 +5,7 @@
  */
 
 import type { IConversationArtifact } from '@/common/adapter/ipcBridge';
+import { ipcBridge } from '@/common';
 import type { IMessageAcpToolCall, IMessageToolCall, IMessageToolGroup, TMessage } from '@/common/chat/chatLib';
 import { useConversationContextSafe } from '@/renderer/hooks/context/ConversationContext';
 import { useConversationRuntimeView } from '@/renderer/pages/conversation/runtime/useConversationRuntimeView';
@@ -337,7 +338,41 @@ const MessageList: React.FC<{ className?: string; emptySlot?: React.ReactNode }>
   const pagination = useMessagePaginationState();
   const artifacts = useConversationArtifacts();
   const conversationContext = useConversationContextSafe();
+  const rememberedMessageIds = useRef(new Set<string>());
   const rowWidthClass = getChatSurfaceWidthClass();
+
+  useEffect(() => {
+    const projectWorkspace = conversationContext?.projectWorkspace;
+    if (!projectWorkspace || isMessageListLoading) return;
+    const completedTextMessages = list.filter((message) => {
+      if (message.type !== 'text' || rememberedMessageIds.current.has(message.id)) return false;
+      const payload: unknown = message.content;
+      const content =
+        typeof payload === 'string'
+          ? payload
+          : typeof payload === 'object' && payload !== null && 'content' in payload
+            ? String(payload.content)
+            : '';
+      return content.trim().length >= 20;
+    });
+
+    for (const message of completedTextMessages) {
+      const payload: unknown = message.content;
+      const content =
+        typeof payload === 'string'
+          ? payload
+          : typeof payload === 'object' && payload !== null && 'content' in payload
+            ? String(payload.content)
+            : '';
+      rememberedMessageIds.current.add(message.id);
+      void ipcBridge.desktopProjects.remember.invoke({
+        workspace: projectWorkspace,
+        conversationId: conversationContext.conversation_id,
+        source: 'turn',
+        content: `${message.position === 'left' ? 'Assistant result' : 'User request'}: ${content}`,
+      });
+    }
+  }, [conversationContext, isMessageListLoading, list]);
   const loadPreviousMessagePage = useLoadPreviousMessagePage(conversationContext?.conversation_id);
   const loadAnchorMessageWindow = useLoadAnchorMessageWindow(conversationContext?.conversation_id);
   // While the agent is still streaming, the in-progress turn's last text keeps

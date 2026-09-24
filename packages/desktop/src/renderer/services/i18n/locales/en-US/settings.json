@@ -2,12 +2,15 @@
   "title": "Settings",
   "skillsHub": {
     "title": "Skills Hub",
-    "description": "Centrally manage AI skill packs — install once, use across all assistants.",
+    "description": "Centrally manage AI skill packs. Install once, use across all assistants.",
     "mySkillsTitle": "My Skills",
     "noSkills": "No skills found. Import some to get started.",
     "custom": "Custom",
     "builtin": "Built-in",
     "manualImport": "Import Skills",
+    "installPlugin": "Install Plugin",
+    "pluginInstallSuccess": "Installed {{installed}}",
+    "pluginInstallPartial": "Installed {{installed}}; rejected {{rejected}} invalid plugin(s).",
     "tipTitle": "Usage Tip:",
     "tipContent": "Skills configured here can be enabled for any assistant in the \"Assistants\" setup page; import a skill folder, a parent folder, or a zip archive.",
     "fetchError": "Failed to fetch skills",
@@ -1414,5 +1417,8 @@
   "crossSessionMessageDesc": "Let agents send messages to your other conversations. Turning this off also disables the @@ conversation mention in the input box.",
   "crossSessionMessageDisabledBanner": "Cross-conversation messages are off, so the @@ conversation mention is unavailable.",
   "crossSessionMessageResume": "Turn back on",
-  "crossSessionMessageUpdateFailed": "Failed to update the cross-conversation message setting"
+  "crossSessionMessageUpdateFailed": "Failed to update the cross-conversation message setting",
+  "allowEmoji": "Allow emoji in responses",
+  "allowEmojiDesc": "Allow assistants to use emoji and decorative symbols in their responses.",
+  "allowEmojiUpdateFailed": "Could not update the emoji preference."
 }

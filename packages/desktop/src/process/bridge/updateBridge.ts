@@ -60,7 +60,7 @@ interface AutoUpdateCheckParams {
   includePrerelease?: boolean;
 }
 
-const DEFAULT_REPO = 'iOfficeAI/BoloUi';
+const DEFAULT_REPO = 'rekabitdev/BoloUi';
 const DEFAULT_USER_AGENT = 'BoloUi';
 const ALLOWED_ASSET_EXTS = new Set(['.exe', '.msi', '.dmg', '.zip', '.deb', '.rpm']);
 const CDN_HOST = 'static.boloui.com';
@@ -347,71 +347,6 @@ const fetchGitHubReleases = async (repo: string, timeoutMs = 30000): Promise<Git
   }
 };
 
-const CDN_MANIFEST_TIMEOUT_MS = 15000;
-const GITHUB_NOTES_TIMEOUT_MS = 10000;
-
-/**
- * Fetch and parse the authoritative CDN channel manifest for the current
- * platform/arch. Any failure here fails the manual check — the CDN is the
- * single source of truth for "is there an update".
- */
-const fetchCdnManifest = async (): Promise<CdnLatestManifest> => {
-  const url = `${CDN_BASE_URL}/${resolveCdnChannelFile()}`;
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), CDN_MANIFEST_TIMEOUT_MS);
-
-  log.info('[manual-update] Checking CDN manifest:', url);
-  try {
-    const res = await fetch(url, {
-      headers: { 'User-Agent': DEFAULT_USER_AGENT },
-      signal: controller.signal,
-    });
-    if (!res.ok) {
-      throw new Error((await getI18n()).t('update.errors.cdnManifestFailed', { status: res.status }));
-    }
-    const manifest = parseCdnManifest(await res.text());
-    if (!manifest) {
-      throw new Error((await getI18n()).t('update.errors.cdnManifestInvalid'));
-    }
-    log.info('[manual-update] CDN manifest resolved:', {
-      url,
-      version: manifest.version,
-      files: manifest.files.length,
-    });
-    return manifest;
-  } catch (err: unknown) {
-    if (err instanceof Error && err.name === 'AbortError') {
-      throw new Error((await getI18n()).t('update.errors.cdnManifestTimeout'), { cause: err });
-    }
-    throw err;
-  } finally {
-    clearTimeout(timeoutId);
-  }
-};
-
-type ReleaseNotesEnrichment = { body?: string; htmlUrl?: string; name?: string; publishedAt?: string };
-
-/**
- * Best-effort GitHub lookup for the release matching the CDN version. The
- * manual check must work without GitHub (the repo stays the changelog source
- * but may be unreachable), so every failure path resolves to an empty object.
- */
-const fetchReleaseNotesEnrichment = async (repo: string, version: string): Promise<ReleaseNotesEnrichment> => {
-  try {
-    const releases = await fetchGitHubReleases(repo, GITHUB_NOTES_TIMEOUT_MS);
-    const match = releases.find((rel) => rel && !rel.draft && normalizeTagToSemver(rel.tag_name) === version);
-    if (!match) return {};
-    return {
-      body: match.body,
-      htmlUrl: match.html_url,
-      name: match.name,
-      publishedAt: match.published_at,
-    };
-  } catch {
-    return {};
-  }
-};
-
 type DownloadState = {
   abortController: AbortController;
   file_path: string;
@@ -678,42 +613,51 @@ export function initUpdateBridge(): void {
         const repo = resolveRepo(params?.repo);
         const currentVersion = app.getVersion();
 
-        // EN: Versioning note
-        // Update comparisons are pure semver: `app.getVersion()` (packaged app version) vs the CDN
-        // manifest `version`. If you want dev/prerelease updates to work reliably, CI must inject a
-        // prerelease semver into `package.json#version` for dev builds (e.g. `1.7.2-dev.1234+sha.abcdef0`)
-        // so semver ordering holds.
-        //
-        // 中文：版本号说明
-        // 更新比较严格使用 semver：`app.getVersion()`（应用自身版本号）对比 CDN manifest 的 `version`。
-        // 若要 dev/预发布版本更新可靠生效，需要 CI 在 dev 构建时把 `package.json#version`
-        // 注入为带 prerelease 的 semver（如 `1.7.2-dev.1234+sha.abcdef0`），以保证比较顺序正确。
-
-        // The CDN channel manifest is the authoritative source. It serves a single
-        // stable channel, so `includePrerelease` no longer affects detection.
-        const manifest = await fetchCdnManifest();
-        const latest = mapCdnManifestToRelease(manifest, repo);
-
         const currentSemver = semver.valid(currentVersion) || semver.coerce(currentVersion)?.version;
-        if (!currentSemver || !latest) {
+        if (!currentSemver) {
           return { success: true, data: { currentVersion, updateAvailable: false } };
         }
 
-        // GitHub only enriches the result with release notes; it never blocks.
-        const enrichment = await fetchReleaseNotesEnrichment(repo, latest.version);
+        const releases = await fetchGitHubReleases(repo);
+        const candidates = releases
+          .filter((release) => !release.draft && (params?.includePrerelease || !release.prerelease))
+          .map((release) => ({ release, version: normalizeTagToSemver(release.tag_name) }))
+          .filter((candidate): candidate is { release: GitHubReleaseApi; version: string } =>
+            Boolean(candidate.version)
+          )
+          .toSorted((a, b) => semver.rcompare(a.version, b.version));
+        const candidate = candidates[0];
+        if (!candidate) {
+          return { success: true, data: { currentVersion, updateAvailable: false } };
+        }
+
+        const assets = (candidate.release.assets ?? [])
+          .filter((asset) => isAllowedAssetName(asset.name))
+          .map((asset) => ({
+            name: asset.name,
+            url: asset.browser_download_url,
+            size: asset.size,
+            contentType: asset.content_type,
+          }));
+        const latest: UpdateReleaseInfo = {
+          tagName: candidate.release.tag_name,
+          version: candidate.version,
+          name: candidate.release.name,
+          body: candidate.release.body,
+          htmlUrl: candidate.release.html_url,
+          publishedAt: candidate.release.published_at,
+          prerelease: candidate.release.prerelease,
+          draft: candidate.release.draft,
+          assets,
+          recommendedAsset: pickRecommendedAsset(assets),
+        };
 
         return {
           success: true,
           data: {
             currentVersion,
             updateAvailable: semver.gt(latest.version, currentSemver),
-            latest: {
-              ...latest,
-              body: enrichment.body,
-              name: enrichment.name,
-              htmlUrl: enrichment.htmlUrl ?? '',
-              publishedAt: enrichment.publishedAt ?? latest.publishedAt,
-            },
+            latest,
           },
         };
       } catch (err: unknown) {

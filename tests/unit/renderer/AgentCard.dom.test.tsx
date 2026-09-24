@@ -45,6 +45,16 @@ const renderCustom = (
   );
 
 describe('AgentCard (custom variant)', () => {
+  it('uses a fluid card width and clips overflowing content', () => {
+    const { container } = renderCustom(true);
+    const card = container.firstElementChild as HTMLElement;
+
+    expect(card.className).toContain('w-full');
+    expect(card.className).toContain('min-w-0');
+    expect(card.className).toContain('overflow-hidden');
+    expect(card.className).not.toContain('w-[280px]');
+  });
+
   it('greys the identity block and keeps the test-connection action available when the agent is disabled', () => {
     const { container } = renderCustom(false);
 

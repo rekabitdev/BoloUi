@@ -1,8 +1,21 @@
 import { mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
-import type { DesktopProject, DesktopProjectEntry, DesktopProjectProfile } from '@/common/types/project';
+import type {
+  DesktopProject,
+  DesktopProjectEntry,
+  DesktopProjectProfile,
+  ProjectMemorySearchResult,
+} from '@/common/types/project';
 import { getDataPath } from '@process/utils';
+import {
+  cosineSimilarity,
+  deserializeEmbedding,
+  embedProjectMemory,
+  PROJECT_EMBEDDING_DIMENSIONS,
+  PROJECT_EMBEDDING_MODEL,
+  serializeEmbedding,
+} from './projectEmbeddingService';
 
 const DATABASE_FILE_NAME = 'boloui-desktop.db';
 
@@ -56,11 +69,38 @@ function getDatabase(): DatabaseSync {
     );
     CREATE INDEX IF NOT EXISTS idx_desktop_projects_updated_at
       ON desktop_projects(updated_at DESC);
+    CREATE TABLE IF NOT EXISTS project_memory_chunks (
+      id TEXT PRIMARY KEY,
+      project_id TEXT NOT NULL,
+      conversation_id TEXT,
+      source TEXT NOT NULL,
+      content TEXT NOT NULL,
+      content_hash TEXT NOT NULL,
+      embedding BLOB,
+      embedding_model TEXT,
+      embedding_dimensions INTEGER,
+      created_at TEXT NOT NULL,
+      FOREIGN KEY(project_id) REFERENCES desktop_projects(id) ON DELETE CASCADE,
+      UNIQUE(project_id, content_hash)
+    );
+    CREATE INDEX IF NOT EXISTS idx_project_memory_chunks_project_created
+      ON project_memory_chunks(project_id, created_at DESC);
   `);
-  const columns = database.prepare('PRAGMA table_info(desktop_projects)').all() as Array<{ name: string }>;
-  if (!columns.some((column) => column.name === 'memory')) {
+  const projectColumns = database.prepare('PRAGMA table_info(desktop_projects)').all() as Array<{ name: string }>;
+  if (!projectColumns.some((column) => column.name === 'memory')) {
     database.exec("ALTER TABLE desktop_projects ADD COLUMN memory TEXT NOT NULL DEFAULT '';");
   }
+  const memoryColumns = database.prepare('PRAGMA table_info(project_memory_chunks)').all() as Array<{ name: string }>;
+  if (!memoryColumns.some((column) => column.name === 'embedding')) {
+    database.exec('ALTER TABLE project_memory_chunks ADD COLUMN embedding BLOB;');
+  }
+  if (!memoryColumns.some((column) => column.name === 'embedding_model')) {
+    database.exec('ALTER TABLE project_memory_chunks ADD COLUMN embedding_model TEXT;');
+  }
+  if (!memoryColumns.some((column) => column.name === 'embedding_dimensions')) {
+    database.exec('ALTER TABLE project_memory_chunks ADD COLUMN embedding_dimensions INTEGER;');
+  }
+  database.exec('DROP TABLE IF EXISTS project_memory_fts;');
   return database;
 }
 
@@ -104,10 +144,7 @@ export function getDesktopProject(workspace: string): DesktopProject | null {
   return row ? rowToProject(row) : null;
 }
 
-export function upsertDesktopProject(
-  entry: DesktopProjectEntry,
-  profile?: DesktopProjectProfile,
-): DesktopProject {
+export function upsertDesktopProject(entry: DesktopProjectEntry, profile?: DesktopProjectProfile): DesktopProject {
   const existing = getDesktopProject(entry.workspace);
   const now = new Date().toISOString();
   const project: DesktopProject = {
@@ -154,14 +191,149 @@ export function upsertDesktopProject(
       project.memory,
       JSON.stringify(project.documents),
       project.createdAt,
-      project.updatedAt,
+      project.updatedAt
     );
 
   return getDesktopProject(entry.workspace) ?? project;
 }
 
+function normalizeMemoryContent(content: string): string {
+  return content.replace(/\s+/g, ' ').trim().slice(0, 12_000);
+}
+
+function memoryHash(content: string): string {
+  let hash = 2166136261;
+  for (let index = 0; index < content.length; index += 1) {
+    hash ^= content.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
+type MemoryVectorRow = {
+  id: string;
+  project_id: string;
+  conversation_id: string | null;
+  source: ProjectMemorySearchResult['source'];
+  content: string;
+  embedding: Uint8Array;
+  created_at: string;
+};
+
+/** Stores a deduplicated memory chunk with its local Hugging Face embedding. */
+export async function rememberProjectTurn(input: {
+  workspace: string;
+  conversationId?: string;
+  source: 'turn' | 'handoff' | 'manual';
+  content: string;
+}): Promise<void> {
+  const project = getDesktopProject(input.workspace);
+  const content = normalizeMemoryContent(input.content);
+  if (!project || content.length < 20) return;
+
+  const db = getDatabase();
+  const hash = memoryHash(content);
+  const existing = db
+    .prepare('SELECT id, embedding_model FROM project_memory_chunks WHERE project_id = ? AND content_hash = ?')
+    .get(project.id, hash) as { id: string; embedding_model: string | null } | undefined;
+  if (existing?.embedding_model === PROJECT_EMBEDDING_MODEL) return;
+
+  const embedding = await embedProjectMemory(content, 'passage');
+  if (existing) {
+    db.prepare(`
+      UPDATE project_memory_chunks
+      SET embedding = ?, embedding_model = ?, embedding_dimensions = ?
+      WHERE id = ?
+    `).run(serializeEmbedding(embedding), PROJECT_EMBEDDING_MODEL, PROJECT_EMBEDDING_DIMENSIONS, existing.id);
+    return;
+  }
+
+  db.prepare(`
+    INSERT INTO project_memory_chunks (
+      id, project_id, conversation_id, source, content, content_hash,
+      embedding, embedding_model, embedding_dimensions, created_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    crypto.randomUUID(),
+    project.id,
+    input.conversationId ?? null,
+    input.source,
+    content,
+    hash,
+    serializeEmbedding(embedding),
+    PROJECT_EMBEDDING_MODEL,
+    PROJECT_EMBEDDING_DIMENSIONS,
+    new Date().toISOString()
+  );
+}
+
+/** Backfills embeddings for memory captured before the local model was installed. */
+export async function backfillProjectMemoryEmbeddings(): Promise<number> {
+  const db = getDatabase();
+  const rows = db
+    .prepare(`
+      SELECT id, content
+      FROM project_memory_chunks
+      WHERE embedding IS NULL OR embedding_model IS NULL OR embedding_model != ?
+      ORDER BY created_at ASC
+    `)
+    .all(PROJECT_EMBEDDING_MODEL) as unknown as Array<{ id: string; content: string }>;
+
+  let updated = 0;
+  for (const row of rows) {
+    const embedding = await embedProjectMemory(row.content, 'passage');
+    db.prepare(`
+      UPDATE project_memory_chunks
+      SET embedding = ?, embedding_model = ?, embedding_dimensions = ?
+      WHERE id = ?
+    `).run(serializeEmbedding(embedding), PROJECT_EMBEDDING_MODEL, PROJECT_EMBEDDING_DIMENSIONS, row.id);
+    updated += 1;
+  }
+  return updated;
+}
+
+/** Recalls semantically similar chunks from only the requested Project. */
+export async function recallProjectMemory(input: {
+  workspace: string;
+  query: string;
+  limit?: number;
+}): Promise<ProjectMemorySearchResult[]> {
+  const project = getDesktopProject(input.workspace);
+  const query = normalizeMemoryContent(input.query);
+  if (!project || !query) return [];
+
+  const limit = Math.max(1, Math.min(input.limit ?? 6, 10));
+  const queryEmbedding = await embedProjectMemory(query, 'query');
+  const rows = getDatabase()
+    .prepare(`
+      SELECT id, project_id, conversation_id, source, content, embedding, created_at
+      FROM project_memory_chunks
+      WHERE project_id = ?
+        AND embedding IS NOT NULL
+        AND embedding_model = ?
+        AND embedding_dimensions = ?
+    `)
+    .all(project.id, PROJECT_EMBEDDING_MODEL, PROJECT_EMBEDDING_DIMENSIONS) as unknown as MemoryVectorRow[];
+
+  return rows
+    .map((row) => ({
+      id: row.id,
+      projectId: row.project_id,
+      conversationId: row.conversation_id ?? undefined,
+      source: row.source,
+      content: row.content,
+      createdAt: row.created_at,
+      rank: cosineSimilarity(queryEmbedding, deserializeEmbedding(row.embedding)),
+    }))
+    .filter((row) => Number.isFinite(row.rank))
+    .sort((left, right) => right.rank - left.rank)
+    .slice(0, limit);
+}
+
 export function deleteDesktopProject(workspace: string): boolean {
-  return getDatabase().prepare('DELETE FROM desktop_projects WHERE workspace = ?').run(workspace).changes > 0;
+  const project = getDesktopProject(workspace);
+  if (!project) return false;
+  return getDatabase().prepare('DELETE FROM desktop_projects WHERE id = ?').run(project.id).changes > 0;
 }
 
 /** Closes the Project database connection. Intended for orderly shutdown and tests. */

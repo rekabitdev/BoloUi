@@ -72,8 +72,8 @@
     "pinned": "Pinned",
     "pinFailed": "Pin operation failed",
     "pinnedSection": "Pinned",
-    "deleteSuccess": "Deleted successfully",
-    "deleteFailed": "Delete failed",
+    "deleteSuccess": "Conversation deleted",
+    "deleteFailed": "Failed to delete conversation",
     "today": "Today",
     "yesterday": "Yesterday",
     "recent7Days": "Last 7 Days",
@@ -89,8 +89,6 @@
     "delete": "Delete",
     "deleteConfirmTitle": "Delete conversation?",
     "deleteConfirmContent": "\"{{name}}\" will be permanently deleted. This action cannot be undone.",
-    "deleteSuccess": "Conversation deleted",
-    "deleteFailed": "Failed to delete conversation",
     "archiveSuccess": "Archived",
     "archiveFailed": "Archive failed",
     "batchArchive": "Batch archive",
@@ -792,5 +790,9 @@
     "progress": "{{completed}}/{{total}}",
     "expand": "Expand plan",
     "collapse": "Collapse plan"
+  },
+  "projects": {
+    "developBoloUi": "Develop BoloUi",
+    "sourceNotFound": "BoloUi source repository was not found. Set BOLOUI_SOURCE_PATH and try again."
   }
 }

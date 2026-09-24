@@ -123,7 +123,7 @@ const AgentCard: React.FC<AgentCardProps> = (props) => {
   return (
     <div
       data-testid={`agent-row-${agent.id}`}
-      className='group flex cursor-pointer items-center justify-between gap-12px rounded-12px border border-solid border-transparent bg-base px-14px py-10px transition-all duration-180 hover:border-border-1 hover:bg-fill-1'
+      className='group flex w-full min-w-0 cursor-pointer flex-wrap items-center justify-between gap-12px overflow-hidden rounded-12px border border-solid border-transparent bg-base px-14px py-10px transition-all duration-180 hover:border-border-1 hover:bg-fill-1'
       onClick={onConfigure}
     >
       <div className={`flex min-w-0 flex-1 items-center gap-12px ${isDisabled ? 'opacity-50' : ''}`}>
@@ -166,7 +166,7 @@ const AgentCard: React.FC<AgentCardProps> = (props) => {
         </div>
       </div>
 
-      <div className='ms-12px flex flex-shrink-0 items-center gap-8px' onClick={stop}>
+      <div className='ms-auto flex max-w-full flex-wrap items-center justify-end gap-8px' onClick={stop}>
         <BoundAssistantStack assistants={boundAssistants} />
         <Button
           data-testid={`agent-row-test-${agent.id}`}

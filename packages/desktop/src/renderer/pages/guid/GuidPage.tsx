@@ -153,10 +153,7 @@ const GuidPage: React.FC = () => {
     const provider = modelSelection.modelList.find((item) => item.id === projectModel.providerId);
     if (!provider?.models.includes(projectModel.modelId)) return;
     projectModelAppliedRef.current = projectModelKey;
-    void modelSelection.setCurrentModel(
-      { ...provider, use_model: projectModel.modelId },
-      { persistPreference: false }
-    );
+    void modelSelection.setCurrentModel({ ...provider, use_model: projectModel.modelId }, { persistPreference: false });
   }, [modelSelection, navState?.projectModel]);
   const resetAssistantRequested = navState?.resetAssistant === true;
   const preselectAssistantId = navState?.selectedAssistantId;

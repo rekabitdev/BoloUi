@@ -1,6 +1,9 @@
 {
   "title": "Налаштування",
   "skillsHub": {
+    "installPlugin": "Встановити плагін",
+    "pluginInstallSuccess": "Встановлено: {{installed}}",
+    "pluginInstallPartial": "Встановлено: {{installed}}; відхилено недійсних плагінів: {{rejected}}.",
     "title": "Центр навичок",
     "description": "Централізовано керуйте пакетами навичок ШІ — установіть один раз і використовуйте в усіх асистентах.",
     "mySkillsTitle": "Мої навички",
@@ -1429,5 +1432,8 @@
   "crossSessionMessageDesc": "Дозволяє агентам надсилати повідомлення до ваших інших розмов. Вимкнення також відключає згадку @@ у полі введення.",
   "crossSessionMessageDisabledBanner": "Повідомлення між розмовами вимкнено, згадка @@ недоступна.",
   "crossSessionMessageResume": "Увімкнути знову",
-  "crossSessionMessageUpdateFailed": "Не вдалося оновити налаштування повідомлень між розмовами"
+  "crossSessionMessageUpdateFailed": "Не вдалося оновити налаштування повідомлень між розмовами",
+  "allowEmoji": "Allow emoji in responses",
+  "allowEmojiDesc": "Allow assistants to use emoji and decorative symbols in their responses.",
+  "allowEmojiUpdateFailed": "Could not update the emoji preference."
 }

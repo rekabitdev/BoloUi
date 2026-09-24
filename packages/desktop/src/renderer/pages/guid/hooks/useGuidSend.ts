@@ -8,6 +8,7 @@ import { ipcBridge } from '@/common';
 import { type ChatFileRef, chatFileRefPath } from '@/common/types/chatFile';
 import type { IMcpServer, TProviderWithModel } from '@/common/config/storage';
 import { toSessionMcpServer } from '@/renderer/hooks/mcp/catalog';
+import { getEmojiResponseInstruction } from '@/renderer/utils/emojiPreference';
 import { emitter } from '@/renderer/utils/emitter';
 import { updateWorkspaceTime } from '@/renderer/utils/workspace/workspaceHistory';
 import { Message } from '@arco-design/web-react';
@@ -189,11 +190,19 @@ export const useGuidSend = (deps: GuidSendDeps): GuidSendResult => {
         const projectDocuments = projectProfile?.documents.filter(
           (document) => document.name.trim() && document.content.trim()
         );
+        const recalledMemory = projectWorkspace
+          ? await ipcBridge.desktopProjects.recall.invoke({ workspace: projectWorkspace, query: input, limit: 6 })
+          : [];
+        const globalResponseInstruction = await getEmojiResponseInstruction();
         const projectContext = [
+          globalResponseInstruction,
           projectProfile?.instructions,
           projectProfile?.context,
           projectProfile?.memory
             ? `# Project Memory\n\nUse this shared memory to continue work from other chats in this Project. Keep it as context; do not claim events beyond what it states.\n\n${projectProfile.memory}`
+            : undefined,
+          recalledMemory.length > 0
+            ? `# Recalled Project History\n\n${recalledMemory.map((memory) => `- ${memory.content}`).join('\n')}`
             : undefined,
           ...(projectDocuments?.map((document) => `# ${document.name}\n\n${document.content}`) ?? []),
         ]
@@ -232,6 +241,15 @@ export const useGuidSend = (deps: GuidSendDeps): GuidSendResult => {
           return;
         }
 
+        if (projectWorkspace && input.trim()) {
+          await ipcBridge.desktopProjects.remember.invoke({
+            workspace: projectWorkspace,
+            conversationId: conversation.id,
+            source: 'turn',
+            content: `User request: ${input}`,
+          });
+        }
+
         if (isCustomWorkspace) {
           updateWorkspaceTime(finalWorkspace);
         }
@@ -268,11 +286,19 @@ export const useGuidSend = (deps: GuidSendDeps): GuidSendResult => {
       const projectDocuments = projectProfile?.documents.filter(
         (document) => document.name.trim() && document.content.trim()
       );
+      const recalledMemory = projectWorkspace
+        ? await ipcBridge.desktopProjects.recall.invoke({ workspace: projectWorkspace, query: input, limit: 6 })
+        : [];
+      const globalResponseInstruction = await getEmojiResponseInstruction();
       const projectContext = [
+        globalResponseInstruction,
         projectProfile?.instructions,
         projectProfile?.context,
         projectProfile?.memory
           ? `# Project Memory\n\nUse this shared memory to continue work from other chats in this Project. Keep it as context; do not claim events beyond what it states.\n\n${projectProfile.memory}`
+          : undefined,
+        recalledMemory.length > 0
+          ? `# Recalled Project History\n\n${recalledMemory.map((memory) => `- ${memory.content}`).join('\n')}`
           : undefined,
         ...(projectDocuments?.map((document) => `# ${document.name}\n\n${document.content}`) ?? []),
       ]
@@ -305,6 +331,15 @@ export const useGuidSend = (deps: GuidSendDeps): GuidSendResult => {
       if (!conversation || !conversation.id) {
         console.error('Failed to create ACP conversation - conversation object is null or missing id');
         return;
+      }
+
+      if (projectWorkspace && input.trim()) {
+        await ipcBridge.desktopProjects.remember.invoke({
+          workspace: projectWorkspace,
+          conversationId: conversation.id,
+          source: 'turn',
+          content: `User request: ${input}`,
+        });
       }
 
       if (isCustomWorkspace) {

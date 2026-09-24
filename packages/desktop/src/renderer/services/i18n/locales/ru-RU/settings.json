@@ -1,6 +1,9 @@
 {
   "title": "Настройки",
   "skillsHub": {
+    "installPlugin": "Установить плагин",
+    "pluginInstallSuccess": "Установлено: {{installed}}",
+    "pluginInstallPartial": "Установлено: {{installed}}; отклонено недопустимых плагинов: {{rejected}}.",
     "title": "Центр навыков",
     "description": "Централизованно управляйте пакетами навыков ИИ — установите один раз и используйте во всех ассистентах.",
     "mySkillsTitle": "Мои навыки",
@@ -1428,5 +1431,8 @@
   "crossSessionMessageDesc": "Разрешить агентам отправлять сообщения в ваши другие беседы. При отключении также отключается упоминание @@ в поле ввода.",
   "crossSessionMessageDisabledBanner": "Сообщения между беседами отключены, упоминание @@ недоступно.",
   "crossSessionMessageResume": "Включить снова",
-  "crossSessionMessageUpdateFailed": "Не удалось обновить настройку сообщений между беседами"
+  "crossSessionMessageUpdateFailed": "Не удалось обновить настройку сообщений между беседами",
+  "allowEmoji": "Allow emoji in responses",
+  "allowEmojiDesc": "Allow assistants to use emoji and decorative symbols in their responses.",
+  "allowEmojiUpdateFailed": "Could not update the emoji preference."
 }

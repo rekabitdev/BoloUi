@@ -17,13 +17,7 @@ interface Props {
   onClick: () => void;
 }
 
-const SiderProjectsEntry: React.FC<Props> = ({
-  isMobile,
-  isActive,
-  collapsed,
-  siderTooltipProps,
-  onClick,
-}) => {
+const SiderProjectsEntry: React.FC<Props> = ({ isMobile, isActive, collapsed, siderTooltipProps, onClick }) => {
   const icon = <FolderOpen theme='outline' size={collapsed ? 20 : 16} fill='currentColor' />;
   if (collapsed) {
     return (

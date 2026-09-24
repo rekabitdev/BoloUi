@@ -1,6 +1,6 @@
 {
   "name": "BoloUi",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "description": "Transform your command-line AI agent into a modern, efficient AI Chat interface.",
   "keywords": [],
   "license": "Apache-2.0",
@@ -76,10 +76,10 @@
   },
   "dependencies": {
     "@agentclientprotocol/sdk": "^0.18.2",
-    "@boloui/web-host": "workspace:*",
     "@anthropic-ai/sdk": "^0.71.2",
     "@arco-design/web-react": "^2.66.1",
     "@aws-sdk/client-bedrock": "^3.987.0",
+    "@boloui/web-host": "workspace:*",
     "@codemirror/commands": "^6.8.1",
     "@codemirror/lang-css": "^6.3.1",
     "@codemirror/lang-html": "^6.4.11",
@@ -205,6 +205,7 @@
     "@types/turndown": "^5.0.6",
     "@types/ws": "^8.18.1",
     "@types/yauzl": "^2.10.3",
+    "@types/yazl": "^3.3.1",
     "@vitest/coverage-v8": "^4.0.18",
     "builder-util": "26.15.0",
     "cross-env": "^7.0.3",
@@ -232,7 +233,8 @@
     "unocss-preset-extra": "^1.0.0",
     "vite": "^6.4.1",
     "vite-plugin-static-copy": "^3.2.0",
-    "vitest": "^4.0.18"
+    "vitest": "^4.0.18",
+    "yazl": "^3.3.1"
   },
   "optionalDependencies": {
     "@rollup/rollup-win32-x64-msvc": "^4.46.2",

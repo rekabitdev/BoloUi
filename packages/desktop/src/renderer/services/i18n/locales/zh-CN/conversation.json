@@ -25,6 +25,9 @@
     "skillsMarketDetails": "详情 >>"
   },
   "history": {
+    "delete": "删除",
+    "deleteConfirmTitle": "永久删除对话？",
+    "deleteConfirmContent": "“{{name}}”将被永久删除。此操作无法撤销。",
     "recents": "最近",
     "noHistory": "暂无对话历史",
     "deleteTitle": "删除",
@@ -787,5 +790,12 @@
     "progress": "{{completed}}/{{total}}",
     "expand": "展开计划",
     "collapse": "收起计划"
+  },
+  "projects": {
+    "developBoloUi": "开发 BoloUi",
+    "developBoloUiDescription": "使用现有的项目、Cowork、技能和记忆工作流打开并改进 BoloUi。",
+    "developBoloUiLocateFailed": "无法在此计算机上找到 BoloUi 源代码。",
+    "developBoloUi": "?? BoloUi",
+    "sourceNotFound": "??? BoloUi ????????? BOLOUI_SOURCE_PATH ????"
   }
 }

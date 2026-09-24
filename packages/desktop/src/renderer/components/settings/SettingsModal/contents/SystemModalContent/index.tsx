@@ -58,6 +58,7 @@ const SystemModalContent: React.FC = () => {
   const [gpuStatus, setGpuStatus] = useState<IGpuStatus | null>(null);
   const [notificationEnabled, setNotificationEnabled] = useState(true);
   const [cronNotificationEnabled, setCronNotificationEnabled] = useState(false);
+  const [allowEmoji, setAllowEmoji] = useState(true);
   const [promptTimeout, setPromptTimeout] = useState<number>(300);
   const [agentIdleTimeout, setAgentIdleTimeout] = useState<number>(5);
   /**
@@ -113,6 +114,10 @@ const SystemModalContent: React.FC = () => {
     }
     setNotificationEnabled(configService.get('system.notificationEnabled') ?? true);
     setCronNotificationEnabled(configService.get('system.cronNotificationEnabled') ?? false);
+    ipcBridge.systemSettings.getAllowEmoji
+      ?.invoke()
+      .then((enabled) => setAllowEmoji(enabled ?? true))
+      .catch(() => setAllowEmoji(true));
     setSaveUploadToWorkspace(configService.get('upload.saveToWorkspace') ?? false);
   }, [isDesktop]);
 
@@ -259,6 +264,18 @@ const SystemModalContent: React.FC = () => {
       configService.setLocal('system.cronNotificationEnabled', !checked);
     });
   }, []);
+
+  const handleAllowEmojiChange = useCallback(
+    (checked: boolean) => {
+      setAllowEmoji(checked);
+      const request = ipcBridge.systemSettings.setAllowEmoji?.invoke({ enabled: checked });
+      request?.catch(() => {
+        setAllowEmoji(!checked);
+        Message.error(t('settings.allowEmojiUpdateFailed'));
+      });
+    },
+    [t]
+  );
 
   const handlePromptTimeoutChange = useCallback((val: number | undefined) => {
     setPromptTimeout(val as number);
@@ -435,6 +452,12 @@ const SystemModalContent: React.FC = () => {
           suffix='MB'
         />
       ),
+    },
+    {
+      key: 'allowEmoji',
+      label: t('settings.allowEmoji'),
+      description: t('settings.allowEmojiDesc'),
+      component: <Switch checked={allowEmoji} onChange={handleAllowEmojiChange} />,
     },
     {
       key: 'saveUploadToWorkspace',

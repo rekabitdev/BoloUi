@@ -1,6 +1,9 @@
 {
   "title": "Paramètres",
   "skillsHub": {
+    "installPlugin": "Installer le plugin",
+    "pluginInstallSuccess": "{{installed}} installé",
+    "pluginInstallPartial": "{{installed}} installé ; {{rejected}} plugin(s) non valide(s) rejeté(s).",
     "title": "Centre de compétences",
     "description": "Gérer centralement les compétences des agents IA. Installez une fois, utilisez sur tous les assistants.",
     "mySkillsTitle": "Mes compétences",
@@ -1414,5 +1417,8 @@
   "crossSessionMessageDesc": "Permet aux agents d'envoyer des messages à vos autres conversations. La désactivation coupe aussi la mention @@ dans la zone de saisie.",
   "crossSessionMessageDisabledBanner": "Les messages entre conversations sont désactivés, la mention @@ est indisponible.",
   "crossSessionMessageResume": "Réactiver",
-  "crossSessionMessageUpdateFailed": "Échec de la mise à jour du réglage des messages entre conversations"
+  "crossSessionMessageUpdateFailed": "Échec de la mise à jour du réglage des messages entre conversations",
+  "allowEmoji": "Allow emoji in responses",
+  "allowEmojiDesc": "Allow assistants to use emoji and decorative symbols in their responses.",
+  "allowEmojiUpdateFailed": "Could not update the emoji preference."
 }

@@ -24,6 +24,9 @@ export interface ConversationContextValue {
    */
   workspace?: string;
 
+  /** Project workspace used to isolate cross-chat memory. */
+  projectWorkspace?: string;
+
   /**
    * Conversation type
    * 会话类型

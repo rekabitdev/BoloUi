@@ -1,6 +1,9 @@
 {
   "title": "Einstellungen",
   "skillsHub": {
+    "installPlugin": "Plugin installieren",
+    "pluginInstallSuccess": "{{installed}} installiert",
+    "pluginInstallPartial": "{{installed}} installiert; {{rejected}} ungültige(s) Plugin(s) abgelehnt.",
     "title": "Skills-Hub",
     "description": "AI-Skill-Pakete zentral verwalten – einmal installieren, in allen Assistenten nutzen.",
     "mySkillsTitle": "Meine Skills",
@@ -1414,5 +1417,8 @@
   "crossSessionMessageDesc": "Erlaubt Agenten, Nachrichten an Ihre anderen Unterhaltungen zu senden. Beim Ausschalten wird auch die @@-Erwähnung im Eingabefeld deaktiviert.",
   "crossSessionMessageDisabledBanner": "Nachrichten zwischen Unterhaltungen sind aus, die @@-Erwähnung ist nicht verfügbar.",
   "crossSessionMessageResume": "Wieder einschalten",
-  "crossSessionMessageUpdateFailed": "Einstellung konnte nicht aktualisiert werden"
+  "crossSessionMessageUpdateFailed": "Einstellung konnte nicht aktualisiert werden",
+  "allowEmoji": "Allow emoji in responses",
+  "allowEmojiDesc": "Allow assistants to use emoji and decorative symbols in their responses.",
+  "allowEmojiUpdateFailed": "Could not update the emoji preference."
 }

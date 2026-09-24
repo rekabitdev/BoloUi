@@ -127,7 +127,10 @@ export const AgentHubModal: React.FC<AgentHubModalProps> = ({ visible, onCancel 
             </Typography.Text>
           </div>
         ) : (
-          <div data-testid='agent-hub-grid' className='grid grid-cols-1 gap-10px sm:grid-cols-2 lg:grid-cols-4'>
+          <div
+            data-testid='agent-hub-grid'
+            className='grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(180px,100%),1fr))] gap-10px overflow-x-hidden'
+          >
             {agents.map((agent) => {
               const avatar = resolveAgentAvatar(logos, {
                 icon: agent.icon,
@@ -138,11 +141,11 @@ export const AgentHubModal: React.FC<AgentHubModalProps> = ({ visible, onCancel 
                 <div
                   key={agent.name}
                   data-testid='agent-hub-card'
-                  className='flex min-h-[144px] flex-col rounded-12px border border-solid border-[var(--color-border-2)] bg-[var(--color-bg-2)] p-10px transition-colors hover:border-[var(--color-border-3)]'
+                  className='flex min-h-[174px] min-w-0 flex-col overflow-hidden rounded-12px border border-solid border-[var(--color-border-2)] bg-[var(--color-bg-2)] p-12px transition-colors hover:border-[var(--color-border-3)]'
                 >
                   <Typography.Text
                     bold
-                    className='mb-6px block min-h-36px text-center text-13px leading-18px line-clamp-2'
+                    className='mb-6px block min-h-36px min-w-0 break-words text-center text-13px leading-18px line-clamp-2'
                   >
                     {agent.display_name}
                   </Typography.Text>
@@ -165,7 +168,7 @@ export const AgentHubModal: React.FC<AgentHubModalProps> = ({ visible, onCancel 
                     )}
                   </div>
 
-                  <Typography.Text className='mb-10px block min-h-28px text-center text-11px leading-15px text-t-secondary line-clamp-2'>
+                  <Typography.Text className='mb-10px block min-h-45px min-w-0 break-words text-center text-11px leading-15px text-t-secondary line-clamp-3'>
                     {agent.description}
                   </Typography.Text>
 

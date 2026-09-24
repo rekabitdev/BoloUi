@@ -27,6 +27,7 @@ import { createSetUploadFile, useSendBoxFiles } from '@/renderer/hooks/chat/useS
 import { useSlashCommands } from '@/renderer/hooks/chat/useSlashCommands';
 import { useOpenFileSelector } from '@/renderer/hooks/file/useOpenFileSelector';
 import { useLatestRef } from '@/renderer/hooks/ui/useLatestRef';
+import { appendGlobalResponsePreferences } from '@/renderer/utils/emojiPreference';
 import {
   useConversationCommandQueue,
   type ConversationCommandQueueItem,
@@ -279,6 +280,7 @@ const AionrsSendBox: React.FC<{
           input,
           conversation_id,
           files,
+          inject_skills: await appendGlobalResponsePreferences([]),
           // `@@` references. Omitting this makes the whole feature silently
           // no-op for this platform.
           sessions,

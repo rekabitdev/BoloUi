@@ -25,6 +25,9 @@
     "skillsMarketDetails": "Подробнее >>"
   },
   "history": {
+    "delete": "Удалить",
+    "deleteConfirmTitle": "Удалить беседу навсегда?",
+    "deleteConfirmContent": "«{{name}}» будет удалена навсегда. Это действие нельзя отменить.",
     "recents": "Недавние",
     "noHistory": "Нет истории чатов",
     "deleteTitle": "Удалить",
@@ -803,5 +806,12 @@
     "progress": "{{completed}}/{{total}}",
     "expand": "Развернуть план",
     "collapse": "Свернуть план"
+  },
+  "projects": {
+    "developBoloUi": "Разработка BoloUi",
+    "developBoloUiDescription": "Откройте и улучшайте BoloUi с помощью существующего рабочего процесса проектов, Cowork, навыков и памяти.",
+    "developBoloUiLocateFailed": "Не удалось найти исходный код BoloUi на этом компьютере.",
+    "developBoloUi": "Develop BoloUi",
+    "sourceNotFound": "BoloUi source repository was not found. Set BOLOUI_SOURCE_PATH and try again."
   }
 }

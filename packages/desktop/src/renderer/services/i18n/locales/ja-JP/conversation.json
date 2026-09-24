@@ -25,6 +25,9 @@
     "skillsMarketDetails": "詳細 >>"
   },
   "history": {
+    "delete": "削除",
+    "deleteConfirmTitle": "会話を完全に削除しますか？",
+    "deleteConfirmContent": "「{{name}}」は完全に削除されます。この操作は元に戻せません。",
     "recents": "最近",
     "today": "今日",
     "yesterday": "昨日",
@@ -787,5 +790,12 @@
     "progress": "{{completed}}/{{total}}",
     "expand": "プランを展開",
     "collapse": "プランを折りたたむ"
+  },
+  "projects": {
+    "developBoloUi": "BoloUiを開発",
+    "developBoloUiDescription": "既存のプロジェクト、Cowork、スキル、メモリのワークフローを使用してBoloUiを開き、改善します。",
+    "developBoloUiLocateFailed": "このコンピューターでBoloUiのソースコードが見つかりませんでした。",
+    "developBoloUi": "BoloUi ???",
+    "sourceNotFound": "BoloUi ??????????????????BOLOUI_SOURCE_PATH ???????????????"
   }
 }

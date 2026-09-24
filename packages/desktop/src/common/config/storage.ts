@@ -288,6 +288,8 @@ export type TChatConversation =
           is_health_check?: boolean;
           /** Cron job ID that spawned this conversation */
           cron_job_id?: string;
+          /** BoloUi local Project association used for isolated cross-chat memory. */
+          project_workspace?: string;
           /** Fork lineage (present only on forked conversations). */
           fork?: TConversationForkLineage;
         }

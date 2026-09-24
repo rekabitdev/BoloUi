@@ -31,6 +31,7 @@ import { useAcpMessage } from './useAcpMessage';
 const AcpChat: React.FC<{
   conversation_id: string;
   workspace?: string;
+  projectWorkspace?: string;
   backend: string;
   session_mode?: string;
   agent_name?: string;
@@ -48,6 +49,7 @@ const AcpChat: React.FC<{
 }> = ({
   conversation_id,
   workspace,
+  projectWorkspace,
   backend,
   session_mode,
   agent_name,
@@ -77,6 +79,7 @@ const AcpChat: React.FC<{
       value={{
         conversation_id: conversation_id,
         workspace,
+        projectWorkspace,
         type: 'acp',
         cron_job_id,
         hideSendBox,

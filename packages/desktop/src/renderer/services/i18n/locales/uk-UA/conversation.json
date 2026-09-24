@@ -25,6 +25,9 @@
     "skillsMarketDetails": "Докладніше >>"
   },
   "history": {
+    "delete": "Видалити",
+    "deleteConfirmTitle": "Видалити розмову назавжди?",
+    "deleteConfirmContent": "«{{name}}» буде видалено назавжди. Цю дію неможливо скасувати.",
     "recents": "Недавні",
     "noHistory": "Немає історії чатів",
     "deleteTitle": "Видалити",
@@ -803,5 +806,12 @@
     "progress": "{{completed}}/{{total}}",
     "expand": "Розгорнути план",
     "collapse": "Згорнути план"
+  },
+  "projects": {
+    "developBoloUi": "Розробляти BoloUi",
+    "developBoloUiDescription": "Відкривайте та вдосконалюйте BoloUi за допомогою наявного робочого процесу проєктів, Cowork, навичок і пам’яті.",
+    "developBoloUiLocateFailed": "Не вдалося знайти вихідний код BoloUi на цьому комп’ютері.",
+    "developBoloUi": "Develop BoloUi",
+    "sourceNotFound": "BoloUi source repository was not found. Set BOLOUI_SOURCE_PATH and try again."
   }
 }

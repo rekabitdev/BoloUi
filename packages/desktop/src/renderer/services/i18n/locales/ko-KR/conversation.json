@@ -25,6 +25,9 @@
     "skillsMarketDetails": "자세히 >>"
   },
   "history": {
+    "delete": "삭제",
+    "deleteConfirmTitle": "대화를 영구적으로 삭제하시겠습니까?",
+    "deleteConfirmContent": "\"{{name}}\"이(가) 영구적으로 삭제됩니다. 이 작업은 실행 취소할 수 없습니다.",
     "recents": "최근",
     "today": "오늘",
     "yesterday": "어제",
@@ -787,5 +790,12 @@
     "progress": "{{completed}}/{{total}}",
     "expand": "계획 펼치기",
     "collapse": "계획 접기"
+  },
+  "projects": {
+    "developBoloUi": "BoloUi 개발",
+    "developBoloUiDescription": "기존 프로젝트, Cowork, 스킬 및 메모리 워크플로를 사용하여 BoloUi를 열고 개선합니다.",
+    "developBoloUiLocateFailed": "이 컴퓨터에서 BoloUi 소스 코드를 찾을 수 없습니다.",
+    "developBoloUi": "BoloUi ??",
+    "sourceNotFound": "BoloUi ?? ???? ?? ? ????. BOLOUI_SOURCE_PATH? ??? ? ?? ?????."
   }
 }
