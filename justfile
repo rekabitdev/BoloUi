@@ -169,18 +169,6 @@ verify-native:
     Write-Host "All native modules verified and loadable."
 
 # ============================================================
-# Quality and Git
-# ============================================================
-
-# Run mandatory checks before pushing, then forward arguments to Git.
-push *args:
-    bun run lint
-    bun run format:check
-    bunx tsc --noEmit
-    bun run test
-    git push {{args}}
-
-# ============================================================
 # Build (mirrors CI workflow environment setup)
 # ============================================================
 
