@@ -3,8 +3,10 @@
  * Copyright 2026 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Button, Input, Message, Modal, Space, Tag, Typography } from '@arco-design/web-react';
-import { Delete, Plus } from '@icon-park/react';
+import { ipcBridge } from '@/common';
+import { useProvidersQuery } from '@/renderer/hooks/agent/useModelProviderList';
+import { Button, Input, Message, Modal, Select, Space, Tag, Typography } from '@arco-design/web-react';
+import { Delete, FolderOpen, Plus } from '@icon-park/react';
 import React, { useEffect, useMemo, useState } from 'react';
 
 export type ProjectMarkdownDocument = {
@@ -16,6 +18,8 @@ export type ProjectProfile = {
   instructions: string;
   skills: string[];
   context: string;
+  model?: { providerId: string; modelId: string };
+  coworkWorkspace?: string;
   documents: ProjectMarkdownDocument[];
 };
 
@@ -33,17 +37,23 @@ const EMPTY_PROFILE: ProjectProfile = {
   documents: [{ name: 'SOUL.md', content: '' }],
 };
 
-const storageKey = (projectKey: string) => `boloui.projectProfile.${encodeURIComponent(projectKey)}`;
+export const projectProfileStorageKey = (projectKey: string) =>
+  `boloui.projectProfile.${encodeURIComponent(projectKey)}`;
 
-function loadProfile(projectKey: string): ProjectProfile {
+export function loadProjectProfile(projectKey: string): ProjectProfile {
   try {
-    const value = localStorage.getItem(storageKey(projectKey));
+    const value = localStorage.getItem(projectProfileStorageKey(projectKey));
     if (!value) return EMPTY_PROFILE;
     const parsed = JSON.parse(value) as Partial<ProjectProfile>;
     return {
       instructions: typeof parsed.instructions === 'string' ? parsed.instructions : '',
       skills: Array.isArray(parsed.skills) ? parsed.skills.filter((skill): skill is string => typeof skill === 'string') : [],
       context: typeof parsed.context === 'string' ? parsed.context : '',
+      model:
+        typeof parsed.model?.providerId === 'string' && typeof parsed.model?.modelId === 'string'
+          ? parsed.model
+          : undefined,
+      coworkWorkspace: typeof parsed.coworkWorkspace === 'string' ? parsed.coworkWorkspace : undefined,
       documents: Array.isArray(parsed.documents)
         ? parsed.documents.filter(
             (document): document is ProjectMarkdownDocument =>
@@ -64,11 +74,12 @@ const normalizeMarkdownName = (name: string): string => {
 
 const ProjectProfileModal: React.FC<Props> = ({ visible, projectKey, projectName, onClose }) => {
   const [profile, setProfile] = useState<ProjectProfile>(EMPTY_PROFILE);
+  const { data: providers = [] } = useProvidersQuery();
   const [skillInput, setSkillInput] = useState('');
   const [documentName, setDocumentName] = useState('');
 
   useEffect(() => {
-    if (visible) setProfile(loadProfile(projectKey));
+    if (visible) setProfile(loadProjectProfile(projectKey));
   }, [projectKey, visible]);
 
   const duplicateDocumentNames = useMemo(() => {
@@ -94,12 +105,22 @@ const ProjectProfileModal: React.FC<Props> = ({ visible, projectKey, projectName
     setDocumentName('');
   };
 
+  const connectCowork = async () => {
+    const result = await ipcBridge.dialog.showOpen.invoke({
+      properties: ['openDirectory', 'createDirectory'],
+    });
+    const workspace = result[0];
+    if (workspace) {
+      setProfile((current) => ({ ...current, coworkWorkspace: workspace }));
+    }
+  };
+
   const save = () => {
     if (duplicateDocumentNames) {
       Message.error('Markdown file names must be unique.');
       return;
     }
-    localStorage.setItem(storageKey(projectKey), JSON.stringify(profile));
+    localStorage.setItem(projectProfileStorageKey(projectKey), JSON.stringify(profile));
     Message.success('Project profile saved');
     onClose();
   };
@@ -116,6 +137,40 @@ const ProjectProfileModal: React.FC<Props> = ({ visible, projectKey, projectName
       unmountOnExit
     >
       <Space direction='vertical' size='large' className='w-full'>
+        <div>
+          <Typography.Title heading={6}>Project model</Typography.Title>
+          <Select
+            allowClear
+            value={profile.model ? `${profile.model.providerId}::${profile.model.modelId}` : undefined}
+            placeholder='Use the global default model'
+            className='w-full'
+            onChange={(value?: string) => {
+              if (!value) {
+                setProfile((current) => ({ ...current, model: undefined }));
+                return;
+              }
+              const [providerId, ...modelParts] = value.split('::');
+              setProfile((current) => ({ ...current, model: { providerId, modelId: modelParts.join('::') } }));
+            }}
+          >
+            {providers.flatMap((provider) =>
+              (provider.models ?? []).map((modelId) => (
+                <Select.Option key={`${provider.id}::${modelId}`} value={`${provider.id}::${modelId}`}>
+                  {provider.name || provider.id} — {modelId}
+                </Select.Option>
+              ))
+            )}
+          </Select>
+        </div>
+
+        <div>
+          <Typography.Title heading={6}>Cowork Desktop</Typography.Title>
+          <Space className='w-full'>
+            <Input value={profile.coworkWorkspace ?? ''} readOnly placeholder='No Cowork folder connected' />
+            <Button icon={<FolderOpen />} onClick={() => void connectCowork()}>Connect folder</Button>
+          </Space>
+        </div>
+
         <div>
           <Typography.Title heading={6}>Custom instructions</Typography.Title>
           <Input.TextArea

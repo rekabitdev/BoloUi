@@ -50,6 +50,8 @@ type GuidNavigationState = {
   preservePrefillDraft?: boolean;
   focusPrefill?: boolean;
   workspace?: string;
+  projectWorkspace?: string;
+  projectModel?: { providerId: string; modelId: string };
   [key: string]: unknown;
 };
 
@@ -135,6 +137,20 @@ const GuidPage: React.FC = () => {
   const modelSelection = useGuidModelSelection('aionrs');
 
   const navState = location.state as GuidNavigationState | null;
+  const projectModelAppliedRef = useRef<string | null>(null);
+  useEffect(() => {
+    const projectModel = navState?.projectModel;
+    if (!projectModel || !modelSelection.modelList?.length) return;
+    const projectModelKey = `${projectModel.providerId}::${projectModel.modelId}`;
+    if (projectModelAppliedRef.current === projectModelKey) return;
+    const provider = modelSelection.modelList.find((item) => item.id === projectModel.providerId);
+    if (!provider?.models.includes(projectModel.modelId)) return;
+    projectModelAppliedRef.current = projectModelKey;
+    void modelSelection.setCurrentModel(
+      { ...provider, use_model: projectModel.modelId },
+      { persistPreference: false }
+    );
+  }, [modelSelection, navState?.projectModel]);
   const resetAssistantRequested = navState?.resetAssistant === true;
   const preselectAssistantId = navState?.selectedAssistantId;
   const agentSelection = useGuidAssistantSelection({

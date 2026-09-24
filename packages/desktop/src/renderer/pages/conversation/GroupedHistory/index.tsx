@@ -20,7 +20,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import WorkspaceCollapse from '../components/WorkspaceCollapse';
 import ConversationRow from './ConversationRow';
-import ProjectProfileModal from './ProjectProfileModal';
+import ProjectProfileModal, { loadProjectProfile } from './ProjectProfileModal';
 import SortableConversationRow from './SortableConversationRow';
 import { useBatchSelection } from './hooks/useBatchSelection';
 import { useConversationActions } from './hooks/useConversationActions';
@@ -427,6 +427,20 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
                 const projectMenu = (
                   <Menu
                     onClickMenuItem={(key) => {
+                      if (key === 'new-chat' || key === 'cowork') {
+                        const profile = loadProjectProfile(group.workspace);
+                        void navigate('/', {
+                          state: {
+                            workspace:
+                              key === 'cowork' && profile.coworkWorkspace
+                                ? profile.coworkWorkspace
+                                : group.workspace,
+                            projectWorkspace: group.workspace,
+                            projectModel: profile.model,
+                          },
+                        });
+                        return;
+                      }
                       if (key === 'profile') {
                         setProfileProject({ key: group.workspace, name: group.displayName });
                         return;
@@ -436,6 +450,18 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
                       }
                     }}
                   >
+                    <Menu.Item key='new-chat'>
+                      <span className='flex items-center gap-8px'>
+                        <Plus theme='outline' size='14' />
+                        New chat in project
+                      </span>
+                    </Menu.Item>
+                    <Menu.Item key='cowork'>
+                      <span className='flex items-center gap-8px'>
+                        <FolderClose theme='outline' size='14' />
+                        Connect Cowork Desktop
+                      </span>
+                    </Menu.Item>
                     <Menu.Item key='profile'>
                       <span className='flex items-center gap-8px'>
                         <SettingTwo theme='outline' size='14' />
