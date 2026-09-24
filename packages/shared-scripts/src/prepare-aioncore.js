@@ -62,7 +62,36 @@ function ensureDirectory(dirPath) {
 }
 
 function removeDirectorySafe(dirPath) {
-  fs.rmSync(dirPath, { recursive: true, force: true });
+  if (!fs.existsSync(dirPath)) return;
+
+  try {
+    fs.rmSync(dirPath, {
+      recursive: true,
+      force: true,
+      maxRetries: 12,
+      retryDelay: 500,
+    });
+  } catch (error) {
+    if (process.platform === 'win32') {
+      try {
+        fs.chmodSync(dirPath, 0o700);
+        fs.rmSync(dirPath, {
+          recursive: true,
+          force: true,
+          maxRetries: 12,
+          retryDelay: 500,
+        });
+        return;
+      } catch (retryError) {
+        const code = retryError && typeof retryError === 'object' && 'code' in retryError ? retryError.code : 'UNKNOWN';
+        throw new Error(
+          `Unable to replace backend resources at ${dirPath} (${code}). Close only BoloUi builds using this folder, then retry.`,
+          { cause: retryError }
+        );
+      }
+    }
+    throw error;
+  }
 }
 
 function copyFileSafe(sourcePath, targetPath) {
@@ -587,5 +616,6 @@ module.exports = {
   getActionsArtifactMissingMessage,
   getActionsArtifactName,
   prepareAioncore,
+  removeDirectorySafe,
   verifyPreparedAioncoreBundle,
 };

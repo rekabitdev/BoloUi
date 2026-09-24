@@ -119,10 +119,10 @@ describe('resolveBinaryPath', () => {
     expect(resolveBinaryPath()).toBe(resolved);
   });
 
-  it('attaches bundled path diagnostics when aioncore cannot be resolved', () => {
+  it('attaches bundled path diagnostics when BoloUiCore cannot be resolved', () => {
     const resourcesPath = '/app/resources';
     const runtimeKey = `${process.platform}-${process.arch}`;
-    const binaryName = process.platform === 'win32' ? 'aioncore.exe' : 'aioncore';
+    const binaryName = process.platform === 'win32' ? 'bolouicore.exe' : 'bolouicore';
     const bundledDir = join(resourcesPath, 'bundled-aioncore');
     const runtimeDir = join(bundledDir, runtimeKey);
     const checkedBundledPath = join(runtimeDir, binaryName);
@@ -138,7 +138,7 @@ describe('resolveBinaryPath', () => {
       throw new Error('not found on PATH');
     });
 
-    expect(() => resolveBinaryPath()).toThrow('Cannot find "aioncore" binary');
+    expect(() => resolveBinaryPath()).toThrow('Cannot find "bolouicore" binary');
 
     try {
       resolveBinaryPath();
@@ -154,7 +154,7 @@ describe('resolveBinaryPath', () => {
           runtimeDirExists: false,
           resourcesDirEntries: ['bundled-aioncore/'],
           runtimeDirEntries: ['manifest.json'],
-          pathLookupCommand: process.platform === 'win32' ? 'where aioncore' : 'which aioncore',
+          pathLookupCommand: process.platform === 'win32' ? 'where bolouicore' : 'which bolouicore',
           pathLookupError: expect.stringContaining('not found on PATH'),
         }),
       });

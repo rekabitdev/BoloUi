@@ -775,6 +775,16 @@ try {
     version: resolveAioncoreVersion(projectRoot),
   });
 
+  // BoloUi launches its own backend entry point. Build it only after the
+  // compatibility engine is prepared so both executables are packaged together.
+  if (process.platform === 'win32') {
+    const runtime = targetArch === 'arm64' ? 'win-arm64' : 'win-x64';
+    execSync(
+      `powershell -ExecutionPolicy Bypass -File scripts/build-bolouicore.ps1 -Runtime ${runtime}`,
+      { stdio: 'inherit', shell: true }
+    );
+  }
+
   // 6. Prepare hub resources (index.json + extension zips for offline fallback)
   execSync('node scripts/prepareHubResources.js', { stdio: 'inherit', env: process.env });
 

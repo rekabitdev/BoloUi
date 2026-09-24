@@ -5,8 +5,9 @@
  */
 import React, { useMemo, useState } from 'react';
 import { ipcBridge } from '@/common';
-import { Button, Card, Empty, Grid, Space, Typography } from '@arco-design/web-react';
-import { FolderOpen, Plus, SettingTwo } from '@icon-park/react';
+import { Button, Card, Empty, Grid, Message, Modal, Space, Typography } from '@arco-design/web-react';
+import { Delete, FolderOpen, Plus, SettingTwo } from '@icon-park/react';
+import { emitter } from '@/renderer/utils/emitter';
 import { useNavigate } from 'react-router-dom';
 import { useConversations } from '../conversation/GroupedHistory/hooks/useConversations';
 import ProjectProfileModal, {
@@ -67,6 +68,42 @@ const ProjectsPage: React.FC = () => {
     setProfileProject({ key: workspace, name: projectDisplayName(workspace) });
   };
 
+  const deleteProject = (workspace: string) => {
+    const projectConversations = conversations.filter(
+      (conversation) => conversation.extra?.workspace?.trim() === workspace
+    );
+    const name = projectDisplayName(workspace);
+    Modal.confirm({
+      title: `Delete project “${name}”?`,
+      content: `${projectConversations.length} chat${projectConversations.length === 1 ? '' : 's'} will be permanently deleted. The folder and files on your computer will not be deleted.`,
+      okText: 'Delete Project and Chats',
+      cancelText: 'Cancel',
+      okButtonProps: { status: 'danger' },
+      onOk: async () => {
+        const results = await Promise.allSettled(
+          projectConversations.map(async (conversation) => {
+            const removed = await ipcBridge.conversation.remove.invoke({ id: conversation.id });
+            if (!removed) throw new Error(`Conversation ${conversation.id} was not deleted`);
+          })
+        );
+        const failed = results.filter((result) => result.status === 'rejected');
+        if (failed.length > 0) {
+          Message.error(`Project was not removed because ${failed.length} chat${failed.length === 1 ? '' : 's'} could not be deleted.`);
+          emitter.emit('chat.history.refresh');
+          return;
+        }
+
+        const nextProjects = registeredProjects.filter((project) => project !== workspace);
+        localStorage.setItem(PROJECT_REGISTRY_KEY, JSON.stringify(nextProjects));
+        localStorage.removeItem(`boloui.projectProfile.${encodeURIComponent(workspace)}`);
+        setRegisteredProjects(nextProjects);
+        if (profileProject?.key === workspace) setProfileProject(null);
+        emitter.emit('chat.history.refresh');
+        Message.success(`Deleted project “${name}” and ${projectConversations.length} chat${projectConversations.length === 1 ? '' : 's'}.`);
+      },
+    });
+  };
+
   const openProjectChat = (workspace: string, cowork = false) => {
     const profile = loadProjectProfile(workspace);
     void navigate('/', {
@@ -110,15 +147,29 @@ const ProjectsPage: React.FC = () => {
                     </Space>
                   }
                   extra={
-                    <Button
-                      type='text'
-                      size='small'
-                      icon={<SettingTwo />}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        setProfileProject({ key: project.workspace, name: project.workspace });
-                      }}
-                    />
+                    <Space size='mini'>
+                      <Button
+                        type='text'
+                        size='small'
+                        icon={<SettingTwo />}
+                        aria-label={`Configure ${projectDisplayName(project.workspace)}`}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          setProfileProject({ key: project.workspace, name: project.workspace });
+                        }}
+                      />
+                      <Button
+                        type='text'
+                        status='danger'
+                        size='small'
+                        icon={<Delete />}
+                        aria-label={`Delete ${projectDisplayName(project.workspace)}`}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          deleteProject(project.workspace);
+                        }}
+                      />
+                    </Space>
                   }
                 >
                   <Typography.Paragraph type='secondary' ellipsis={{ rows: 2 }}>
