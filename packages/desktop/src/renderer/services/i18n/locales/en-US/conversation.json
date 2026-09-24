@@ -1,4 +1,9 @@
 {
+  "projectMemory": {
+    "title": "Project Memory",
+    "description": "Shared progress, decisions, and important facts loaded into every new chat in this Project.",
+    "placeholder": "Current progress, decisions already made, unresolved tasks, and facts future chats must remember"
+  },
   "welcome": {
     "title": "Hi, what's your plan for today?",
     "placeholder": "Send a message, upload files, open a folder, create a scheduled task, or type / for commands...",

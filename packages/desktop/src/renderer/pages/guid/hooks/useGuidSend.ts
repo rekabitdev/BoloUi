@@ -49,6 +49,7 @@ export type GuidSendDeps = {
     instructions: string;
     skills: string[];
     context: string;
+    memory: string;
     documents: Array<{ name: string; content: string }>;
   };
 
@@ -191,6 +192,9 @@ export const useGuidSend = (deps: GuidSendDeps): GuidSendResult => {
         const projectContext = [
           projectProfile?.instructions,
           projectProfile?.context,
+          projectProfile?.memory
+            ? `# Project Memory\n\nUse this shared memory to continue work from other chats in this Project. Keep it as context; do not claim events beyond what it states.\n\n${projectProfile.memory}`
+            : undefined,
           ...(projectDocuments?.map((document) => `# ${document.name}\n\n${document.content}`) ?? []),
         ]
           .filter(Boolean)
@@ -267,6 +271,9 @@ export const useGuidSend = (deps: GuidSendDeps): GuidSendResult => {
       const projectContext = [
         projectProfile?.instructions,
         projectProfile?.context,
+        projectProfile?.memory
+          ? `# Project Memory\n\nUse this shared memory to continue work from other chats in this Project. Keep it as context; do not claim events beyond what it states.\n\n${projectProfile.memory}`
+          : undefined,
         ...(projectDocuments?.map((document) => `# ${document.name}\n\n${document.content}`) ?? []),
       ]
         .filter(Boolean)

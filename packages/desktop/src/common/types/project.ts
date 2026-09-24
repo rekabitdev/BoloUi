@@ -59,3 +59,26 @@ export type AttachFolderRequest = {
  */
 export const PROJECT_ERROR_DUPLICATE = 'project_explorer_duplicate';
 export const PROJECT_ERROR_OVERLAP = 'project_explorer_overlap';
+
+/** Project metadata persisted by the BoloUi desktop client. */
+export type DesktopProjectProfile = {
+  instructions: string;
+  skills: string[];
+  context: string;
+  memory: string;
+  model?: { providerId: string; modelId: string };
+  coworkWorkspace?: string;
+  documents: Array<{ name: string; content: string }>;
+};
+
+/** A desktop Project registry record. */
+export type DesktopProjectEntry = {
+  id: string;
+  name: string;
+  workspace: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+/** Complete desktop Project data stored in SQLite. */
+export type DesktopProject = DesktopProjectEntry & DesktopProjectProfile;

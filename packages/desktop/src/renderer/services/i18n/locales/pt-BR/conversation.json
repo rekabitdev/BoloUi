@@ -1,4 +1,9 @@
 {
+  "projectMemory": {
+    "title": "Memória do projeto",
+    "description": "Progresso, decisões e informações importantes compartilhados em cada novo chat deste Projeto.",
+    "placeholder": "Progresso atual, decisões tomadas, tarefas pendentes e informações que os próximos chats devem lembrar"
+  },
   "welcome": {
     "title": "Olá, qual é o seu plano para hoje?",
     "placeholder": "Envie uma mensagem, faça upload de arquivos, abra uma pasta, crie uma tarefa agendada ou digite / para comandos...",

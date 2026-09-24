@@ -1,4 +1,9 @@
 {
+  "projectMemory": {
+    "title": "Proje Belleği",
+    "description": "Bu Projedeki her yeni sohbete yüklenen ortak ilerleme, kararlar ve önemli bilgiler.",
+    "placeholder": "Mevcut ilerleme, alınan kararlar, çözülmemiş görevler ve sonraki sohbetlerin hatırlaması gereken bilgiler"
+  },
   "welcome": {
     "title": "Merhaba, bugünkü planın nedir?",
     "placeholder": "Mesaj gönder, dosya yükle, klasör aç veya komutlar için / yaz...",

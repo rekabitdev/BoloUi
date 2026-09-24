@@ -96,7 +96,14 @@ import type {
 } from '../update/updateTypes';
 import type { AgentMetadata } from '@/renderer/utils/model/agentTypes';
 import type { Theme } from '@/common/theme/types';
-import type { AttachFolderRequest, ProjectDetailDto, ProjectEntryDto } from '@/common/types/project';
+import type {
+  AttachFolderRequest,
+  DesktopProject,
+  DesktopProjectEntry,
+  DesktopProjectProfile,
+  ProjectDetailDto,
+  ProjectEntryDto,
+} from '@/common/types/project';
 import type { ChatFileRef, ContentEncoding } from '@/common/types/chatFile';
 import type { ProtocolDetectionRequest, ProtocolDetectionResponse } from '../utils/protocolDetector';
 import {
@@ -728,6 +735,15 @@ export const application = {
     'app.log-stream'
   ),
   devToolsStateChanged: bridge.buildEmitter<{ isOpen: boolean }>('app.devtools-state-changed'),
+};
+
+export const desktopProjects = {
+  list: bridge.buildProvider<DesktopProjectEntry[], void>('desktop-projects.list'),
+  get: bridge.buildProvider<DesktopProject | null, { workspace: string }>('desktop-projects.get'),
+  upsert: bridge.buildProvider<DesktopProject, { entry: DesktopProjectEntry; profile?: DesktopProjectProfile }>(
+    'desktop-projects.upsert'
+  ),
+  delete: bridge.buildProvider<boolean, { workspace: string }>('desktop-projects.delete'),
 };
 
 // ---------------------------------------------------------------------------

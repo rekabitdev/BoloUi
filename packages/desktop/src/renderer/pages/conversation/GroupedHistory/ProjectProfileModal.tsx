@@ -8,6 +8,7 @@ import { useProvidersQuery } from '@/renderer/hooks/agent/useModelProviderList';
 import { Button, Input, Message, Modal, Select, Space, Tag, Typography } from '@arco-design/web-react';
 import { Delete, FolderOpen, Plus } from '@icon-park/react';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export type ProjectMarkdownDocument = {
   name: string;
@@ -18,6 +19,7 @@ export type ProjectProfile = {
   instructions: string;
   skills: string[];
   context: string;
+  memory: string;
   model?: { providerId: string; modelId: string };
   coworkWorkspace?: string;
   documents: ProjectMarkdownDocument[];
@@ -34,21 +36,23 @@ const EMPTY_PROFILE: ProjectProfile = {
   instructions: '',
   skills: [],
   context: '',
+  memory: '',
   documents: [{ name: 'SOUL.md', content: '' }],
 };
 
 export const projectProfileStorageKey = (projectKey: string) =>
   `boloui.projectProfile.${encodeURIComponent(projectKey)}`;
 
-export function loadProjectProfile(projectKey: string): ProjectProfile {
+function parseLegacyProjectProfile(projectKey: string): ProjectProfile | null {
   try {
     const value = localStorage.getItem(projectProfileStorageKey(projectKey));
-    if (!value) return EMPTY_PROFILE;
+    if (!value) return null;
     const parsed = JSON.parse(value) as Partial<ProjectProfile>;
     return {
       instructions: typeof parsed.instructions === 'string' ? parsed.instructions : '',
       skills: Array.isArray(parsed.skills) ? parsed.skills.filter((skill): skill is string => typeof skill === 'string') : [],
       context: typeof parsed.context === 'string' ? parsed.context : '',
+      memory: typeof parsed.memory === 'string' ? parsed.memory : '',
       model:
         typeof parsed.model?.providerId === 'string' && typeof parsed.model?.modelId === 'string'
           ? parsed.model
@@ -62,8 +66,36 @@ export function loadProjectProfile(projectKey: string): ProjectProfile {
         : EMPTY_PROFILE.documents,
     };
   } catch {
-    return EMPTY_PROFILE;
+    return null;
   }
+}
+
+export async function loadProjectProfile(projectKey: string, projectName = projectKey): Promise<ProjectProfile> {
+  const legacyProfile = parseLegacyProjectProfile(projectKey);
+  const stored = await ipcBridge.desktopProjects.get.invoke({ workspace: projectKey });
+
+  if (legacyProfile) {
+    const now = new Date().toISOString();
+    await ipcBridge.desktopProjects.upsert.invoke({
+      entry: {
+        id: stored?.id ?? crypto.randomUUID(),
+        name: stored?.name ?? projectName,
+        workspace: projectKey,
+        createdAt: stored?.createdAt ?? now,
+        updatedAt: now,
+      },
+      profile: legacyProfile,
+    });
+    localStorage.removeItem(projectProfileStorageKey(projectKey));
+    return legacyProfile;
+  }
+
+  if (stored) {
+    const { instructions, skills, context, memory, model, coworkWorkspace, documents } = stored;
+    return { instructions, skills, context, memory, model, coworkWorkspace, documents };
+  }
+
+  return EMPTY_PROFILE;
 }
 
 const normalizeMarkdownName = (name: string): string => {
@@ -73,6 +105,7 @@ const normalizeMarkdownName = (name: string): string => {
 };
 
 const ProjectProfileModal: React.FC<Props> = ({ visible, projectKey, projectName, onClose }) => {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState<ProjectProfile>(EMPTY_PROFILE);
   const { data: providers = [] } = useProvidersQuery();
   const [availableSkills, setAvailableSkills] = useState<Array<{ name: string; description: string }>>([]);
@@ -83,8 +116,13 @@ const ProjectProfileModal: React.FC<Props> = ({ visible, projectKey, projectName
   useEffect(() => {
     if (!visible) return;
     setProfileHydrated(false);
-    setProfile(loadProjectProfile(projectKey));
-    setProfileHydrated(true);
+    void loadProjectProfile(projectKey, projectName)
+      .then((storedProfile) => setProfile(storedProfile))
+      .catch((error: unknown) => {
+        console.error('Failed to load project profile:', error);
+        setProfile(EMPTY_PROFILE);
+      })
+      .finally(() => setProfileHydrated(true));
     void ipcBridge.fs.listAvailableSkills
       .invoke()
       .then((skills) => setAvailableSkills(skills.map(({ name, description }) => ({ name, description }))))
@@ -92,12 +130,18 @@ const ProjectProfileModal: React.FC<Props> = ({ visible, projectKey, projectName
         console.error('Failed to load project skills:', error);
         setAvailableSkills([]);
       });
-  }, [projectKey, visible]);
+  }, [projectKey, projectName, visible]);
 
   useEffect(() => {
     if (!visible || !profileHydrated) return;
-    localStorage.setItem(projectProfileStorageKey(projectKey), JSON.stringify(profile));
-  }, [profile, profileHydrated, projectKey, visible]);
+    const now = new Date().toISOString();
+    void ipcBridge.desktopProjects.upsert
+      .invoke({
+        entry: { id: crypto.randomUUID(), name: projectName, workspace: projectKey, createdAt: now, updatedAt: now },
+        profile,
+      })
+      .catch((error: unknown) => console.error('Failed to save project profile:', error));
+  }, [profile, profileHydrated, projectKey, projectName, visible]);
 
   const duplicateDocumentNames = useMemo(() => {
     const names = profile.documents.map((document) => document.name.toLowerCase());
@@ -141,12 +185,16 @@ const ProjectProfileModal: React.FC<Props> = ({ visible, projectKey, projectName
     }
   };
 
-  const save = () => {
+  const save = async () => {
     if (duplicateDocumentNames) {
       Message.error('Markdown file names must be unique.');
       return;
     }
-    localStorage.setItem(projectProfileStorageKey(projectKey), JSON.stringify(profile));
+    const now = new Date().toISOString();
+    await ipcBridge.desktopProjects.upsert.invoke({
+      entry: { id: crypto.randomUUID(), name: projectName, workspace: projectKey, createdAt: now, updatedAt: now },
+      profile,
+    });
     Message.success('Project profile saved');
     onClose();
   };
@@ -248,6 +296,19 @@ const ProjectProfileModal: React.FC<Props> = ({ visible, projectKey, projectName
             onChange={(context) => setProfile((current) => ({ ...current, context }))}
             placeholder='Background, goals, constraints, conventions, and other shared context'
             autoSize={{ minRows: 3, maxRows: 8 }}
+          />
+        </div>
+
+        <div>
+          <Typography.Title heading={6}>{t('conversation.projectMemory.title')}</Typography.Title>
+          <Typography.Paragraph type='secondary'>{t('conversation.projectMemory.description')}</Typography.Paragraph>
+          <Input.TextArea
+            value={profile.memory}
+            onChange={(memory) => setProfile((current) => ({ ...current, memory }))}
+            placeholder={t('conversation.projectMemory.placeholder')}
+            autoSize={{ minRows: 4, maxRows: 10 }}
+            maxLength={12000}
+            showWordLimit
           />
         </div>
 

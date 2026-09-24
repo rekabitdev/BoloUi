@@ -428,23 +428,25 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
                   <Menu
                     onClickMenuItem={(key) => {
                       if (key === 'new-chat' || key === 'cowork') {
-                        const profile = loadProjectProfile(group.workspace);
-                        void navigate('/', {
-                          state: {
-                            workspace:
-                              key === 'cowork' && profile.coworkWorkspace
-                                ? profile.coworkWorkspace
-                                : group.workspace,
-                            projectWorkspace: group.workspace,
-                            projectModel: profile.model,
-                            projectProfile: {
-                              instructions: profile.instructions,
-                              skills: profile.skills,
-                              context: profile.context,
-                              documents: profile.documents,
+                        void loadProjectProfile(group.workspace, group.displayName).then((profile) =>
+                          navigate('/', {
+                            state: {
+                              workspace:
+                                key === 'cowork' && profile.coworkWorkspace
+                                  ? profile.coworkWorkspace
+                                  : group.workspace,
+                              projectWorkspace: group.workspace,
+                              projectModel: profile.model,
+                              projectProfile: {
+                                instructions: profile.instructions,
+                                skills: profile.skills,
+                                context: profile.context,
+                                memory: profile.memory,
+                                documents: profile.documents,
+                              },
                             },
-                          },
-                        });
+                          }),
+                        );
                         return;
                       }
                       if (key === 'profile') {

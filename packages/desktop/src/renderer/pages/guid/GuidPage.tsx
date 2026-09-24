@@ -56,6 +56,7 @@ type GuidNavigationState = {
     instructions: string;
     skills: string[];
     context: string;
+    memory: string;
     documents: Array<{ name: string; content: string }>;
   };
   [key: string]: unknown;

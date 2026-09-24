@@ -12,12 +12,26 @@
 import os from 'os';
 import path from 'path';
 import { ipcBridge } from '@/common';
+import {
+  deleteDesktopProject,
+  getDesktopProject,
+  initializeDesktopProjectDatabase,
+  listDesktopProjects,
+  upsertDesktopProject,
+} from '@process/services/database/projectRepository';
 import { createSkillFileService } from '@process/services/skills';
 import { getSystemDir, ProcessEnv } from '@process/utils/initStorage';
 import { copyDirectoryRecursively, getConfigPath, getDataPath, resolveCliSafePath } from '@process/utils';
 
 export function initApplicationBridgeCore(): void {
+  initializeDesktopProjectDatabase();
   const skillFiles = createSkillFileService();
+
+  ipcBridge.desktopProjects.list.provider(() => listDesktopProjects());
+  ipcBridge.desktopProjects.get.provider(({ workspace }) => getDesktopProject(workspace));
+  ipcBridge.desktopProjects.upsert.provider(({ entry, profile }) => upsertDesktopProject(entry, profile));
+  ipcBridge.desktopProjects.delete.provider(({ workspace }) => deleteDesktopProject(workspace));
+
   ipcBridge.fs.listSkillFiles.provider(({ skill_location }) => skillFiles.list(skill_location));
   ipcBridge.fs.readSkillFile.provider(({ skill_location, relative_path }) =>
     skillFiles.read(skill_location, relative_path)

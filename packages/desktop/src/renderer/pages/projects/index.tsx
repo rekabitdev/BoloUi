@@ -3,7 +3,7 @@
  * Copyright 2026 BoloUi (boloui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ipcBridge } from '@/common';
 import { Button, Card, Empty, Grid, Message, Modal, Space, Typography } from '@arco-design/web-react';
 import { Delete, FolderOpen, Plus, SettingTwo } from '@icon-park/react';
@@ -17,7 +17,7 @@ import ProjectProfileModal, {
 const { Row, Col } = Grid;
 const PROJECT_REGISTRY_KEY = 'boloui.projects';
 
-const loadProjectRegistry = (): string[] => {
+const loadLegacyProjectRegistry = (): string[] => {
   try {
     const value = JSON.parse(localStorage.getItem(PROJECT_REGISTRY_KEY) ?? '[]') as unknown;
     return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
@@ -35,7 +35,29 @@ const ProjectsPage: React.FC = () => {
   const navigate = useNavigate();
   const { conversations } = useConversations();
   const [profileProject, setProfileProject] = useState<{ key: string; name: string } | null>(null);
-  const [registeredProjects, setRegisteredProjects] = useState(loadProjectRegistry);
+  const [registeredProjects, setRegisteredProjects] = useState<string[]>([]);
+
+  useEffect(() => {
+    void (async () => {
+      const storedProjects = await ipcBridge.desktopProjects.list.invoke();
+      const storedWorkspaces = storedProjects.map((project) => project.workspace);
+      const legacyWorkspaces = loadLegacyProjectRegistry().filter((workspace) => !storedWorkspaces.includes(workspace));
+      for (const workspace of legacyWorkspaces) {
+        const now = new Date().toISOString();
+        await ipcBridge.desktopProjects.upsert.invoke({
+          entry: {
+            id: crypto.randomUUID(),
+            name: projectDisplayName(workspace),
+            workspace,
+            createdAt: now,
+            updatedAt: now,
+          },
+        });
+      }
+      if (legacyWorkspaces.length > 0) localStorage.removeItem(PROJECT_REGISTRY_KEY);
+      setRegisteredProjects([...storedWorkspaces, ...legacyWorkspaces]);
+    })().catch((error: unknown) => console.error('Failed to load projects:', error));
+  }, []);
 
   const projects = useMemo(() => {
     const map = new Map<string, { workspace: string; count: number; updatedAt: number }>();
@@ -59,12 +81,19 @@ const ProjectsPage: React.FC = () => {
     const selected = await ipcBridge.dialog.showOpen.invoke({ properties: ['openDirectory', 'createDirectory'] });
     const workspace = selected[0];
     if (!workspace) return;
-    setRegisteredProjects((current) => {
-      if (current.includes(workspace)) return current;
-      const next = [...current, workspace];
-      localStorage.setItem(PROJECT_REGISTRY_KEY, JSON.stringify(next));
-      return next;
-    });
+    if (!registeredProjects.includes(workspace)) {
+      const now = new Date().toISOString();
+      await ipcBridge.desktopProjects.upsert.invoke({
+        entry: {
+          id: crypto.randomUUID(),
+          name: projectDisplayName(workspace),
+          workspace,
+          createdAt: now,
+          updatedAt: now,
+        },
+      });
+      setRegisteredProjects((current) => [...current, workspace]);
+    }
     setProfileProject({ key: workspace, name: projectDisplayName(workspace) });
   };
 
@@ -93,10 +122,8 @@ const ProjectsPage: React.FC = () => {
           return;
         }
 
-        const nextProjects = registeredProjects.filter((project) => project !== workspace);
-        localStorage.setItem(PROJECT_REGISTRY_KEY, JSON.stringify(nextProjects));
-        localStorage.removeItem(`boloui.projectProfile.${encodeURIComponent(workspace)}`);
-        setRegisteredProjects(nextProjects);
+        await ipcBridge.desktopProjects.delete.invoke({ workspace });
+        setRegisteredProjects((current) => current.filter((project) => project !== workspace));
         if (profileProject?.key === workspace) setProfileProject(null);
         emitter.emit('chat.history.refresh');
         Message.success(`Deleted project “${name}” and ${projectConversations.length} chat${projectConversations.length === 1 ? '' : 's'}.`);
@@ -105,20 +132,22 @@ const ProjectsPage: React.FC = () => {
   };
 
   const openProjectChat = (workspace: string, cowork = false) => {
-    const profile = loadProjectProfile(workspace);
-    void navigate('/', {
-      state: {
-        workspace: cowork && profile.coworkWorkspace ? profile.coworkWorkspace : workspace,
-        projectWorkspace: workspace,
-        projectModel: profile.model,
-        projectProfile: {
-          instructions: profile.instructions,
-          skills: profile.skills,
-          context: profile.context,
-          documents: profile.documents,
+    void loadProjectProfile(workspace, projectDisplayName(workspace)).then((profile) =>
+      navigate('/', {
+        state: {
+          workspace: cowork && profile.coworkWorkspace ? profile.coworkWorkspace : workspace,
+          projectWorkspace: workspace,
+          projectModel: profile.model,
+          projectProfile: {
+            instructions: profile.instructions,
+            skills: profile.skills,
+            context: profile.context,
+            memory: profile.memory,
+            documents: profile.documents,
+          },
         },
-      },
-    });
+      }),
+    );
   };
 
   return (
