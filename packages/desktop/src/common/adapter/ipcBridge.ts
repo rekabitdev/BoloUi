@@ -1575,6 +1575,11 @@ export const systemSettings = {
   setPetDnd: bridge.buildProvider<void, { dnd: boolean }>('system-settings:set-pet-dnd'),
   getPetConfirmEnabled: bridge.buildProvider<boolean, void>('system-settings:get-pet-confirm-enabled'),
   setPetConfirmEnabled: bridge.buildProvider<void, { enabled: boolean }>('system-settings:set-pet-confirm-enabled'),
+  getPetAlwaysOnTop: bridge.buildProvider<boolean, void>('system-settings:get-pet-always-on-top'),
+  setPetAlwaysOnTop: bridge.buildProvider<void, { enabled: boolean }>('system-settings:set-pet-always-on-top'),
+  showPet: bridge.buildProvider<void, void>('system-settings:show-pet'),
+  hidePet: bridge.buildProvider<void, void>('system-settings:hide-pet'),
+  resetPetPosition: bridge.buildProvider<void, void>('system-settings:reset-pet-position'),
   ensureNodeRuntime: httpPost<{ ready: boolean }, { scope: IRuntimeStatusScope }>('/api/system/ensure-node-runtime'),
   ensureManagedAcpTool: httpPost<{ ready: boolean }, { scope: IRuntimeStatusScope; tool_id: string }>(
     '/api/system/ensure-managed-acp-tool'

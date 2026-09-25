@@ -13,5 +13,29 @@
   "resetPosition": "위치 초기화",
   "hide": "숨기기",
   "showHide": "표시/숨기기",
-  "desktopOnly": "데스크톱 펫은 데스크톱 애플리케이션에서만 사용할 수 있습니다. WebUI 브라우저 모드에서는 사용할 수 없습니다."
+  "desktopOnly": "데스크톱 펫은 데스크톱 애플리케이션에서만 사용할 수 있습니다. WebUI 브라우저 모드에서는 사용할 수 없습니다.",
+  "settings": {
+    "title": "BoloPet",
+    "description": "A lightweight desktop companion that follows BoloUi activity without a separate service.",
+    "enable": "Enable BoloPet",
+    "enableDescription": "Show BoloPet when BoloUi opens and close it with BoloUi.",
+    "alwaysOnTop": "Always on top",
+    "alwaysOnTopDescription": "Keep BoloPet visible above other windows.",
+    "size": "Pet size",
+    "sizeSmall": "Small",
+    "sizeMedium": "Medium",
+    "sizeLarge": "Large",
+    "sizeDescription": "Choose a comfortable size for your screen.",
+    "dnd": "Do Not Disturb",
+    "dndDescription": "Hide status bubbles and confirmation prompts temporarily.",
+    "confirm": "Tool confirmation",
+    "confirmDescription": "Show tool confirmation requests above BoloPet.",
+    "show": "Show",
+    "hide": "Hide",
+    "resetPosition": "Reset position",
+    "shown": "BoloPet is visible.",
+    "hidden": "BoloPet is hidden.",
+    "positionReset": "BoloPet position was reset.",
+    "updateFailed": "BoloPet settings could not be updated."
+  }
 }

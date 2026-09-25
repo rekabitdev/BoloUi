@@ -84,10 +84,19 @@ let lastHitIgnoreState = true;
 // createPetWindow() so the initial value picked up from ProcessConfig at startup
 // (see src/index.ts) is honored even though createPetWindow itself is sync.
 let confirmBubbleEnabled = true;
+let alwaysOnTopEnabled = true;
 
 // States that should be restored after drag ends (AI activity / notifications).
 // User-interaction states (attention/poke/happy) and idle/sleep states are NOT restored.
 const RESTORABLE_STATES: ReadonlySet<PetState> = new Set<PetState>(['thinking', 'working', 'error', 'notification']);
+
+function applyAlwaysOnTop(window: BrowserWindow, enabled: boolean): void {
+  if (!enabled) {
+    window.setAlwaysOnTop(false);
+    return;
+  }
+  window.setAlwaysOnTop(true, process.platform === 'darwin' ? 'screen-saver' : 'pop-up-menu');
+}
 
 /**
  * Create pet windows (rendering window + hit detection window).
@@ -115,7 +124,7 @@ export function createPetWindow(): void {
     frame: false,
     transparent: true,
     resizable: false,
-    alwaysOnTop: true,
+    alwaysOnTop: alwaysOnTopEnabled,
     skipTaskbar: true,
     hasShadow: false,
     focusable: false,
@@ -126,11 +135,7 @@ export function createPetWindow(): void {
     },
   });
 
-  if (process.platform === 'darwin') {
-    petWindow.setAlwaysOnTop(true, 'screen-saver');
-  } else {
-    petWindow.setAlwaysOnTop(true, 'pop-up-menu');
-  }
+  applyAlwaysOnTop(petWindow, alwaysOnTopEnabled);
 
   petWindow.setIgnoreMouseEvents(true);
 
@@ -146,7 +151,7 @@ export function createPetWindow(): void {
     frame: false,
     transparent: true,
     resizable: false,
-    alwaysOnTop: true,
+    alwaysOnTop: alwaysOnTopEnabled,
     skipTaskbar: true,
     hasShadow: false,
     focusable: false,
@@ -157,11 +162,7 @@ export function createPetWindow(): void {
     },
   });
 
-  if (process.platform === 'darwin') {
-    petHitWindow.setAlwaysOnTop(true, 'screen-saver');
-  } else {
-    petHitWindow.setAlwaysOnTop(true, 'pop-up-menu');
-  }
+  applyAlwaysOnTop(petHitWindow, alwaysOnTopEnabled);
 
   petHitWindow.setIgnoreMouseEvents(true, { forward: true });
 
@@ -258,6 +259,25 @@ export function showPetWindow(): void {
 export function hidePetWindow(): void {
   if (petWindow && !petWindow.isDestroyed()) petWindow.hide();
   if (petHitWindow && !petHitWindow.isDestroyed()) petHitWindow.hide();
+}
+
+export function setPetAlwaysOnTop(enabled: boolean): void {
+  alwaysOnTopEnabled = enabled;
+  if (petWindow && !petWindow.isDestroyed()) applyAlwaysOnTop(petWindow, enabled);
+  if (petHitWindow && !petHitWindow.isDestroyed()) applyAlwaysOnTop(petHitWindow, enabled);
+}
+
+export async function resetPetPosition(): Promise<void> {
+  if (!petWindow || petWindow.isDestroyed()) {
+    createPetWindow();
+    await petWindow?.webContents.executeJavaScript('true');
+  }
+  if (!petWindow || petWindow.isDestroyed()) return;
+
+  const { x, y } = computeInitialPosition(currentSize);
+  petWindow.setPosition(x, y, false);
+  petHitWindow?.setPosition(x + Math.round(currentSize * 0.2), y + Math.round(currentSize * 0.2), false);
+  idleTicker?.setPetBounds(x, y, currentSize, currentSize);
 }
 
 export function getEventBridge(): PetEventBridge | null {

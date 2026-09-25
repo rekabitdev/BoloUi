@@ -13,5 +13,29 @@
   "resetPosition": "Скинути позицію",
   "hide": "Приховати",
   "showHide": "Показати/Приховати",
-  "desktopOnly": "Настільний улюбленець доступний лише в десктопній програмі. Його неможливо використовувати в режимі браузера WebUI."
+  "desktopOnly": "Настільний улюбленець доступний лише в десктопній програмі. Його неможливо використовувати в режимі браузера WebUI.",
+  "settings": {
+    "title": "BoloPet",
+    "description": "A lightweight desktop companion that follows BoloUi activity without a separate service.",
+    "enable": "Enable BoloPet",
+    "enableDescription": "Show BoloPet when BoloUi opens and close it with BoloUi.",
+    "alwaysOnTop": "Always on top",
+    "alwaysOnTopDescription": "Keep BoloPet visible above other windows.",
+    "size": "Pet size",
+    "sizeSmall": "Small",
+    "sizeMedium": "Medium",
+    "sizeLarge": "Large",
+    "sizeDescription": "Choose a comfortable size for your screen.",
+    "dnd": "Do Not Disturb",
+    "dndDescription": "Hide status bubbles and confirmation prompts temporarily.",
+    "confirm": "Tool confirmation",
+    "confirmDescription": "Show tool confirmation requests above BoloPet.",
+    "show": "Show",
+    "hide": "Hide",
+    "resetPosition": "Reset position",
+    "shown": "BoloPet is visible.",
+    "hidden": "BoloPet is hidden.",
+    "positionReset": "BoloPet position was reset.",
+    "updateFailed": "BoloPet settings could not be updated."
+  }
 }

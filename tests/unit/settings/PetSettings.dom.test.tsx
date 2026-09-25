@@ -8,9 +8,23 @@ import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 
-const { getPetEnabledMock, setPetEnabledMock, configServiceMock } = vi.hoisted(() => ({
+const {
+  getPetEnabledMock,
+  setPetEnabledMock,
+  getPetAlwaysOnTopMock,
+  setPetAlwaysOnTopMock,
+  showPetMock,
+  hidePetMock,
+  resetPetPositionMock,
+  configServiceMock,
+} = vi.hoisted(() => ({
   getPetEnabledMock: vi.fn(),
   setPetEnabledMock: vi.fn(() => Promise.resolve()),
+  getPetAlwaysOnTopMock: vi.fn(() => Promise.resolve(true)),
+  setPetAlwaysOnTopMock: vi.fn(() => Promise.resolve()),
+  showPetMock: vi.fn(() => Promise.resolve()),
+  hidePetMock: vi.fn(() => Promise.resolve()),
+  resetPetPositionMock: vi.fn(() => Promise.resolve()),
   configServiceMock: {
     get: vi.fn(() => undefined),
     setLocal: vi.fn(),
@@ -22,15 +36,34 @@ vi.mock('@/common/adapter/ipcBridge', () => ({
   systemSettings: {
     getPetEnabled: { invoke: getPetEnabledMock },
     setPetEnabled: { invoke: setPetEnabledMock },
+    getPetSize: { invoke: vi.fn(() => Promise.resolve(280)) },
     setPetSize: { invoke: vi.fn(() => Promise.resolve()) },
+    getPetDnd: { invoke: vi.fn(() => Promise.resolve(false)) },
     setPetDnd: { invoke: vi.fn(() => Promise.resolve()) },
+    getPetConfirmEnabled: { invoke: vi.fn(() => Promise.resolve(true)) },
     setPetConfirmEnabled: { invoke: vi.fn(() => Promise.resolve()) },
+    getPetAlwaysOnTop: { invoke: getPetAlwaysOnTopMock },
+    setPetAlwaysOnTop: { invoke: setPetAlwaysOnTopMock },
+    showPet: { invoke: showPetMock },
+    hidePet: { invoke: hidePetMock },
+    resetPetPosition: { invoke: resetPetPositionMock },
   },
 }));
 
 vi.mock('@/common/config/configService', () => ({
   configService: configServiceMock,
 }));
+
+vi.mock('@arco-design/web-react', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@arco-design/web-react')>();
+  return {
+    ...actual,
+    Message: {
+      success: vi.fn(),
+      error: vi.fn(),
+    },
+  };
+});
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (k: string) => k }),
@@ -167,5 +200,34 @@ describe('PetSettings enable switch', () => {
       expect(getEnableSwitch()).not.toBeDisabled();
     });
     expect(getEnableSwitch().getAttribute('aria-checked')).toBe('false');
+  });
+
+  it('persists the always-on-top preference', async () => {
+    getPetEnabledMock.mockResolvedValue(true);
+    getPetAlwaysOnTopMock.mockResolvedValue(true);
+    render(<PetSettings />);
+
+    const switches = await screen.findAllByRole('switch');
+    fireEvent.click(switches[1]);
+
+    await waitFor(() => {
+      expect(setPetAlwaysOnTopMock).toHaveBeenCalledWith({ enabled: false });
+    });
+  });
+
+  it('runs the show, hide, and reset-position controls', async () => {
+    getPetEnabledMock.mockResolvedValue(true);
+    render(<PetSettings />);
+
+    await waitFor(() => expect(getEnableSwitch()).not.toBeDisabled());
+    fireEvent.click(screen.getByRole('button', { name: 'pet.settings.show' }));
+    fireEvent.click(screen.getByRole('button', { name: 'pet.settings.hide' }));
+    fireEvent.click(screen.getByRole('button', { name: 'pet.settings.resetPosition' }));
+
+    await waitFor(() => {
+      expect(showPetMock).toHaveBeenCalledTimes(1);
+      expect(hidePetMock).toHaveBeenCalledTimes(1);
+      expect(resetPetPositionMock).toHaveBeenCalledTimes(1);
+    });
   });
 });

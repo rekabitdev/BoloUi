@@ -111,4 +111,30 @@ export function initSystemSettingsBridge(): void {
     const { setPetConfirmEnabled } = await import('@process/pet/petManager');
     setPetConfirmEnabled(enabled);
   });
+
+  ipcBridge.systemSettings.getPetAlwaysOnTop.provider(async () => {
+    const value = await ProcessConfig.get('pet.alwaysOnTop');
+    return value ?? true;
+  });
+
+  ipcBridge.systemSettings.setPetAlwaysOnTop.provider(async ({ enabled }) => {
+    await ProcessConfig.set('pet.alwaysOnTop', enabled);
+    const { setPetAlwaysOnTop } = await import('@process/pet/petManager');
+    setPetAlwaysOnTop(enabled);
+  });
+
+  ipcBridge.systemSettings.showPet.provider(async () => {
+    const { showPetWindow } = await import('@process/pet/petManager');
+    showPetWindow();
+  });
+
+  ipcBridge.systemSettings.hidePet.provider(async () => {
+    const { hidePetWindow } = await import('@process/pet/petManager');
+    hidePetWindow();
+  });
+
+  ipcBridge.systemSettings.resetPetPosition.provider(async () => {
+    const { resetPetPosition } = await import('@process/pet/petManager');
+    await resetPetPosition();
+  });
 }
